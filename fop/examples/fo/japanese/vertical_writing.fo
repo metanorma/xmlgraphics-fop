@@ -18,10 +18,31 @@
             </fo:block>
         </fo:static-content>
         <fo:flow flow-name="xsl-region-body" script="hani">
+            <fo:block>fo:block:</fo:block>
             <fo:block border="1pt solid blue" language="JA">
                 「天の人を生ずるは億兆皆同一轍にて、之に附与するに動かす可からざるの通義を以てす。即ち其通義とは人の自から生命を保し自由を求め幸福を祈るの類にて、他より之を如何ともす可らざるものなり。」
                 ――『アメリカ独立宣言』
             </fo:block>
+            <fo:block margin-top="1em">fo:block-container:</fo:block>
+            <fo:block-container>
+              <fo:block border="1pt solid blue" language="JA">
+                「天の人を生ずるは億兆皆同一轍にて、之に附与するに動かす可からざるの通義を以てす。即ち其通義とは人の自から生命を保し自由を求め幸福を祈るの類にて、他より之を如何ともす可らざるものなり。」
+                ――『アメリカ独立宣言』
+              </fo:block>
+            </fo:block-container>
+            <fo:block margin-top="1em">fo:table:</fo:block>
+            <fo:table width="100%" table-layout="fixed">
+              <fo:table-body>
+                <fo:table-row>
+                  <fo:table-cell>
+                    <fo:block border="1pt solid blue" language="JA">
+                        「天の人を生ずるは億兆皆同一轍にて、之に附与するに動かす可からざるの通義を以てす。即ち其通義とは人の自から生命を保し自由を求め幸福を祈るの類にて、他より之を如何ともす可らざるものなり。」
+                        ――『アメリカ独立宣言』
+                    </fo:block>
+                  </fo:table-cell>
+                </fo:table-row>
+              </fo:table-body>
+            </fo:table>
             <fo:block margin-top="1em" border="1pt solid blue" language="ZH">
                 “我等之见解为，下述真理不证自明：凡人生而平等，秉造物者之赐，拥诸无可转让之权利，包含生命权、自由权、与追寻幸福之权。”
                 ——《美国独立宣言》
