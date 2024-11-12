@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format"
+         xmlns:fox="http://xmlgraphics.apache.org/fop/extensions">
+    <fo:layout-master-set>
+        <fo:simple-page-master margin="0.5cm"
+                               page-width="29.7cm" page-height="21.0cm" master-name="A4" writing-mode="tb-rl" >
+            <fo:region-body margin="2cm"/><fo:region-start precedence="true" extent="2cm" writing-mode="lr-tb"/>
+        </fo:simple-page-master>
+        <fo:simple-page-master margin="0.5cm" page-width="21.0cm" page-height="29.7cm" master-name="A4-P">
+            <fo:region-body margin="2cm"/><fo:region-before extent="2cm"/><fo:region-after extent="2cm"/><fo:region-start extent="2cm"/>
+            <fo:region-end extent="269mm" writing-mode="tb-rl"/>
+        </fo:simple-page-master>
+    </fo:layout-master-set>
+    <fo:page-sequence master-reference="A4" font-family="Noto Sans CJK SC">
+        <fo:static-content flow-name="xsl-region-start" position="absolute">
+            <fo:block >
+                縦書きサンプル
+            </fo:block>
+        </fo:static-content>
+        <fo:flow flow-name="xsl-region-body" script="hani">
+            <fo:block border="1pt solid blue" language="JA">
+                「天の人を生ずるは億兆皆同一轍にて、之に附与するに動かす可からざるの通義を以てす。即ち其通義とは人の自から生命を保し自由を求め幸福を祈るの類にて、他より之を如何ともす可らざるものなり。」
+                ――『アメリカ独立宣言』
+            </fo:block>
+            <fo:block margin-top="1em" border="1pt solid blue" language="ZH">
+                “我等之见解为，下述真理不证自明：凡人生而平等，秉造物者之赐，拥诸无可转让之权利，包含生命权、自由权、与追寻幸福之权。”
+                ——《美国独立宣言》
+            </fo:block>
+            <fo:block margin-top="1em" margin="0" border="1pt solid red" language="JA">
+                平成<fo:inline-container writing-mode="lr-tb" text-align="center"
+                                       alignment-baseline="central" reference-orientation="90" width="1em" margin="0" padding="0"
+                                       text-indent="0mm" last-line-end-indent="0mm" start-indent="0mm" end-indent="0mm">
+                <fo:block-container width="1em">
+                    <fo:block line-height="1em">29</fo:block>
+                </fo:block-container>
+            </fo:inline-container>年<fo:inline-container writing-mode="lr-tb" text-align="center"
+                                                        alignment-baseline="central" reference-orientation="90" width="1em" margin="0" padding="0"
+                                                        text-indent="0mm" last-line-end-indent="0mm" start-indent="0mm" end-indent="0mm">
+                <fo:block-container width="1em">
+                    <fo:block line-height="1em">8</fo:block>
+                </fo:block-container>
+            </fo:inline-container>月<fo:inline-container writing-mode="lr-tb" text-align="center"
+                                                        alignment-baseline="central" reference-orientation="90" width="1em" margin="0" padding="0"
+                                                        text-indent="0mm" last-line-end-indent="0mm" start-indent="0mm" end-indent="0mm">
+                <fo:block-container width="1em">
+                    <fo:block line-height="1em">11</fo:block>
+                </fo:block-container>
+            </fo:inline-container>日（縦中横サンプル）
+
+            </fo:block>
+            <fo:block margin-top="1em" padding="1mm" border="1pt solid red" language="JA" letter-spacing.optimum="0pt" letter-spacing.maximum="2mm" text-align="justify">
+                <fo:block font-size="18pt">
+                    縦書きと横書きの使い分け
+                </fo:block>
+                現代日本においては、縦書きも横書きもともに用いられる。
+                縦書き（縦組み）は、日本語本来の記法である伝統と矜持と共に、書道作品のほとんど、国語の教科書、文芸（小説、詩歌、戯曲など）、新聞などで用いられる。漫画もその戦前からの伝統を踏襲しており、コマ運びは右横進行、吹出しの台詞は縦書きが標準であるが、左開きに製本された場合、コマ運びだけは、右横進行のことも左横進行のこともある。自然科学関連の書籍でも、数式などを用いない啓蒙書では、縦書きの例が依然として多い。社会科学系の書物も、数理経済学、会計学の専門書を除くと縦書きが多い。公文書においては法令や法案、官報、あるいは国会での決議と決議案が縦書きにされる。縦書きおよび右横書き基調の綴じ本は、右開きに製本される。
+                横書き（横組み）は、例えば、外国語、数学、科学、音楽になどに関する専門書、つまり、横書きの言語、数式、楽譜を含むような文書のほとんどで使われる。コンピュータの出力もほとんど横書きである。映画・ゲーム情報誌なども、横長の画面写真を扱うレイアウトの性質上、横書きが主流である。 左横書き基調の綴本は、左開きに製本される。
+                シナリオも縦書きで出版されるのが普通であるが、英語学習用の洋画の対訳つきシナリオ書などは横書きである。
+                社会科学系の書物では、副島隆彦の『アメリカ政治思想の大研究』は、人名や専門用語などに正式な英語表記が併記されるために横書きで出版された。しかし、文庫化されたときに縦書きになった。
+                数式を多用する経済学の場合、専門書は横書きの場合も多いが、経済評論などの場合は縦が普通である。『資本論』も縦書きで出版されることが多い。小室直樹の経済学の啓蒙書は、数式を使うが縦書きである。トム・ピーターズの経営書の訳書も縦書きで出版されていたが、「マニフェスト・シリーズ」は横書きである。
+                学校教育の教科書では、国語に属する分野以外はほぼ横書きが用いられる。社会科が縦書きだった時期も昭和60年代まであったが、その後は横書きになった。
+                横書き基調の書面の左右端などのスペースに縦書きが用いられたり、逆に縦書き基調の書面の上下端に横書きが用いられることも珍しくなく、こういったことは縦横両用の日本語組版の強みといえる。新聞では、見出しにおいてデザインやレイアウトの都合または強調のために、横書きを使うこともある。またテレビ・ラジオの番組予定欄（ラテ欄）は、原則として横書きである。
+            </fo:block>
+            <fo:block margin-top="1em">
+                縦中横（たてちゅうよこ）は、縦組みの文書の中で横組みすることである。読みは「たてちゅうよこ」であり、「たてなかよこ」ではない（JIS X 4051で規定）。縦組みの行の中で数文字（通常2、3文字。まれに4文字以上）の欧字や数字を、1文字分の高さで左横書きに配置する。
+                縦中横を用いる場合、前の文字と後ろの文字の間に空白は開けず、行の中心が、縦中横全体の中心にくるように文字を配置する。また、縦中横の中の文字数が多い場合、それぞれの文字の幅を文字数に応じて三分（さんぶ。通常の文字の幅の3分の1）や四分（しぶ。同4分の1）などとすることで、縦中横にした箇所の幅が前後の文字と揃うように配慮する。
+            </fo:block>
+        </fo:flow>
+    </fo:page-sequence>
+    <fo:page-sequence master-reference="A4-P" font-family="Noto Sans CJK SC">
+        <fo:static-content flow-name="xsl-region-end">
+            <fo:block margin-top="2cm" text-align="center" text-indent="0" start-indent="0" end-indent="0" >
+                横書きサンプル
+            </fo:block>
+        </fo:static-content>
+        <fo:flow flow-name="xsl-region-body" script="hani">
+            <fo:block border="1pt solid blue" language="JA">
+                「天の人を生ずるは億兆皆同一轍にて、之に附与するに動かす可からざるの通義を以てす。即ち其通義とは人の自から生命を保し自由を求め幸福を祈るの類にて、他より之を如何ともす可らざるものなり。」
+                ――『アメリカ独立宣言』
+            </fo:block>
+            <fo:block margin-top="1em" border="1pt solid blue" language="ZH">
+                “我等之见解为，下述真理不证自明：凡人生而平等，秉造物者之赐，拥诸无可转让之权利，包含生命权、自由权、与追寻幸福之权。”
+                ——《美国独立宣言》
+            </fo:block>
+            <fo:block margin-top="1em" margin="0" border="1pt solid red" language="JA">
+                平成<fo:inline-container writing-mode="lr-tb" text-align="center"
+                                       alignment-baseline="central" reference-orientation="90" width="1em" margin="0" padding="0"
+                                       text-indent="0mm" last-line-end-indent="0mm" start-indent="0mm" end-indent="0mm">
+                <fo:block-container width="1em">
+                    <fo:block line-height="1em">29</fo:block>
+                </fo:block-container>
+            </fo:inline-container>年<fo:inline-container writing-mode="lr-tb" text-align="center"
+                                                        alignment-baseline="central" reference-orientation="90" width="1em" margin="0" padding="0"
+                                                        text-indent="0mm" last-line-end-indent="0mm" start-indent="0mm" end-indent="0mm">
+                <fo:block-container width="1em">
+                    <fo:block line-height="1em">8</fo:block>
+                </fo:block-container>
+            </fo:inline-container>月<fo:inline-container writing-mode="lr-tb" text-align="center"
+                                                        alignment-baseline="central" reference-orientation="90" width="1em" margin="0" padding="0"
+                                                        text-indent="0mm" last-line-end-indent="0mm" start-indent="0mm" end-indent="0mm">
+                <fo:block-container width="1em">
+                    <fo:block line-height="1em">11</fo:block>
+                </fo:block-container>
+            </fo:inline-container>日（縦中横サンプル）
+
+            </fo:block>
+            <fo:block margin-top="1em" padding="1mm" border="1pt solid red" letter-spacing.optimum="0pt" letter-spacing.maximum="2pt" text-align="justify">
+                <fo:block font-size="18pt">
+                    縦書きと横書きの使い分け
+                </fo:block>
+                現代日本においては、縦書きも横書きもともに用いられる。
+                縦書き（縦組み）は、日本語本来の記法である伝統と矜持と共に、書道作品のほとんど、国語の教科書、文芸（小説、詩歌、戯曲など）、新聞などで用いられる。漫画もその戦前からの伝統を踏襲しており、コマ運びは右横進行、吹出しの台詞は縦書きが標準であるが、左開きに製本された場合、コマ運びだけは、右横進行のことも左横進行のこともある。自然科学関連の書籍でも、数式などを用いない啓蒙書では、縦書きの例が依然として多い。社会科学系の書物も、数理経済学、会計学の専門書を除くと縦書きが多い。公文書においては法令や法案、官報、あるいは国会での決議と決議案が縦書きにされる。縦書きおよび右横書き基調の綴じ本は、右開きに製本される。
+                横書き（横組み）は、例えば、外国語、数学、科学、音楽になどに関する専門書、つまり、横書きの言語、数式、楽譜を含むような文書のほとんどで使われる。コンピュータの出力もほとんど横書きである。映画・ゲーム情報誌なども、横長の画面写真を扱うレイアウトの性質上、横書きが主流である。 左横書き基調の綴本は、左開きに製本される。
+                シナリオも縦書きで出版されるのが普通であるが、英語学習用の洋画の対訳つきシナリオ書などは横書きである。
+                社会科学系の書物では、副島隆彦の『アメリカ政治思想の大研究』は、人名や専門用語などに正式な英語表記が併記されるために横書きで出版された。しかし、文庫化されたときに縦書きになった。
+                数式を多用する経済学の場合、専門書は横書きの場合も多いが、経済評論などの場合は縦が普通である。『資本論』も縦書きで出版されることが多い。小室直樹の経済学の啓蒙書は、数式を使うが縦書きである。トム・ピーターズの経営書の訳書も縦書きで出版されていたが、「マニフェスト・シリーズ」は横書きである。
+                学校教育の教科書では、国語に属する分野以外はほぼ横書きが用いられる。社会科が縦書きだった時期も昭和60年代まであったが、その後は横書きになった。
+                横書き基調の書面の左右端などのスペースに縦書きが用いられたり、逆に縦書き基調の書面の上下端に横書きが用いられることも珍しくなく、こういったことは縦横両用の日本語組版の強みといえる。新聞では、見出しにおいてデザインやレイアウトの都合または強調のために、横書きを使うこともある。またテレビ・ラジオの番組予定欄（ラテ欄）は、原則として横書きである。
+
+                <fo:block text-align="justify" word-spacing.optimum="0.8em" word-spacing.maximum="3em">
+                    Many East Asian scripts can be written horizontally or vertically. The Chinese, Japanese and Korean scripts can be oriented in either direction, as they consist mainly of disconnected syllabic units and/or ideographic units, each occupying a square block of space, thus allowing for flexibility for which direction texts can be written, be it horizontally from left-to-right, horizontally from right-to-left, vertically from top-to-bottom, and even vertically from bottom-to-top. On the other hand, the traditional Kapampangan script, Mongolian script and its offshoots (like Manchu) are written vertically from top-to-bottom.
+                    Horizontal writing is known in Chinese as hengpai (simplified Chinese: 横排; traditional Chinese: 橫排; pinyin: héngpái; literally: "horizontal alignment"), in Japanese as yokogaki (横書き, "horizontal writing", also yokogumi, 横組み), and in Korean as garosseugi (가로쓰기) or hoengseo (횡서; 橫書).
+                    Vertical writing is known respectively as zongpai (simplified Chinese: 纵排; traditional Chinese: 縱排; pinyin: zōngpái; literally: "vertical alignment"), tategaki (縦書き, "vertical writing", also tategumi, 縦組み), or serosseugi (세로쓰기) or jongseo (종서; 縱書).
+                    Traditionally, Chinese, Japanese, and Korean are written vertically in columns going from top to bottom and ordered from right to left, with each new column starting to the left of the preceding one. The stroke order and stroke direction of Chinese characters (hanzi in Chinese, kanji in Japanese, hanja in Korean), Japanese kana, and Korean Hangul all facilitate writing in this manner. In addition, writing in vertical columns from right to left facilitated writing with a brush in the right hand while continually unrolling the sheet of paper or scroll with the left. Since the nineteenth century, it has become increasingly common for these languages to be written horizontally, from left to right, with successive rows going from top to bottom, under the influence of European languages such as English, although vertical writing is still frequently used in Japan, Taiwan, Hong Kong and Macau.
+                </fo:block>
+
+            </fo:block>
+            <fo:block margin-top="1em">
+                縦中横（たてちゅうよこ）は、縦組みの文書の中で横組みすることである。読みは「たてちゅうよこ」であり、「たてなかよこ」ではない（JIS X 4051で規定）。縦組みの行の中で数文字（通常2、3文字。まれに4文字以上）の欧字や数字を、1文字分の高さで左横書きに配置する。
+                縦中横を用いる場合、前の文字と後ろの文字の間に空白は開けず、行の中心が、縦中横全体の中心にくるように文字を配置する。また、縦中横の中の文字数が多い場合、それぞれの文字の幅を文字数に応じて三分（さんぶ。通常の文字の幅の3分の1）や四分（しぶ。同4分の1）などとすることで、縦中横にした箇所の幅が前後の文字と揃うように配慮する。
+            </fo:block>
+
+            <fo:block>
+            <fo:block space-before="5em" space-after="3em">XSL-FOにはルビに関する仕様がありません。しかし、fo:inline-containerを使ってルビを表現することが可能です。</fo:block>
+
+            <fo:block font-size="18pt">XMLとは<fo:inline-container width="2em" text-indent="0mm" last-line-end-indent="0mm" alignment-baseline="central">
+                    <fo:block font-size="0.4em" text-align="center" line-height="1.2em" space-before="-1.4em" space-before.conditionality="retain">じょほう</fo:block>
+                    <fo:block line-height="1em">情報</fo:block>
+                </fo:inline-container>を<fo:inline-container width="2em" text-indent="0mm" last-line-end-indent="0mm" alignment-baseline="central">
+                    <fo:block font-size="0.4em" text-align="center" line-height="1.2em" space-before="-1.4em" space-before.conditionality="retain">ひょうげん</fo:block>
+                    <fo:block line-height="1em">表現</fo:block></fo:inline-container>するための<fo:inline-container width="1.2em" text-indent="0mm" last-line-end-indent="0mm" alignment-baseline="central">
+                <fo:block font-size="0.4em" text-align="center" line-height="1.2em" space-before="-1.4em" space-before.conditionality="retain">あたら</fo:block>
+                <fo:block line-height="1em">新</fo:block></fo:inline-container>しい<fo:inline-container width="2em" text-indent="0mm" last-line-end-indent="0mm" alignment-baseline="central">
+                <fo:block font-size="0.4em" text-align="center" line-height="1.2em" space-before="-1.4em" space-before.conditionality="retain">ほうほう</fo:block>
+                <fo:block line-height="1em">方法</fo:block></fo:inline-container>です。</fo:block></fo:block>
+
+            <fo:table table-layout="fixed" width="100%" padding="0pt" margin="0pt" break-before="page">
+                <fo:table-column column-width="5cm"/>
+                <fo:table-column column-width="5cm"/>
+                <fo:table-body>
+                    <fo:table-row>
+                        <fo:table-cell border="1pt solid blue">
+                            <fo:block-container border="1pt solid red" font-size="18pt" width="3.175cm" height="2.1cm" fox:shrink-to-fit="true">
+                                <fo:block>
+                                    １５文字まで出力出来る枠により
+                                </fo:block>
+                            </fo:block-container>
+                        </fo:table-cell>
+                        <fo:table-cell border="1pt solid blue">
+                            <fo:block-container border="1pt solid red" font-size="18pt" width="3.175cm" height="2.1cm" fox:shrink-to-fit="true">
+                                <fo:block>
+                                    １５文字まで出力出来る枠により多い文字を入れると自動縮小されます。
+                                </fo:block>
+                            </fo:block-container>
+                        </fo:table-cell>
+                    </fo:table-row>
+                </fo:table-body>
+            </fo:table>
+        </fo:flow>
+    </fo:page-sequence>
+</fo:root>

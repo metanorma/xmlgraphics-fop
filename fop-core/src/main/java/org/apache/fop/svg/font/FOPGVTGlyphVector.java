@@ -93,7 +93,7 @@ public class FOPGVTGlyphVector implements GVTGlyphVector {
         boolean retainControls = false;
         GlyphMapping mapping = GlyphMapping.doGlyphMapping(text, text.getBeginIndex(), text.getEndIndex(),
             f, letterSpaceIPD, letterSpaceAdjustments, '\0', '\0',
-            false, text.getBidiLevel(), true, true, retainControls);
+            false, text.getBidiLevel(), true, true, retainControls, false);
         CharacterIterator glyphAsCharIter =
             mapping.mapping != null ? new StringCharacterIterator(mapping.mapping) : text.getIterator();
         this.glyphs = buildGlyphs(f, glyphAsCharIter);

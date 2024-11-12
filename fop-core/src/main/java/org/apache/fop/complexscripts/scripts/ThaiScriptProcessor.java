@@ -21,8 +21,8 @@ package org.apache.fop.complexscripts.scripts;
 import org.apache.fop.complexscripts.fonts.GlyphDefinitionTable;
 
 public class ThaiScriptProcessor extends DefaultScriptProcessor {
-    ThaiScriptProcessor(String script) {
-        super(script);
+    ThaiScriptProcessor(String script, boolean vertical) {
+        super(script, vertical);
     }
 
     @Override

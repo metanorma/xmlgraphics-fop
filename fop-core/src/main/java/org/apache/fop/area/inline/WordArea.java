@@ -54,6 +54,7 @@ public class WordArea extends InlineArea {
      * its original logical order.
      */
     protected boolean reversed;
+    protected boolean upright;
     private boolean nextIsSpace;
 
     /**
@@ -239,6 +240,24 @@ public class WordArea extends InlineArea {
 
     public boolean isNextIsSpace() {
         return nextIsSpace;
+    }
+
+    /**
+     * CJK Glyph keep upright in vertical mode
+     *
+     * @return if the word should rotate to upright
+     */
+    public boolean isUpright() {
+        return upright;
+    }
+
+    /**
+     * CJK Glyph keep upright in vertical mode
+     *
+     * @param upright
+     */
+    public void setUpright(boolean upright) {
+        this.upright = upright;
     }
 
     /*

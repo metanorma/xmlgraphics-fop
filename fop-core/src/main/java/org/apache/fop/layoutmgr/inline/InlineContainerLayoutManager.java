@@ -118,6 +118,7 @@ public class InlineContainerLayoutManager extends AbstractLayoutManager implemen
         LayoutManager childLM;
         while ((childLM = getChildLM()) != null) {
             LayoutContext childLC = LayoutContext.offspringOf(layoutContext);
+            childLC.setWritingMode(getInlineContainer().getWritingMode());
             childLC.setRefIPD(contentAreaIPD);
             @SuppressWarnings("unchecked")
             List<ListElement> childElements = childLM.getNextKnuthElements(childLC, alignment);
@@ -246,7 +247,9 @@ public class InlineContainerLayoutManager extends AbstractLayoutManager implemen
         }
         assert inlineContainerPosition != null;
         KnuthPossPosIter childPosIter = new KnuthPossPosIter(childElements);
-        AreaAdditionUtil.addAreas(this, childPosIter, context);
+        LayoutContext childLC = LayoutContext.offspringOf(context);
+        childLC.setWritingMode(getInlineContainer().getWritingMode());
+        AreaAdditionUtil.addAreas(this, childPosIter, childLC);
     }
 
     @Override
