@@ -772,6 +772,7 @@ public class BlockContainerLayoutManager extends SpacedBorderedPaddedBlockLayout
         LayoutManager childLM;
         LayoutManager lastLM = null;
         LayoutContext lc = LayoutContext.offspringOf(layoutContext);
+        lc.setWritingMode(getBlockContainerFO().getWritingMode());
         lc.setSpaceAdjust(layoutContext.getSpaceAdjust());
         // set space after in the LayoutContext for children
         if (layoutContext.getSpaceAfter() > 0) {
@@ -838,7 +839,7 @@ public class BlockContainerLayoutManager extends SpacedBorderedPaddedBlockLayout
             }
         } else {
             //Add child areas inside the reference area
-            bcpos.getBreaker().addContainedAreas(layoutContext);
+            bcpos.getBreaker().addContainedAreas(lc);
         }
 
         registerMarkers(false, isFirst(firstPos), isLast(lastPos));

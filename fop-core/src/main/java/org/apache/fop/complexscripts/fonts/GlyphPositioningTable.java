@@ -230,12 +230,13 @@ public class GlyphPositioningTable extends GlyphTable {
      * @param widths array of default advancements for each glyph
      * @param adjustments accumulated adjustments array (sequence) of 4-tuples of placement [PX,PY] and advance [AX,AY] adjustments, in that order,
      * with one 4-tuple for each element of glyph sequence
+     * @param isVertical
      * @return true if some adjustment is not zero; otherwise, false
      */
-    public boolean position(GlyphSequence gs, String script, String language, int fontSize, int[] widths, int[][] adjustments) {
+    public boolean position(GlyphSequence gs, String script, String language, int fontSize, int[] widths, int[][] adjustments, boolean isVertical) {
         Map<LookupSpec, List<LookupTable>> lookups = matchLookups(script, language, "*");
         if ((lookups != null) && (lookups.size() > 0)) {
-            ScriptProcessor sp = ScriptProcessor.getInstance(script, processors);
+            ScriptProcessor sp = ScriptProcessor.getInstance(script, processors, isVertical);
             return sp.position(this, gs, script, language, fontSize, lookups, widths, adjustments);
         } else {
             return false;

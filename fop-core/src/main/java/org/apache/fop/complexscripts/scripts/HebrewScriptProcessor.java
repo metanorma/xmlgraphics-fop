@@ -21,8 +21,8 @@ package org.apache.fop.complexscripts.scripts;
 import org.apache.fop.complexscripts.fonts.GlyphDefinitionTable;
 
 public class HebrewScriptProcessor extends DefaultScriptProcessor {
-    HebrewScriptProcessor(String script) {
-        super(script);
+    HebrewScriptProcessor(String script, boolean vertical) {
+        super(script, vertical);
     }
 
     @Override

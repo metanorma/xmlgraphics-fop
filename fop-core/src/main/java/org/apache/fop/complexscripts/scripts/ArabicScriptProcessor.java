@@ -115,7 +115,7 @@ public class ArabicScriptProcessor extends DefaultScriptProcessor {
     private final ScriptContextTester posContextTester;
 
     ArabicScriptProcessor(String script) {
-        super(script);
+        super(script, false);
         this.subContextTester = new SubstitutionScriptContextTester();
         this.posContextTester = new PositioningScriptContextTester();
     }

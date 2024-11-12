@@ -99,10 +99,11 @@ public class GlyphDefinitionTable extends GlyphTable {
      * @param gpa associated glyph position adjustments (also reordered)
      * @param script a script identifier
      * @param language a language identifier
+     * @param isVertical
      * @return the reordered (output) glyph sequence
      */
-    public GlyphSequence reorderCombiningMarks(GlyphSequence gs, int[] widths, int[][] gpa, String script, String language) {
-        ScriptProcessor sp = ScriptProcessor.getInstance(script, processors);
+    public GlyphSequence reorderCombiningMarks(GlyphSequence gs, int[] widths, int[][] gpa, String script, String language, boolean isVertical) {
+        ScriptProcessor sp = ScriptProcessor.getInstance(script, processors, isVertical);
         return sp.reorderCombiningMarks(this, gs, widths, gpa, script, language);
     }
 

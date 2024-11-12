@@ -142,7 +142,7 @@ public class IndicScriptProcessor extends DefaultScriptProcessor {
     private final ScriptContextTester posContextTester;
 
     IndicScriptProcessor(String script) {
-        super(script);
+        super(script, false);
         this.subContextTester = new SubstitutionScriptContextTester();
         this.posContextTester = new PositioningScriptContextTester();
     }

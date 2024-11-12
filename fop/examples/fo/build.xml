@@ -73,6 +73,9 @@
       <fileset dir="advanced">
         <include name="**/giro.fo"/>
       </fileset>
+      <fileset dir="japanese">
+        <include name="**/*.fo"/>
+      </fileset>
     </fop>
   </target>
   <!-- =================================================================== -->

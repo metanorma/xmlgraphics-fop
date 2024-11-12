@@ -75,7 +75,7 @@ public class ArabicJoinersTestCase {
     @Test
     public void testArabicJoiners() {
         String script = CharScript.scriptTagFromCode(CharScript.SCRIPT_ARABIC);
-        ScriptProcessor sp = ScriptProcessor.getInstance(script, new HashMap<String, ScriptProcessor>());
+        ScriptProcessor sp = ScriptProcessor.getInstance(script, new HashMap<String, ScriptProcessor>(), false);
         assertTrue(sp != null);
         ScriptContextTester sct = sp.getSubstitutionContextTester();
         assertTrue(sct != null);
