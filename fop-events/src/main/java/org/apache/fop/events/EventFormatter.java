@@ -149,6 +149,41 @@ public final class EventFormatter {
     public static String format(Event event, String pattern) {
         AdvancedMessageFormat format = new AdvancedMessageFormat(pattern);
         Map params = new java.util.HashMap(event.getParams());
+
+        String elementId = (String) params.get("elementId");
+        if (elementId == null && params.get("elementName") != null) {
+            elementId = "";
+            String elementPage = "unknown";
+            Object source = event.getSource();
+            LayoutManager lm = (source instanceof LayoutManager) ? (LayoutManager)source : null;
+
+            String id = "";
+            String page = "";
+
+            if (lm != null) {
+                try {
+                    id = lm.getFObj().getId();
+                    page = lm.getPSLM().getCurrentPage().getPageViewport().getPageNumberString();
+                } catch (Exception ex) { }
+            }
+
+            if (id != null && !id.isEmpty()) {
+                elementId = "(id='" + id + "')";
+            }
+
+            if (page == null || page.isEmpty()) {
+                // try to get the parameter 'page'
+                page = (String) params.get("page");
+            }
+
+            if (page != null && !page.isEmpty()) {
+                elementPage = page;
+            }
+
+            params.put("elementId",  elementId);
+            params.put("page",  elementPage);
+        }
+
         params.put("source", event.getSource());
         params.put("severity", event.getSeverity());
         params.put("groupID", event.getEventGroupID());
