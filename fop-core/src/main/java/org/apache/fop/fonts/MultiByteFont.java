@@ -677,7 +677,7 @@ public class MultiByteFont extends CIDFont implements Substitutable, Positionabl
             notifyMapOperation();
             gi = findGlyphIndex(cc);
             if (gi == SingleByteEncoding.NOT_FOUND_CODE_POINT) {
-                warnMissingGlyph((char) cc);
+                warnMissingGlyph((char) cc, cs);
                 gi = giMissing;
             }
             cb.put(cc);
