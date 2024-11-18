@@ -126,6 +126,8 @@ public class PDFStructureTreeBuilder implements StructureTreeEventHandler {
             StructureType structureType;
             if (role == null) {
                 structureType = defaultStructureType;
+            } else if (role.equals("SKIP")) {
+                return (PDFStructElem)parent;
             } else {
                 structureType = StandardStructureTypes.get(role);
                 if (structureType == null) {
@@ -134,6 +136,27 @@ public class PDFStructureTreeBuilder implements StructureTreeEventHandler {
                             structureType.toString());
                 }
             }
+
+
+            List<String> tags_ancestor = new ArrayList<>();
+            try {
+                PDFStructElem ancestor = ((PDFStructElem) parent).getParentStructElem();
+                // if Span in LBody, then skip Span tag
+                StringBuilder tags = new StringBuilder();
+                //tags.append(structureType + " ");
+                while (ancestor != null) {
+                    tags.append(ancestor.getStructureType().toString() + " ");
+                    tags_ancestor.add(ancestor.getStructureType().toString());
+                    ancestor = ancestor.getParentStructElem();
+                }
+                //System.out.println(tags);
+            }catch (Exception ex) {}
+
+            // if Div inside P, then skip it
+            if (structureType.toString().equals("Div") && tags_ancestor.contains("P")) {
+                return (PDFStructElem)parent;
+            }
+
             PDFStructElem structElem = createStructureElement(parent, structureType);
             setAttributes(structElem, attributes);
             addKidToParent(structElem, parent, attributes);
