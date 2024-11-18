@@ -400,7 +400,9 @@ public class PDFStructureTreeBuilder implements StructureTreeEventHandler {
 
     private boolean isPDFA1Safe(String name) {
         return !((pdfFactory.getDocument().getProfile().getPDFAMode().isPart1()
-                || pdfFactory.getDocument().getProfile().getPDFUAMode().isEnabled())
+                // commented, see https://github.com/metanorma/metanorma-iso/issues/1001#issuecomment-1592786352
+                // || pdfFactory.getDocument().getProfile().getPDFUAMode().isEnabled()
+                )
                 && (name.equals("table-body")
                 || name.equals("table-header")
                 || name.equals("table-footer")));
