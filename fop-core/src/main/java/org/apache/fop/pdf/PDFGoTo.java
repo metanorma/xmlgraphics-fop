@@ -36,7 +36,7 @@ public class PDFGoTo extends PDFAction {
     private float xPosition;
     private float yPosition;
     private boolean isNamedDestination;
-
+    private String contents;
     /**
      * create a /GoTo object.
      *
@@ -117,6 +117,28 @@ public class PDFGoTo extends PDFAction {
      */
     public void setDestination(String dest) {
         destination = dest;
+    }
+
+    /**
+     * Set the Contents key string for this Goto.
+     *
+     * @param str the PDF Contents key string
+     */
+    public void setContents(String str) {
+        str = str
+                .replaceAll("[\\s\\u200b\\u00a0]+", " ")
+                .trim()
+                .replaceAll("[\\.,:;]+$","");
+        contents = PDFText.escapeText(str, false);
+    }
+
+    /**
+     * Get the Contents key string for the GoTo action.
+     *
+     * @return the Contents key string for the action
+     */
+    public String getContents() {
+        return contents;
     }
 
     /**
