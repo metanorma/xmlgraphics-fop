@@ -696,12 +696,22 @@ class PDFRenderingUtil {
         }
         PDFDictionary dict = new PDFDictionary();
         dict.put("F", file);
+        dict.put("UF", file);
         PDFFileSpec fileSpec = new PDFFileSpec(embeddedFile.getFilename(), embeddedFile.getUnicodeFilename());
         String filename = fileSpec.getFilename();
         pdfDoc.getRoot().addAF(fileSpec);
         fileSpec.setEmbeddedFile(dict);
         if (embeddedFile.getDesc() != null) {
             fileSpec.setDescription(embeddedFile.getDesc());
+        }
+        if (embeddedFile.getRel() != null) {
+            fileSpec.setAFRelationship(embeddedFile.getRel());
+        }
+        if (embeddedFile.getVolatile() != null) {
+            fileSpec.setVolatile(embeddedFile.getVolatile());
+        }
+        if (embeddedFile.getLinkAsFileAnnotation() != null) {
+            fileSpec.setLinkAsFileAnnotation(embeddedFile.getLinkAsFileAnnotation());
         }
         this.pdfDoc.registerObject(fileSpec);
 

@@ -89,7 +89,9 @@ public class PDFLink extends PDFObject {
         if (getDocumentSafely().getProfile().getPDFAMode().isEnabled()) {
             int f = 0;
             f |= 1 << (3 - 1); //Print, bit 3
-            f |= 1 << (4 - 1); //NoZoom, bit 4
+            if (!(this.action instanceof PDFFileAttachmentAnnotation)) {
+                f |= 1 << (4 - 1); //NoZoom, bit 4
+            }
             f |= 1 << (5 - 1); //NoRotate, bit 5
             fFlag = "/F " + f;
         }
@@ -101,6 +103,24 @@ public class PDFLink extends PDFObject {
                    + (this.structParent != null
                            ? "/StructParent " + this.structParent.toString() + "\n" : "")
                    + fFlag + "\n>>";
+
+        if (this.action instanceof PDFFileAttachmentAnnotation) {
+            PDFFileAttachmentAnnotation pdfFileAttachmentAnnotation = (PDFFileAttachmentAnnotation) this.action;
+            ulx = brx + 3;
+            uly+=5;
+            brx+=10;
+            bry+=5;
+            //uly = bry - 10;*/
+            s = "<< /Type /Annot /Subtype " + pdfFileAttachmentAnnotation.getFileAttachmentAnnotation()
+                + "/Rect [ "
+                + (ulx) + " " + (uly) + " "
+                + (brx) + " " + (bry) + " ]\n" + "/C [ "
+                + this.color + " ]\n"  + "/Border [ 0 0 0 ]\n"
+                + (this.structParent != null
+                    ? "/StructParent " + this.structParent.toString() + "\n" : "")
+                + fFlag + "\n>>";
+        }
+
         return s;
     }
 
