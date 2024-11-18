@@ -19,12 +19,11 @@
 
 package org.apache.fop.render.pdf;
 
-import java.util.LinkedList;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 import javax.xml.XMLConstants;
 
+import org.apache.fop.pdf.*;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
 
@@ -34,16 +33,9 @@ import org.apache.fop.events.EventBroadcaster;
 import org.apache.fop.fo.extensions.ExtensionElementMapping;
 import org.apache.fop.fo.extensions.InternalElementMapping;
 import org.apache.fop.fo.pagination.Flow;
-import org.apache.fop.pdf.PDFFactory;
-import org.apache.fop.pdf.PDFParentTree;
-import org.apache.fop.pdf.PDFStructElem;
-import org.apache.fop.pdf.PDFStructTreeRoot;
 import org.apache.fop.pdf.StandardStructureAttributes.Table.Scope;
-import org.apache.fop.pdf.StandardStructureTypes;
 import org.apache.fop.pdf.StandardStructureTypes.Grouping;
 import org.apache.fop.pdf.StandardStructureTypes.Table;
-import org.apache.fop.pdf.StructureHierarchyMember;
-import org.apache.fop.pdf.StructureType;
 import org.apache.fop.util.LanguageTags;
 import org.apache.fop.util.XMLUtil;
 
@@ -314,11 +306,11 @@ public class PDFStructureTreeBuilder implements StructureTreeEventHandler {
         protected void setAttributes(PDFStructElem structElem, Attributes attributes) {
             String columnSpan = attributes.getValue("number-columns-spanned");
             if (columnSpan != null) {
-                structElem.setTableAttributeColSpan(Integer.parseInt(columnSpan));
+                structElem.setTableAttributeColSpan(Integer.parseInt(columnSpan), attributes);
             }
             String rowSpan = attributes.getValue("number-rows-spanned");
             if (rowSpan != null) {
-                structElem.setTableAttributeRowSpan(Integer.parseInt(rowSpan));
+                structElem.setTableAttributeRowSpan(Integer.parseInt(rowSpan), attributes);
             }
         }
 
