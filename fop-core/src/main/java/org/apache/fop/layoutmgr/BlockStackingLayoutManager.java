@@ -391,6 +391,7 @@ public abstract class BlockStackingLayoutManager extends AbstractLayoutManager
         childLC.copyPendingMarksFrom(context);
         childLC.setStackLimitBP(context.getStackLimitBP());
         childLC.setRefIPD(referenceIPD);
+        childLC.setWritingMode(context.getWritingMode());
         return childLC;
     }
 

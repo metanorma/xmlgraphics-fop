@@ -40,7 +40,7 @@ public class DefaultScriptTestCase {
         int[][] gpa = new int[2][1];
         gpa[0][0] = 1;
         gpa[1][0] = 1;
-        String actual = getFont().reorderCombiningMarks(in, gpa, OTFScript.DEFAULT, null, null).toString();
+        String actual = getFont().reorderCombiningMarks(in, gpa, OTFScript.DEFAULT, null, null, false).toString();
         Assert.assertEquals(actual.charAt(0), 803);
     }
 
@@ -48,7 +48,7 @@ public class DefaultScriptTestCase {
     public void testProcessorNoReorder() {
         String in = "\u00F6\u0323";
         int[][] gpa = new int[2][1];
-        String actual = getFont().reorderCombiningMarks(in, gpa, OTFScript.DEFAULT, null, null).toString();
+        String actual = getFont().reorderCombiningMarks(in, gpa, OTFScript.DEFAULT, null, null, false).toString();
         Assert.assertEquals(actual.charAt(0), 57344);
     }
 
@@ -57,7 +57,7 @@ public class DefaultScriptTestCase {
         String in = "S\u0323\u0323;";
         int[][] gpa = new int[4][1];
         gpa[2][0] = 1;
-        String actual = getFont().reorderCombiningMarks(in, gpa, OTFScript.DEFAULT, null, null).toString();
+        String actual = getFont().reorderCombiningMarks(in, gpa, OTFScript.DEFAULT, null, null, false).toString();
         Assert.assertEquals(actual.charAt(0), 803);
         Assert.assertEquals(actual.charAt(1), 57344);
         Assert.assertEquals(actual.charAt(2), 803);

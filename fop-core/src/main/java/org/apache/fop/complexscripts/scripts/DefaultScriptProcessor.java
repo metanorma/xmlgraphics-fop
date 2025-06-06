@@ -42,6 +42,15 @@ public class DefaultScriptProcessor extends ScriptProcessor {
         "locl"                                                  // localized forms
     };
 
+    /** features to use for substitutions vertical */
+    private static final String[] GSUB_FEATURES_V =
+    {
+        "ccmp",                                                 // glyph composition/decomposition
+        "liga",                                                 // common ligatures
+        "locl",                                                 // localized forms
+        "vert"                                                  // vertical writing
+    };
+
     /** features to use for positioning */
     private static final String[] GPOS_FEATURES =
     {
@@ -50,14 +59,22 @@ public class DefaultScriptProcessor extends ScriptProcessor {
         "mkmk"                                                  // mark to mark positioning
     };
 
-    DefaultScriptProcessor(String script) {
+    /** do vert substitution.*/
+    private final boolean vertical;
+
+    DefaultScriptProcessor(String script, boolean vertical) {
         super(script);
+        this.vertical = vertical;
     }
 
     @Override
     /** {@inheritDoc} */
     public String[] getSubstitutionFeatures() {
-        return GSUB_FEATURES;
+        if (vertical) {
+            return GSUB_FEATURES_V;
+        } else {
+            return GSUB_FEATURES;
+        }
     }
 
     @Override
