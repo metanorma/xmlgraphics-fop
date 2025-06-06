@@ -73,7 +73,7 @@ public class PDFDocumentHandler extends AbstractBinaryWritingIFDocumentHandler {
 
     private boolean accessEnabled;
 
-    private PDFLogicalStructureHandler logicalStructureHandler;
+    PDFLogicalStructureHandler logicalStructureHandler;
 
     private PDFStructureTreeBuilder structureTreeBuilder;
 
