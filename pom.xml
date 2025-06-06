@@ -2,13 +2,13 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.apache.xmlgraphics</groupId>
+  <groupId>org.metanorma</groupId>
   <artifactId>fop-parent</artifactId>
   <version>2.10.0-SNAPSHOT</version>
-  <name>Apache FOP Parent</name>
-  <description>XML Graphics Format Object Processor</description>
+  <name>Apache FOP Parent (Metanorma Fork)</name>
+  <description>XML Graphics Format Object Processor - Metanorma Fork with Certificate Fixes</description>
   <packaging>pom</packaging>
-  <url>http://xmlgraphics.apache.org/fop/</url>
+  <url>https://github.com/metanorma/xmlgraphics-fop</url>
 
   <properties>
     <ant.version>1.10.14</ant.version>
@@ -106,7 +106,7 @@
           <groupId>com.github.spotbugs</groupId>
           <artifactId>spotbugs-maven-plugin</artifactId>
           <version>${findbugs.plugin.version}</version>
-        </plugin>        
+        </plugin>
       </plugins>
     </pluginManagement>
   </build>
@@ -182,6 +182,16 @@
   </repositories>
 
   <distributionManagement>
+    <repository>
+      <id>metanorma-releases</id>
+      <name>Metanorma GitHub Packages</name>
+      <url>https://maven.pkg.github.com/metanorma/xmlgraphics-fop</url>
+    </repository>
+    <snapshotRepository>
+      <id>metanorma-snapshots</id>
+      <name>Metanorma GitHub Packages</name>
+      <url>https://maven.pkg.github.com/metanorma/xmlgraphics-fop</url>
+    </snapshotRepository>
     <site>
       <id>${project.artifactId}-site</id>
       <url>${project.baseUri}</url>

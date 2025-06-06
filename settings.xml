@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                              http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+  <!-- Maven settings for Apache FOP fork -->
+  <!-- This file helps avoid problematic repository access issues -->
+
+  <mirrors>
+    <mirror>
+      <id>central</id>
+      <name>Central Repository</name>
+      <url>https://repo1.maven.org/maven2</url>
+      <mirrorOf>*,!apache.snapshots.https,!apache.releases.https,!jboss.org</mirrorOf>
+    </mirror>
+  </mirrors>
+
+  <profiles>
+    <profile>
+      <id>fork-optimizations</id>
+      <properties>
+        <!-- Skip problematic operations for fork -->
+        <maven.wagon.http.retryHandler.count>3</maven.wagon.http.retryHandler.count>
+        <maven.wagon.httpconnectionManager.ttlSeconds>120</maven.wagon.httpconnectionManager.ttlSeconds>
+        <maven.wagon.http.retryHandler.requestSentEnabled>true</maven.wagon.http.retryHandler.requestSentEnabled>
+      </properties>
+      <repositories>
+        <!-- Override any problematic repositories -->
+        <repository>
+          <id>metanorma</id>
+          <url>https://repo1.maven.org/maven2</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </repository>
+      </repositories>
+    </profile>
+  </profiles>
+
+  <activeProfiles>
+    <activeProfile>fork-optimizations</activeProfile>
+  </activeProfiles>
+
+  <!-- Server authentication for GitHub Packages -->
+  <!-- To use this, set environment variables: -->
+  <!-- GITHUB_USERNAME: your GitHub username -->
+  <!-- GITHUB_TOKEN: your GitHub personal access token with packages:write scope -->
+  <servers>
+    <server>
+      <id>metanorma-releases</id>
+      <username>${env.GITHUB_USERNAME}</username>
+      <password>${env.GITHUB_TOKEN}</password>
+    </server>
+    <server>
+      <id>metanorma-snapshots</id>
+      <username>${env.GITHUB_USERNAME}</username>
+      <password>${env.GITHUB_TOKEN}</password>
+    </server>
+  </servers>
+
+</settings>
