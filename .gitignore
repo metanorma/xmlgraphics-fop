@@ -1,12 +1,35 @@
 
 # maven artifacts
 target/
+.m2/
 
 # test artifacts
 build/
 
+# IDE files
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# OS files
+.DS_Store
+Thumbs.db
+
 # miscellaneous
 *~
 *.bak
-.idea
-*.iml
+*.tmp
+*.log
+
+# Maven local repository (if using local cache)
+.maven/
+
+# GitHub Actions artifacts
+.github/settings.xml
+
+# Certificate backups
+*.pkcs12.bak
+*.jks.bak
