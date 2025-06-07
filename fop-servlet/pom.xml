@@ -2,67 +2,63 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.apache.xmlgraphics</groupId>
+  <groupId>org.metanorma</groupId>
   <artifactId>fop-servlet</artifactId>
   <name>Apache FOP Servlet</name>
   <description>XML Graphics Format Object Processor Servlet</description>
   <packaging>war</packaging>
 
   <parent>
-    <groupId>org.apache.xmlgraphics</groupId>
+    <groupId>org.metanorma</groupId>
     <artifactId>fop-parent</artifactId>
     <version>2.10.0-SNAPSHOT</version>
   </parent>
 
   <dependencies>
-    <!-- fop deps -->
+    <!-- compile deps -->
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>fop</artifactId>
+      <artifactId>fop-core</artifactId>
       <version>${project.version}</version>
     </dependency>
-    <!-- batik deps -->
     <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>batik-all</artifactId>
-      <version>${batik.version}</version>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <version>5.0.0</version>
+      <scope>provided</scope>
     </dependency>
-    <!-- xgc deps -->
+    <!-- test deps -->
     <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>xmlgraphics-commons</artifactId>
-      <version>${xmlgraphics.commons.version}</version>
-    </dependency>
-    <!-- external deps -->
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>${commons.io.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>commons-logging</groupId>
-      <artifactId>commons-logging</artifactId>
-      <version>${commons.logging.version}</version>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
   <build>
     <plugins>
+      <!-- junit testing -->
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <includes>
+            <include>**/*TestCase.java</include>
+          </includes>
+          <redirectTestOutputToFile>true</redirectTestOutputToFile>
+        </configuration>
+      </plugin>
+      <!-- war packaging -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
         <version>${war.plugin.version}</version>
         <configuration>
-          <packagingIncludes>
-            WEB-INF/lib/batik-all-*.jar,
-            WEB-INF/lib/commons-io-${commons.io.version}.jar,
-            WEB-INF/lib/commons-logging-${commons.logging.version}.jar,
-            WEB-INF/lib/fop-*${project.version}.jar,
-            WEB-INF/lib/xmlgraphics-commons-*.jar,
-            WEB-INF/lib/fontbox-*.jar,
-            WEB-INF/lib/pdfbox-io-*.jar,
-          </packagingIncludes>
           <archive>
-            <addMavenDescriptor>false</addMavenDescriptor>
+            <manifestEntries>
+              <Automatic-Module-Name>org.apache.xmlgraphics.fop.servlet</Automatic-Module-Name>
+            </manifestEntries>
           </archive>
         </configuration>
       </plugin>

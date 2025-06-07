@@ -2,45 +2,25 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.apache.xmlgraphics</groupId>
+  <groupId>org.metanorma</groupId>
   <artifactId>fop-transcoder-allinone</artifactId>
   <name>Apache FOP Transcoder All-In-One</name>
   <description>XML Graphics Format Object Processor Transcoder All-In-One</description>
 
   <parent>
-    <groupId>org.apache.xmlgraphics</groupId>
+    <groupId>org.metanorma</groupId>
     <artifactId>fop-parent</artifactId>
     <version>2.10.0-SNAPSHOT</version>
   </parent>
 
   <dependencies>
-    <!-- fop deps -->
+    <!-- compile deps -->
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>fop-util</artifactId>
+      <artifactId>fop-transcoder</artifactId>
       <version>${project.version}</version>
     </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>fop-events</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>fop-core</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <!-- external deps -->
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>${commons.io.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>commons-logging</groupId>
-      <artifactId>commons-logging</artifactId>
-      <version>${commons.logging.version}</version>
-    </dependency>
+    <!-- test deps -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -51,30 +31,28 @@
 
   <build>
     <plugins>
+      <!-- junit testing -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>package-all</id>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-            <configuration>
-              <addMavenDescriptor>false</addMavenDescriptor>
-              <appendAssemblyId>false</appendAssemblyId>
-              <archive>
-                <manifest>
-                  <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                </manifest>
-              </archive>
-              <descriptors>
-                <descriptor>src/tools/resources/assembly/assembly.xml</descriptor>
-              </descriptors>
-            </configuration>
-          </execution>
-        </executions>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <includes>
+            <include>**/*TestCase.java</include>
+          </includes>
+          <redirectTestOutputToFile>true</redirectTestOutputToFile>
+        </configuration>
+      </plugin>
+      <!-- jar packaging -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestEntries>
+              <Automatic-Module-Name>org.apache.xmlgraphics.fop.transcoder.allinone</Automatic-Module-Name>
+            </manifestEntries>
+          </archive>
+        </configuration>
       </plugin>
     </plugins>
   </build>
