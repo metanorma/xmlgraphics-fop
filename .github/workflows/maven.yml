@@ -69,7 +69,7 @@ jobs:
           ${{ runner.os }}-maven-
 
     - name: Run quality checks
-      run: mvn clean compile -Pquality -B
+      run: mvn clean compile checkstyle:check spotbugs:check -B
       continue-on-error: true
 
     - name: Upload quality reports
@@ -112,7 +112,7 @@ jobs:
       run: |
         mvn org.owasp:dependency-check-maven:check \
           -DfailBuildOnCVSS=7 \
-          -DsuppressionsLocation=owasp-suppressions.xml
+          -DskipProvidedScope=true
       continue-on-error: true
 
     - name: Upload security report
