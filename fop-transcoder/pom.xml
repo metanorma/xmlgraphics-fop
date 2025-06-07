@@ -2,29 +2,19 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.apache.xmlgraphics</groupId>
+  <groupId>org.metanorma</groupId>
   <artifactId>fop-transcoder</artifactId>
   <name>Apache FOP Transcoder</name>
   <description>XML Graphics Format Object Processor Transcoder</description>
 
   <parent>
-    <groupId>org.apache.xmlgraphics</groupId>
+    <groupId>org.metanorma</groupId>
     <artifactId>fop-parent</artifactId>
     <version>2.10.0-SNAPSHOT</version>
   </parent>
 
   <dependencies>
-    <!-- fop deps -->
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>fop-util</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>fop-events</artifactId>
-      <version>${project.version}</version>
-    </dependency>
+    <!-- compile deps -->
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>fop-core</artifactId>
@@ -41,35 +31,76 @@
 
   <build>
     <plugins>
+      <!-- junit testing -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>package-all</id>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-            <configuration>
-              <addMavenDescriptor>false</addMavenDescriptor>
-              <appendAssemblyId>false</appendAssemblyId>
-              <archive>
-                <manifest>
-                  <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                </manifest>
-                <manifestEntries>
-                  <Automatic-Module-Name>org.apache.xmlgraphics.fop.transcoder</Automatic-Module-Name>
-                </manifestEntries>
-              </archive>
-              <descriptors>
-                <descriptor>src/tools/resources/assembly/assembly.xml</descriptor>
-              </descriptors>
-            </configuration>
-          </execution>
-        </executions>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <includes>
+            <include>**/*TestCase.java</include>
+          </includes>
+          <redirectTestOutputToFile>true</redirectTestOutputToFile>
+        </configuration>
+      </plugin>
+      <!-- jar packaging -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestEntries>
+              <Automatic-Module-Name>org.apache.xmlgraphics.fop.transcoder</Automatic-Module-Name>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+      <!-- code analysis - checkstyle -->
+      <plugin>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <configuration>
+          <configLocation>${project.baseUri}../fop-core/src/tools/resources/checkstyle/checkstyle.xml</configLocation>
+          <headerLocation>${project.baseUri}../fop-core/src/tools/resources/checkstyle/LICENSE.txt</headerLocation>
+          <includeResources>false</includeResources>
+          <includeTestResources>false</includeTestResources>
+          <linkXRef>false</linkXRef>
+          <logViolationsToConsole>true</logViolationsToConsole>
+          <suppressionsLocation>${project.baseUri}../fop-core/src/tools/resources/checkstyle/suppressions.xml</suppressionsLocation>
+          <violationSeverity>warning</violationSeverity>
+        </configuration>
+      </plugin>
+      <!-- code analysis - findbugs -->
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>${findbugs.plugin.version}</version>
+        <configuration>
+          <excludeFilterFile>../fop-core/src/tools/resources/findbugs/exclusions.xml</excludeFilterFile>
+          <effort>Max</effort>
+          <threshold>Low</threshold>
+        </configuration>
       </plugin>
     </plugins>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+      <resource>
+        <directory>${basedir}/..</directory>
+        <includes>
+          <include>LICENSE</include>
+          <include>NOTICE</include>
+        </includes>
+        <targetPath>META-INF</targetPath>
+      </resource>
+    </resources>
+    <testResources>
+      <testResource>
+        <directory>src/test/resources</directory>
+        <includes>
+          <include>**/*</include>
+        </includes>
+      </testResource>
+    </testResources>
   </build>
 
 </project>
