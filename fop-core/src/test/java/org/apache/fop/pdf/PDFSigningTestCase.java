@@ -104,6 +104,7 @@ public class PDFSigningTestCase {
         }
         fopxconf += "    <sign-params>\n"
                 + "      <keystore>" + pkcs + "</keystore>\n"
+                + "      <password>password</password>\n"
                 + "    </sign-params>\n"
                 + "    </renderer>\n"
                 + "  </renderers>\n"
