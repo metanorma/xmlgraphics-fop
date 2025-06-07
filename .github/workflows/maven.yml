@@ -1,89 +1,29 @@
-# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
-
 name: ci
 
 on:
-  workflow_dispatch:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
   pull_request:
 
-env:
-  # Optimized Maven options for better performance and reliability
-  MAVEN_OPTS: >-
-    -Dhttp.keepAlive=false
-    -Dmaven.wagon.http.pool=false
-    -Dmaven.wagon.http.retryHandler.class=standard
-    -Dmaven.wagon.http.retryHandler.count=3
-    -Dmaven.wagon.httpconnectionManager.ttlSeconds=120
-    -Dmaven.wagon.http.retryHandler.requestSentEnabled=true
-    -Xmx2048m
-  # Skip problematic repositories for fork
-  MAVEN_CONFIG: >-
-    -Dmaven.repo.local=.m2/repository
-    -s .github/settings.xml
-
 jobs:
-  build:
-    name: Test with Java ${{ matrix.jdk }} on ${{ matrix.os }}
+  test:
+    name: Test JDK ${{ matrix.jdk }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 60
     strategy:
-      fail-fast: false
       matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
         jdk: ['8', '11', '17', '21']
-        os: [ubuntu-latest, windows-latest]
-        exclude:
-          # Reduce matrix for faster builds - focus on LTS versions
-          - jdk: '8'
-            os: windows-latest
+      fail-fast: false
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      with:
-        fetch-depth: 1  # Shallow clone for faster checkout
-
-    - name: Create Maven settings
-      run: |
-        mkdir -p .github
-        cat > .github/settings.xml << 'EOF'
-        <?xml version="1.0" encoding="UTF-8"?>
-        <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
-                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                  xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
-                                      http://maven.apache.org/xsd/settings-1.0.0.xsd">
-          <mirrors>
-            <mirror>
-              <id>central</id>
-              <name>Central Repository</name>
-              <url>https://repo1.maven.org/maven2</url>
-              <mirrorOf>*,!metanorma</mirrorOf>
-            </mirror>
-          </mirrors>
-          <profiles>
-            <profile>
-              <id>disable-problematic-repos</id>
-              <repositories>
-                <repository>
-                  <id>metanorma</id>
-                  <url>https://repo1.maven.org/maven2</url>
-                </repository>
-              </repositories>
-            </profile>
-          </profiles>
-          <activeProfiles>
-            <activeProfile>disable-problematic-repos</activeProfile>
-          </activeProfiles>
-        </settings>
-        EOF
 
     - name: Set up JDK ${{ matrix.jdk }}
       uses: actions/setup-java@v4
       with:
         java-version: ${{ matrix.jdk }}
-        distribution: 'temurin'
+        distribution: 'zulu'
         cache: maven
 
     - name: Cache Maven dependencies
@@ -97,101 +37,125 @@ jobs:
           ${{ runner.os }}-maven-${{ matrix.jdk }}-
           ${{ runner.os }}-maven-
 
-    - name: Validate Maven configuration
-      run: mvn -B validate --file pom.xml
-
-    - name: Compile project
-      run: mvn -B compile --file pom.xml
-
-    - name: Run tests with timeout
-      run: mvn -B test --file pom.xml -Dsurefire.timeout=300
+    - name: Run tests
+      run: mvn clean verify -B
       timeout-minutes: 30
-      continue-on-error: true
 
-    - name: Package project
-      run: mvn -B package -DskipTests --file pom.xml
-      if: success() || failure()
+  quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    needs: test
 
-    - name: Run full build with quality checks
-      run: mvn -B package checkstyle:check spotbugs:check --file pom.xml -DskipTests
-      continue-on-error: true
-      timeout-minutes: 20
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-    - name: Generate test report
-      uses: dorny/test-reporter@v1
-      if: success() || failure()
+    - name: Set up JDK 11
+      uses: actions/setup-java@v4
       with:
-        name: Maven Tests (Java ${{ matrix.jdk }}, ${{ matrix.os }})
-        path: '**/target/surefire-reports/*.xml'
-        reporter: java-junit
-        fail-on-error: false
+        java-version: '11'
+        distribution: 'zulu'
+        cache: maven
 
-    - name: Upload test results
+    - name: Cache Maven dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.m2/repository
+          .m2/repository
+        key: ${{ runner.os }}-maven-11-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-11-
+          ${{ runner.os }}-maven-
+
+    - name: Run quality checks
+      run: mvn clean compile -Pquality -B
+      continue-on-error: true
+
+    - name: Upload quality reports
       uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: test-results-java${{ matrix.jdk }}-${{ matrix.os }}
+        name: quality-reports
         path: |
-          **/target/surefire-reports/
-          **/target/failsafe-reports/
-          **/target/checkstyle-result.xml
-          **/target/spotbugsXml.xml
-        retention-days: 7
+          target/checkstyle-result.xml
+          target/spotbugsXml.xml
 
-    - name: Upload build artifacts on failure
+  security:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 11
+      uses: actions/setup-java@v4
+      with:
+        java-version: '11'
+        distribution: 'zulu'
+        cache: maven
+
+    - name: Cache Maven dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.m2/repository
+          .m2/repository
+        key: ${{ runner.os }}-maven-11-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-11-
+          ${{ runner.os }}-maven-
+
+    - name: Run OWASP dependency check
+      run: |
+        mvn org.owasp:dependency-check-maven:check \
+          -DfailBuildOnCVSS=7 \
+          -DsuppressionsLocation=owasp-suppressions.xml
+      continue-on-error: true
+
+    - name: Upload security report
       uses: actions/upload-artifact@v4
-      if: failure()
+      if: always()
       with:
-        name: build-logs-java${{ matrix.jdk }}-${{ matrix.os }}
+        name: security-report
+        path: target/dependency-check-report.html
+
+  build:
+    name: Build Artifacts
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 11
+      uses: actions/setup-java@v4
+      with:
+        java-version: '11'
+        distribution: 'zulu'
+        cache: maven
+
+    - name: Cache Maven dependencies
+      uses: actions/cache@v4
+      with:
         path: |
-          **/target/
-          !**/target/classes/
-          !**/target/test-classes/
-        retention-days: 3
+          ~/.m2/repository
+          .m2/repository
+        key: ${{ runner.os }}-maven-11-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-11-
+          ${{ runner.os }}-maven-
 
-  # Quick build job for faster feedback
-  quick-build:
-    name: Quick Build (Java 11)
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+    - name: Build all artifacts
+      run: mvn clean package -DskipTests -B
 
-    - name: Set up JDK 11
-      uses: actions/setup-java@v4
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
       with:
-        java-version: '11'
-        distribution: 'temurin'
-        cache: maven
-
-    - name: Quick compile and test
-      run: mvn -B compile test-compile --file pom.xml -T 2C
-
-    - name: Run critical tests only
-      run: mvn -B test --file pom.xml -Dtest="**/PDFSigningTestCase,**/BasicDriverTestCase" -T 2C
-
-  dependency-submission:
-    name: Submit dependency graph
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    permissions:
-      contents: read
-      actions: read
-      security-events: write
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: Set up JDK 11
-      uses: actions/setup-java@v4
-      with:
-        java-version: '11'
-        distribution: 'temurin'
-        cache: maven
-
-    - name: Submit dependency graph
-      uses: advanced-security/maven-dependency-submission-action@v4
-      with:
-        directory: .
+        name: maven-artifacts
+        path: |
+          target/*.jar
+          target/*.pom
