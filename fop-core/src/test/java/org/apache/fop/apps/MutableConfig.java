@@ -53,6 +53,10 @@ public final class MutableConfig implements FopFactoryConfig {
     }
 
 
+    public boolean isStaticRegionsPerPageForAccessibility() {
+        return delegate.isStaticRegionsPerPageForAccessibility();
+    }
+
     public boolean isKeepEmptyTags() {
         return delegate.isKeepEmptyTags();
     }
@@ -151,6 +155,10 @@ public final class MutableConfig implements FopFactoryConfig {
 
     public boolean isLegacyLastPageChangeIPD() {
         return delegate.isLegacyLastPageChangeIPD();
+    }
+
+    public boolean isLegacyFoWrapper() {
+        return delegate.isLegacyFoWrapper();
     }
 
     public Map<String, String> getHyphenationPatternNames() {

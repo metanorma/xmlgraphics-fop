@@ -70,7 +70,7 @@ public class TextLayoutManager extends LeafNodeLayoutManager {
     /**
      * this class stores information about changes in vecAreaInfo which are not yet applied
      */
-    private final class PendingChange {
+    private static final class PendingChange {
 
         private final GlyphMapping mapping;
         private final int index;
