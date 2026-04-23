@@ -54,6 +54,7 @@ import org.apache.fop.fo.flow.RetrieveTableMarker;
 import org.apache.fop.fo.flow.Wrapper;
 import org.apache.fop.fo.flow.table.Table;
 import org.apache.fop.fo.flow.table.TableBody;
+import org.apache.fop.fo.flow.table.TableCaption;
 import org.apache.fop.fo.flow.table.TableCell;
 import org.apache.fop.fo.flow.table.TableColumn;
 import org.apache.fop.fo.flow.table.TableFooter;
@@ -358,6 +359,24 @@ public class FO2StructureTreeConverter extends DelegatingFOEventHandler {
         super.endTable(tbl);
     }
 
+    public void startTableCaption(final TableCaption tableCaption) {
+        startContent(new Event(this) {
+            public void run() {
+                eventHandler.startTableCaption(tableCaption);
+            }
+        }, true);
+        super.startTableCaption(tableCaption);
+    }
+
+    public void endTableCaption(final TableCaption tableCaption) {
+        endContent(new Event(this) {
+            public void run() {
+                eventHandler.endTableCaption(tableCaption);
+            }
+        });
+        super.endTableCaption(tableCaption);
+    }
+
     @Override
     public void startColumn(final TableColumn tc) {
         startContent(new Event(this) {
@@ -604,12 +623,14 @@ public class FO2StructureTreeConverter extends DelegatingFOEventHandler {
 
     @Override
     public void image(final ExternalGraphic eg) {
+        handleStartArtifact(eg);
         content(new Event(this) {
             public void run() {
                 eventHandler.image(eg);
             }
         }, true);
         super.image(eg);
+        handleEndArtifact(eg);
     }
 
     @Override
@@ -624,6 +645,7 @@ public class FO2StructureTreeConverter extends DelegatingFOEventHandler {
 
     @Override
     public void startInstreamForeignObject(final InstreamForeignObject ifo) {
+        handleStartArtifact(ifo);
         startContent(new Event(this) {
             public void run() {
                 eventHandler.startInstreamForeignObject(ifo);
@@ -639,6 +661,7 @@ public class FO2StructureTreeConverter extends DelegatingFOEventHandler {
                 eventHandler.endInstreamForeignObject(ifo);
             }
         });
+        handleEndArtifact(ifo);
         super.endInstreamForeignObject(ifo);
     }
 
