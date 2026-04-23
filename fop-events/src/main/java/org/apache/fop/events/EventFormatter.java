@@ -29,8 +29,6 @@ import java.util.regex.Pattern;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.apache.fop.events.model.EventSeverity;
-import org.apache.fop.layoutmgr.LayoutManager;
 import org.apache.fop.utils.XMLResourceBundle;
 import org.apache.fop.utils.text.AdvancedMessageFormat;
 import org.apache.fop.utils.text.AdvancedMessageFormat.Part;
@@ -88,21 +86,6 @@ public final class EventFormatter {
         String key = event.getEventKey();
         String template;
         if (bundle != null) {
-            String elementName = (String)event.getParams().get("elementName");
-            if (elementName != null) {
-                String className = event.getSource().getClass().toString();
-                try {
-                    String elementId = ((LayoutManager) (event.getSource())).getFObj().getId();
-                    if (elementId != null && elementId.startsWith("__internal_layout__")) { //
-                        // special case when element (for instance, table) is using for block position on the page, no need warning
-                        return "";
-                    }
-                } catch (Exception ex) { }
-            }
-            if (key.equals("overconstrainedAdjustEndIndent") && elementName != null && elementName.equals("fo:table")) {
-                key = "overconstrainedAdjustEndIndentTable";
-                event.setSeverity(EventSeverity.WARN);
-            }
             template = bundle.getString(key);
         } else {
             template = "Missing bundle. Can't lookup event key: '" + key + "'.";
@@ -149,41 +132,6 @@ public final class EventFormatter {
     public static String format(Event event, String pattern) {
         AdvancedMessageFormat format = new AdvancedMessageFormat(pattern);
         Map params = new java.util.HashMap(event.getParams());
-
-        String elementId = (String) params.get("elementId");
-        if (elementId == null && params.get("elementName") != null) {
-            elementId = "";
-            String elementPage = "unknown";
-            Object source = event.getSource();
-            LayoutManager lm = (source instanceof LayoutManager) ? (LayoutManager)source : null;
-
-            String id = "";
-            String page = "";
-
-            if (lm != null) {
-                try {
-                    id = lm.getFObj().getId();
-                    page = lm.getPSLM().getCurrentPage().getPageViewport().getPageNumberString();
-                } catch (Exception ex) { }
-            }
-
-            if (id != null && !id.isEmpty()) {
-                elementId = "(id='" + id + "')";
-            }
-
-            if (page == null || page.isEmpty()) {
-                // try to get the parameter 'page'
-                page = (String) params.get("page");
-            }
-
-            if (page != null && !page.isEmpty()) {
-                elementPage = page;
-            }
-
-            params.put("elementId",  elementId);
-            params.put("page",  elementPage);
-        }
-
         params.put("source", event.getSource());
         params.put("severity", event.getSeverity());
         params.put("groupID", event.getEventGroupID());
