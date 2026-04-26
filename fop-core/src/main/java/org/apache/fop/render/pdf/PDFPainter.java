@@ -534,7 +534,7 @@ public class PDFPainter extends AbstractIFPainter<PDFDocumentHandler> {
     private double startSimulateStyle(Typeface tf, FontTriplet triplet) {
         double shear = 0;
         boolean simulateStyle = tf instanceof CustomFont && ((CustomFont) tf).getSimulateStyle();
-        boolean isTransparent = state.getTextColor().getAlpha() == 0;
+        boolean isTransparent = isTransparent();
         if (isTransparent) {
             PDFTextUtil textutil = generator.getTextUtil();
             textutil.setTextRenderingMode(PDFTextUtil.TR_INVISIBLE); // set transparent mode '3 Tr'
@@ -552,13 +552,20 @@ public class PDFPainter extends AbstractIFPainter<PDFDocumentHandler> {
 
     private void endSimulateStyle(Typeface tf, FontTriplet triplet) {
         boolean simulateStyle = tf instanceof CustomFont && ((CustomFont) tf).getSimulateStyle();
-        boolean isTransparent = state.getTextColor().getAlpha() == 0;
+        boolean isTransparent = isTransparent();
         if (isTransparent) {
             PDFTextUtil textutil = generator.getTextUtil();
             textutil.setTextRenderingMode(PDFTextUtil.TR_FILL); //restore default mode
         } else if (simulateStyle && triplet.getWeight() == 700) {
                 generator.add("0 Tr\n");
         }
+    }
+
+    private boolean isTransparent() {
+        if (state != null && state.getTextColor() != null) {
+            return state.getTextColor().getAlpha() == 0;
+        }
+        return false;
     }
 
     private static int[] paZero = new int[4];
