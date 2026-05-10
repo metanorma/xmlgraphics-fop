@@ -95,33 +95,31 @@ public class PDFLink extends PDFObject {
             f |= 1 << (5 - 1); //NoRotate, bit 5
             fFlag = "/F " + f;
         }
-        String s = "<< /Type /Annot\n" + "/Subtype /Link\n" + "/Rect [ "
+        String dict = "<< /Type /Annot\n" + "/Subtype /Link\n" + "/Rect [ "
                    + (ulx) + " " + (uly) + " "
                    + (brx) + " " + (bry) + " ]\n" + "/C [ "
                    + this.color + " ]\n" + "/Border [ 0 0 0 ]\n" + "/A "
                    + this.action.getAction() + "\n" + "/H /I\n"
                    + (this.structParent != null
-                           ? "/StructParent " + this.structParent.toString() + "\n" : "")
-                   + fFlag + "\n>>";
+                           ? "/StructParent " + this.structParent.toString() + "\n" : "");
 
-        if (this.action instanceof PDFFileAttachmentAnnotation) {
+        if (action instanceof PDFFileAttachmentAnnotation) {
             PDFFileAttachmentAnnotation pdfFileAttachmentAnnotation = (PDFFileAttachmentAnnotation) this.action;
             ulx = brx + 3;
             uly+=5;
             brx+=10;
             bry+=5;
             //uly = bry - 10;*/
-            s = "<< /Type /Annot /Subtype " + pdfFileAttachmentAnnotation.getFileAttachmentAnnotation()
+            dict = "<< /Type /Annot /Subtype " + pdfFileAttachmentAnnotation.getFileAttachmentAnnotation()
                 + "/Rect [ "
                 + (ulx) + " " + (uly) + " "
                 + (brx) + " " + (bry) + " ]\n" + "/C [ "
                 + this.color + " ]\n"  + "/Border [ 0 0 0 ]\n"
                 + (this.structParent != null
-                    ? "/StructParent " + this.structParent.toString() + "\n" : "")
-                + fFlag + "\n>>";
+                    ? "/StructParent " + this.structParent.toString() + "\n" : "");
         }
-
-        return s;
+		dict += fFlag + "\n>>";
+        return dict;
     }
 
     /*
