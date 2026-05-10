@@ -26,10 +26,18 @@ import org.apache.fop.render.intermediate.extensions.URIAction;
 public class URIActionTestCase {
     @Test
     public void testID() {
-        URIAction action = new URIAction("uri", true);
-        URIAction action2 = new URIAction("uri", true);
-        URIAction action3 = new URIAction("uri2", true);
+        URIAction action = new URIAction("uri", true, null);
+        URIAction action2 = new URIAction("uri", true, null);
+        URIAction action3 = new URIAction("uri2", true, null);
         Assert.assertEquals(action.getID(), action2.getID());
         Assert.assertFalse(action.getID().equals(action3.getID()));
+    }
+
+    @Test
+    public void testIdEdgeCase() {
+        URIAction action = new URIAction("19", true, null);
+        URIAction action2 = new URIAction("0X", true, null);
+        Assert.assertNotEquals("We can't use the hashcode for the ids as some strings have the same hashcode",
+                action.getID(), action2.getID());
     }
 }

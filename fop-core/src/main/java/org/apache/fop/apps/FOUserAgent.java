@@ -149,6 +149,7 @@ public class FOUserAgent {
         this.resourceResolver = resourceResolver;
         setTargetResolution(factory.getTargetResolution());
         setAccessibility(factory.isAccessibilityEnabled());
+        setStaticRegionsPerPageForAccessibility(factory.isStaticRegionsPerPageForAccessibility());
         setKeepEmptyTags(factory.isKeepEmptyTags());
         imageSessionContext = new AbstractImageSessionContext(factory.getFallbackResolver()) {
 
@@ -727,6 +728,19 @@ public class FOUserAgent {
         }
     }
 
+    public void setStaticRegionsPerPageForAccessibility(boolean staticRegionsPerPageForAccessibility) {
+        getRendererOptions().put(Accessibility.STATIC_REGION_PER_PAGE, staticRegionsPerPageForAccessibility);
+    }
+
+    public boolean isStaticRegionsPerPageForAccessibility() {
+        Boolean enabled = (Boolean)getRendererOptions().get(Accessibility.STATIC_REGION_PER_PAGE);
+        if (enabled != null) {
+            return enabled;
+        } else {
+            return false;
+        }
+    }
+
     /**
      * Sets the document's structure tree event handler, for use by accessible
      * output formats.
@@ -854,5 +868,9 @@ public class FOUserAgent {
 
     public boolean isLegacyLastPageChangeIPD() {
         return factory.isLegacyLastPageChangeIPD();
+    }
+
+    public boolean isLegacyFoWrapper() {
+        return factory.isLegacyFoWrapper();
     }
 }

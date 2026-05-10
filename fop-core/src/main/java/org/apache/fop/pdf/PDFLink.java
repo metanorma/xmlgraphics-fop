@@ -103,6 +103,13 @@ public class PDFLink extends PDFObject {
                    + (this.structParent != null
                            ? "/StructParent " + this.structParent.toString() + "\n" : "");
 
+        if (action instanceof PDFUri) {
+            String altText = ((PDFUri) action).getAltText();
+            if (altText != null && !altText.isEmpty()) {
+                dict += "/Contents " + PDFText.escapeText(altText) + "\n";
+            }
+        }
+      
         if (action instanceof PDFFileAttachmentAnnotation) {
             PDFFileAttachmentAnnotation pdfFileAttachmentAnnotation = (PDFFileAttachmentAnnotation) this.action;
             ulx = brx + 3;
@@ -118,7 +125,7 @@ public class PDFLink extends PDFObject {
                 + (this.structParent != null
                     ? "/StructParent " + this.structParent.toString() + "\n" : "");
         }
-		dict += fFlag + "\n>>";
+        dict += fFlag + "\n>>";
         return dict;
     }
 
