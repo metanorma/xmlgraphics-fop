@@ -114,7 +114,7 @@ public class PDFLink extends PDFObject {
                 contents_key = pdfGoto.getContents();
             }
         }
-        String s = "<< /Type /Annot\n" + "/Subtype /Link\n" + "/Rect [ "
+        String dict = "<< /Type /Annot\n" + "/Subtype /Link\n" + "/Rect [ "
                    + (ulx) + " " + (uly) + " "
                    + (brx) + " " + (bry) + " ]\n" + "/C [ "
                    + this.color + " ]\n" + "/Border [ 0 0 0 ]\n" + "/A "
@@ -124,7 +124,13 @@ public class PDFLink extends PDFObject {
                    + (contents_key != null && !contents_key.isEmpty()
                            ? "/Contents " + contents_key + "\n" : "")
                    + fFlag + "\n>>";
-        return s;
+        /*if (action instanceof PDFUri) {
+            String altText = ((PDFUri) action).getAltText();
+            if (altText != null && !altText.isEmpty()) {
+                dict += "/Contents " + PDFText.escapeText(altText) + "\n";
+            }
+        }*/
+        return dict;
     }
 
     /*
