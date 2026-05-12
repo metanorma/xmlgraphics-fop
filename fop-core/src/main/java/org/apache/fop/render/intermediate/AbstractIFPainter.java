@@ -41,6 +41,7 @@ import org.apache.xmlgraphics.image.loader.ImageFlavor;
 import org.apache.xmlgraphics.image.loader.ImageInfo;
 import org.apache.xmlgraphics.image.loader.ImageManager;
 import org.apache.xmlgraphics.image.loader.ImageSessionContext;
+import org.apache.xmlgraphics.image.loader.impl.imageio.ImageLoaderImageIO;
 import org.apache.xmlgraphics.image.loader.util.ImageUtil;
 
 import org.apache.fop.ResourceEventProducer;
@@ -158,8 +159,9 @@ public abstract class AbstractIFPainter<T extends IFDocumentHandler> implements 
         Map hints = createDefaultImageProcessingHints(sessionContext);
         context.putHints(hints);
 
-        ImageFlavor[] flavors = imageHandlerRegistry.getSupportedFlavors(context);
+        ImageFlavor[] flavors = imageHandlerRegistry.getSupportedFlavors(context, getImageForSupportedFlavors(info));
         info.getCustomObjects().put("warningincustomobject", true);
+        info.getCustomObjects().put(ImageLoaderImageIO.ICC_CONVERTER, manager.getRegistry().getIccConverter());
         org.apache.xmlgraphics.image.loader.Image img = manager.getImage(
                     info, flavors,
                     hints, sessionContext);
@@ -179,6 +181,10 @@ public abstract class AbstractIFPainter<T extends IFDocumentHandler> implements 
                     getUserAgent().getEventBroadcaster());
             eventProducer.imageWritingError(this, e);
         }
+    }
+
+    protected Image getImageForSupportedFlavors(ImageInfo info) {
+        return null;
     }
 
     /**
@@ -234,8 +240,7 @@ public abstract class AbstractIFPainter<T extends IFDocumentHandler> implements 
             if (additionalHints != null) {
                 hints.putAll(additionalHints);
             }
-            effImage = manager.convertImage(image,
-                    imageHandlerRegistry.getSupportedFlavors(context), hints);
+            effImage = manager.convertImage(image, imageHandlerRegistry.getSupportedFlavors(context, null), hints);
         } else {
             effImage = image;
         }

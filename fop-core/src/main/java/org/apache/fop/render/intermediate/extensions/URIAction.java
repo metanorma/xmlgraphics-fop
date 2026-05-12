@@ -19,6 +19,10 @@
 
 package org.apache.fop.render.intermediate.extensions;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
@@ -33,19 +37,37 @@ public class URIAction extends AbstractAction implements DocumentNavigationExten
 
     private String uri;
     private boolean newWindow;
+    private String altText;
 
     /**
      * Creates a new instance.
      * @param uri the target URI
      * @param newWindow true if the link should be opened in a new window
      */
-    public URIAction(String uri, boolean newWindow) {
+    public URIAction(String uri, boolean newWindow, String altText) {
         if (uri == null) {
             throw new NullPointerException("uri must not be null");
         }
         this.uri = uri;
         this.newWindow = newWindow;
-        setID(getIDPrefix() + (uri + newWindow).hashCode());
+        this.altText = altText;
+        setID(createID(getIDPrefix(), uri + newWindow));
+    }
+
+    private String createID(String idPrefix, String url) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] thedigest = md.digest(url.getBytes(StandardCharsets.UTF_8));
+
+            StringBuilder hex = new StringBuilder();
+            for (byte b : thedigest) {
+                hex.append(String.format("%02x", b));
+            }
+
+            return idPrefix + hex;
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("MD5 algorithm not found", e);
+        }
     }
 
     /**
@@ -97,6 +119,9 @@ public class URIAction extends AbstractAction implements DocumentNavigationExten
             atts.addAttribute("", "id", "id", XMLUtil.CDATA, getID());
         }
         atts.addAttribute("", "uri", "uri", XMLUtil.CDATA, getURI());
+        if (altText != null && !altText.isEmpty()) {
+            atts.addAttribute("", "alt-text", "alt-text", XMLUtil.CDATA, altText);
+        }
         if (isNewWindow()) {
             atts.addAttribute("", "show-destination", "show-destination", XMLUtil.CDATA, "new");
         }
@@ -106,4 +131,7 @@ public class URIAction extends AbstractAction implements DocumentNavigationExten
                 GOTO_URI.getLocalName(), GOTO_URI.getQName());
     }
 
+    public String getAltText() {
+        return altText;
+    }
 }

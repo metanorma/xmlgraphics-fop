@@ -202,7 +202,7 @@ public class BlockContainerLayoutManager extends SpacedBorderedPaddedBlockLayout
         childLC.setStackLimitBP(
                 context.getStackLimitBP().minus(MinOptMax.getInstance(relDims.bpd)));
         childLC.setRefIPD(relDims.ipd);
-        childLC.setWritingMode(getBlockContainerFO().getWritingMode());
+        childLC.setWritingMode(context.getWritingMode());
         return childLC;
     }
 
@@ -245,12 +245,11 @@ public class BlockContainerLayoutManager extends SpacedBorderedPaddedBlockLayout
                 } else {
                     curLM = (LayoutManager) lmStack.pop();
                 }
+                curLM.setFinished(false);
                 setCurrentChildLM(curLM);
-            } else {
-                curLM = getChildLM();
             }
 
-            while (curLM != null) {
+            while ((curLM = getChildLM()) != null) {
                 childLC = makeChildLayoutContext(context);
 
                 // get elements from curLM
@@ -289,7 +288,6 @@ public class BlockContainerLayoutManager extends SpacedBorderedPaddedBlockLayout
                     }
                     contentList.addAll(returnedList);
                     if (returnedList.isEmpty()) {
-                        //Avoid NoSuchElementException below (happens with empty blocks)
                         continue;
                     }
                     if (ElementListUtils.endsWithForcedBreak(returnedList)) {
@@ -308,7 +306,6 @@ public class BlockContainerLayoutManager extends SpacedBorderedPaddedBlockLayout
                 context.updateKeepWithNextPending(childLC.getKeepWithNextPending());
                 childLC.clearKeepsPending();
                 prevLM = curLM;
-                curLM = getChildLM();
             }
             wrapPositionElements(contentList, returnList);
         } else {
@@ -599,7 +596,7 @@ public class BlockContainerLayoutManager extends SpacedBorderedPaddedBlockLayout
                 rect, relDims);
     }
 
-    private class BlockContainerPosition extends NonLeafPosition {
+    private static class BlockContainerPosition extends NonLeafPosition {
 
         private BlockContainerBreaker breaker;
 
@@ -707,7 +704,7 @@ public class BlockContainerLayoutManager extends SpacedBorderedPaddedBlockLayout
         }
 
         protected void doPhase3(PageBreakingAlgorithm alg, int partCount,
-                BlockSequence originalList, BlockSequence effectiveList) {
+                BlockSequence originalList, BlockSequence effectiveList, LayoutContext context) {
             //Defer adding of areas until addAreas is called by the parent LM
             this.deferredAlg = alg;
             this.deferredOriginalList = originalList;
@@ -772,6 +769,7 @@ public class BlockContainerLayoutManager extends SpacedBorderedPaddedBlockLayout
         LayoutManager childLM;
         LayoutManager lastLM = null;
         LayoutContext lc = LayoutContext.offspringOf(layoutContext);
+        lc.setWritingMode(getBlockContainerFO().getWritingMode());
         lc.setSpaceAdjust(layoutContext.getSpaceAdjust());
         // set space after in the LayoutContext for children
         if (layoutContext.getSpaceAfter() > 0) {
@@ -838,7 +836,7 @@ public class BlockContainerLayoutManager extends SpacedBorderedPaddedBlockLayout
             }
         } else {
             //Add child areas inside the reference area
-            bcpos.getBreaker().addContainedAreas(layoutContext);
+            bcpos.getBreaker().addContainedAreas(lc);
         }
 
         registerMarkers(false, isFirst(firstPos), isLast(lastPos));

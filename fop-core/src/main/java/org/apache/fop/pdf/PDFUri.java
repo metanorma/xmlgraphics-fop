@@ -25,14 +25,16 @@ package org.apache.fop.pdf;
 public class PDFUri extends PDFAction {
 
     private String uri;
+    private String altText;
 
     /**
      * create a Uri instance.
      *
      * @param uri the uri to which the link should point
      */
-    public PDFUri(String uri) {
+    public PDFUri(String uri, String altText) {
         this.uri = uri;
+        this.altText = altText;
     }
 
     /**
@@ -52,9 +54,17 @@ public class PDFUri extends PDFAction {
         return "<< /URI " + encodeScript(uri) + "\n/S /URI >>";
     }
 
+    public String getUri() {
+        return PDFText.escapeText(uri, false);
+    }
+
     /** {@inheritDoc} */
     public String toPDFString() {
         //TODO Convert this class into a dictionary
         return getDictString();
+    }
+
+    public String getAltText() {
+        return altText;
     }
 }
