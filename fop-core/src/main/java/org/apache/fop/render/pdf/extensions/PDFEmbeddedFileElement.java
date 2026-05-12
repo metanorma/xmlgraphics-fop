@@ -92,6 +92,18 @@ public class PDFEmbeddedFileElement extends AbstractPDFExtensionElement {
             }
         }
         embeddedFile.setFilename(filename);
+        String rel = attlist.getValue("afrelationship");
+        if (rel != null && rel.length() > 0) {
+            embeddedFile.setRel(rel);
+        }
+        String volatility = attlist.getValue("volatile");
+        if (volatility != null && volatility.length() > 0) {
+            embeddedFile.setVolatile(volatility);
+        }
+        String linkAsFileAnnotation = attlist.getValue("link-as-file-annotation");
+        if (linkAsFileAnnotation != null && linkAsFileAnnotation.length() > 0) {
+            embeddedFile.setLinkAsFileAnnotation(linkAsFileAnnotation);
+        }
     }
 
     @Override

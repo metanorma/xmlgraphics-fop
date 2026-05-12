@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format"
+         xmlns:fox="http://xmlgraphics.apache.org/fop/extensions">
+    <fo:layout-master-set>
+        <fo:simple-page-master margin="0.5cm"
+                               page-width="29.7cm" page-height="21.0cm" master-name="A4" writing-mode="tb-rl" >
+            <fo:region-body margin="2cm"/><fo:region-after extent="2cm" background-color="rgb(235,235,235)"/><fo:region-start precedence="true" extent="2cm" writing-mode="lr-tb"/>
+        </fo:simple-page-master>
+        <fo:simple-page-master margin="0.5cm" page-width="21.0cm" page-height="29.7cm" master-name="A4-P">
+            <fo:region-body margin="2cm"/><fo:region-before extent="2cm"/><fo:region-after extent="2cm"/><fo:region-start extent="2cm"/>
+            <fo:region-end extent="269mm" writing-mode="tb-rl"/>
+        </fo:simple-page-master>
+    </fo:layout-master-set>
+    <fo:page-sequence master-reference="A4" font-family="Noto Sans CJK SC" initial-page-number="123" format="&#x4E00;">
+        <fo:static-content flow-name="xsl-region-start" position="absolute">
+            <fo:block >
+                縦書きサンプル
+            </fo:block>
+        </fo:static-content>
+        <fo:static-content flow-name="xsl-region-after">
+          <fo:block><fo:page-number/></fo:block>
+        </fo:static-content>
+        <fo:static-content flow-name="xsl-footnote-separator">
+          <fo:block>
+            <fo:leader leader-pattern="rule" leader-length="30%"/>
+          </fo:block>
+        </fo:static-content>
+        <fo:flow flow-name="xsl-region-body" script="hani">
+            <fo:block language="JA">目　次</fo:block>
+            <fo:block text-align-last="justify" language="JA">
+              <fo:inline keep-together.within-line="always">
+                Item 1
+                <fo:leader leader-pattern="space"/>
+                <fo:inline>
+                  <fo:page-number-citation ref-id="id_page123"/>
+                </fo:inline>
+              </fo:inline>
+            </fo:block>
+            <fo:block text-align-last="justify" language="JA">
+              <fo:inline keep-together.within-line="always">
+                Item 2
+                <fo:leader leader-pattern="space"/>
+                <fo:inline>
+                  <fo:page-number-citation ref-id="id_page124"/>
+                </fo:inline>
+              </fo:inline>
+            </fo:block>
+            <fo:block text-align-last="justify" language="JA">
+              <fo:inline keep-together.within-line="always">
+                Item 3
+                <fo:leader leader-pattern="space"/>
+                <fo:inline>
+                  <fo:page-number-citation ref-id="id_page125"/>
+                </fo:inline>
+              </fo:inline>
+            </fo:block>
+        
+            <fo:block id="id_page123" margin-top="1em">fo:block:</fo:block>
+            <fo:block border="1pt solid blue" language="JA">
+                「天の人を生ずるは億兆皆同一轍にて、之に附与するに動かす可からざるの通義を以てす。即ち其通義とは人の自<fo:footnote>
+              <fo:inline baseline-shift="30%" color="blue"><fo:basic-link internal-destination="id_footnote">一</fo:basic-link></fo:inline>
+              <fo:footnote-body>
+                <fo:block id="id_footnote"><fo:inline baseline-shift="30%">一</fo:inline>他より之を如何ともす可らざるものなり</fo:block>
+              </fo:footnote-body>
+              </fo:footnote>から生命を保し自由を求め幸福を祈るの類にて、他より之を如何ともす可らざるものなり。」
+                ――『アメリカ独立宣言』
+            </fo:block>
+            <fo:block margin-top="1em">fo:block-container:</fo:block>
+            <fo:block-container>
+              <fo:block border="1pt solid blue" language="JA">
+                「天の人を生ずるは億兆皆同一轍にて、之に附与するに動かす可からざるの通義を以てす。即ち其通義とは人の自から生命を保し自由を求め幸福を祈るの類にて、他より之を如何ともす可らざるものなり。」
+                ――『アメリカ独立宣言』
+              </fo:block>
+            </fo:block-container>
+            <fo:block margin-top="1em">fo:table:</fo:block>
+            <fo:table width="100%" table-layout="fixed">
+              <fo:table-body>
+                <fo:table-row>
+                  <fo:table-cell>
+                    <fo:block border="1pt solid blue" language="JA">
+                        「天の人を生ずるは億兆皆同一轍にて、之に附与するに動かす可からざるの通義を以てす。即ち其通義とは人の自から生命を保し自由を求め幸福を祈るの類にて、他より之を如何ともす可らざるものなり。」
+                        ――『アメリカ独立宣言』
+                    </fo:block>
+                  </fo:table-cell>
+                </fo:table-row>
+              </fo:table-body>
+            </fo:table>
+            <fo:block margin-top="1em" border="1pt solid blue" language="ZH">
+                “我等之见解为，下述真理不证自明：凡人生而平等，秉造物者之赐，拥诸无可转让之权利，包含生命权、自由权、与追寻幸福之权。”
+                ——《美国独立宣言》
+            </fo:block>
+        </fo:flow>
+    </fo:page-sequence>
+</fo:root>

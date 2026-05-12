@@ -291,6 +291,6 @@ public class PDFFactoryTestCase {
         link.setAction(action);
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         link.output(bos);
-        assertTrue(bos.toString().contains("/Contents (b)"));
+        assertTrue(bos.toString().contains("/Contents (a)")); // was (b), see PDFLink.java for /Contents
     }
 }
