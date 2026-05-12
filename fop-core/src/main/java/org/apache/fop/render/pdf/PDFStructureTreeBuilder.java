@@ -19,12 +19,11 @@
 
 package org.apache.fop.render.pdf;
 
-import java.util.LinkedList;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 import javax.xml.XMLConstants;
 
+import org.apache.fop.pdf.*;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
 
@@ -34,16 +33,9 @@ import org.apache.fop.events.EventBroadcaster;
 import org.apache.fop.fo.extensions.ExtensionElementMapping;
 import org.apache.fop.fo.extensions.InternalElementMapping;
 import org.apache.fop.fo.pagination.Flow;
-import org.apache.fop.pdf.PDFFactory;
-import org.apache.fop.pdf.PDFParentTree;
-import org.apache.fop.pdf.PDFStructElem;
-import org.apache.fop.pdf.PDFStructTreeRoot;
 import org.apache.fop.pdf.StandardStructureAttributes.Table.Scope;
-import org.apache.fop.pdf.StandardStructureTypes;
 import org.apache.fop.pdf.StandardStructureTypes.Grouping;
 import org.apache.fop.pdf.StandardStructureTypes.Table;
-import org.apache.fop.pdf.StructureHierarchyMember;
-import org.apache.fop.pdf.StructureType;
 import org.apache.fop.util.LanguageTags;
 import org.apache.fop.util.XMLUtil;
 
@@ -134,6 +126,8 @@ public class PDFStructureTreeBuilder implements StructureTreeEventHandler {
             StructureType structureType;
             if (role == null) {
                 structureType = defaultStructureType;
+            } else if (role.equals("SKIP")) {
+                return (PDFStructElem)parent;
             } else {
                 structureType = StandardStructureTypes.get(role);
                 if (structureType == null) {
@@ -142,6 +136,27 @@ public class PDFStructureTreeBuilder implements StructureTreeEventHandler {
                             structureType.toString());
                 }
             }
+
+
+            List<String> tags_ancestor = new ArrayList<>();
+            try {
+                PDFStructElem ancestor = ((PDFStructElem) parent).getParentStructElem();
+                // if Span in LBody, then skip Span tag
+                StringBuilder tags = new StringBuilder();
+                //tags.append(structureType + " ");
+                while (ancestor != null) {
+                    tags.append(ancestor.getStructureType().toString() + " ");
+                    tags_ancestor.add(ancestor.getStructureType().toString());
+                    ancestor = ancestor.getParentStructElem();
+                }
+                //System.out.println(tags);
+            }catch (Exception ex) {}
+
+            // if Div inside P, then skip it
+            if (structureType.toString().equals("Div") && tags_ancestor.contains("P")) {
+                return (PDFStructElem)parent;
+            }
+
             PDFStructElem structElem = createStructureElement(parent, structureType);
             setAttributes(structElem, attributes);
             addKidToParent(structElem, parent, attributes);
@@ -325,11 +340,11 @@ public class PDFStructureTreeBuilder implements StructureTreeEventHandler {
         protected void setAttributes(PDFStructElem structElem, Attributes attributes) {
             String columnSpan = attributes.getValue("number-columns-spanned");
             if (columnSpan != null) {
-                structElem.setTableAttributeColSpan(Integer.parseInt(columnSpan));
+                structElem.setTableAttributeColSpan(Integer.parseInt(columnSpan), attributes);
             }
             String rowSpan = attributes.getValue("number-rows-spanned");
             if (rowSpan != null) {
-                structElem.setTableAttributeRowSpan(Integer.parseInt(rowSpan));
+                structElem.setTableAttributeRowSpan(Integer.parseInt(rowSpan), attributes);
             }
         }
 
@@ -465,7 +480,9 @@ public class PDFStructureTreeBuilder implements StructureTreeEventHandler {
 
     private boolean isPDFA1Safe(String name) {
         return !((pdfFactory.getDocument().getProfile().getPDFAMode().isPart1()
-                || pdfFactory.getDocument().getProfile().getPDFUAMode().isEnabled())
+                // commented, see https://github.com/metanorma/metanorma-iso/issues/1001#issuecomment-1592786352
+                // || pdfFactory.getDocument().getProfile().getPDFUAMode().isEnabled()
+                )
                 && (name.equals("table-body")
                 || name.equals("table-header")
                 || name.equals("table-footer")));
