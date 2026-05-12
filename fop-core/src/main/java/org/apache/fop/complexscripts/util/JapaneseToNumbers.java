@@ -74,7 +74,7 @@ public class JapaneseToNumbers {
      * @return	numStr			the final written representation in Japanese kanji
      */
     public static String numToWord(String num, Boolean isRecursive) {
-        String numStr = "";
+        StringBuilder numStr = new StringBuilder();
 
         // Counter will be used to keep track of the remainder as each larger unit is subtracted
         // E.G., 2486954371891 --> minus 2 chou (10^12) --> 486954371891 --> . . .
@@ -104,21 +104,21 @@ public class JapaneseToNumbers {
 
                     // If numStr is empty at this point, it means that num >= 9999
                     // and therefore 一 shouldn't be placed before 千
-                    if (numStr.isEmpty()) {
+                    if (numStr.length() == 0) {
                         strVal = strVal.substring(1);
                     }
 
                 }
             }
 
-            numStr += strVal;
+            numStr.append(strVal);
             counter = (BigInteger) results[1];
         }
 
         // Tack on the one's place value
-        numStr += NUMERALS_KANJI[counter.intValue()];
+        numStr.append(NUMERALS_KANJI[counter.intValue()]);
 
-        return numStr;
+        return numStr.toString();
     }
 
     /**
