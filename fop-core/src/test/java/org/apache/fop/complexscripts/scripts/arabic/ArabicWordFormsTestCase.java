@@ -143,10 +143,10 @@ public class ArabicWordFormsTestCase implements ArabicWordFormsConstants {
                 int[][] paa = (int[][]) d[3];
                 GlyphSequence tigs = tf.mapCharsToGlyphs(wf);
                 assertSameGlyphs(iga, getGlyphs(tigs), "input glyphs", wf, tfn);
-                GlyphSequence togs = gsub.substitute(tigs, script, language);
+                GlyphSequence togs = gsub.substitute(tigs, script, language, false);
                 assertSameGlyphs(oga, getGlyphs(togs), "output glyphs", wf, tfn);
                 int[][] tpaa = new int [ togs.getGlyphCount() ] [ 4 ];
-                if (gpos.position(togs, script, language, 1000, widths, tpaa)) {
+                if (gpos.position(togs, script, language, 1000, widths, tpaa, false)) {
                     assertSameAdjustments(paa, tpaa, wf, tfn);
                 } else if (paa != null) {
                     assertEquals("unequal adjustment count, word form(" + wf + "), font (" + tfn + ")", paa.length, 0);
