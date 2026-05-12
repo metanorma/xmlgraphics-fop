@@ -322,7 +322,7 @@ public class PageBreaker extends AbstractBreaker {
      * or whether to take into account a 'last-page' condition.
      */
     protected void doPhase3(PageBreakingAlgorithm alg, int partCount,
-            BlockSequence originalList, BlockSequence effectiveList) {
+            BlockSequence originalList, BlockSequence effectiveList, LayoutContext context) {
 
         if (needColumnBalancing) {
             //column balancing for the last part
@@ -444,7 +444,7 @@ public class PageBreaker extends AbstractBreaker {
                     getTopLevelLM(), getPageProvider(), createLayoutListener(),
                     alg.getAlignment(), alg.getAlignmentLast(),
                     footnoteSeparatorLength,
-                    isPartOverflowRecoveryActivated(), false, false);
+                    isPartOverflowRecoveryActivated(), false, false, null);
             log.debug("===================================================");
         }
 
@@ -475,12 +475,17 @@ public class PageBreaker extends AbstractBreaker {
                 //Replace last page
                 pslm.setCurrentPage(pageProvider.getPage(false, currentPageNum));
             } else {
+                if (optimalPageCount > pslm.getCurrentPV().getBodyRegion().getMainReference().getColumnCount()) {
+                    setLastPageIndex(currentPageNum + 2);
+                } else {
+                    setLastPageIndex(currentPageNum + 1);
+                }
                 //Last page-master cannot hold the content.
                 //Add areas now...
                 addAreas(alg, restartPoint, partCount - restartPoint, originalList, effectiveList);
-                if (!ipdChange) {
-                    //...and add a blank last page
+                if (!ipdChange && pslm.currentPageNum == currentPageNum) {
                     setLastPageIndex(currentPageNum + 1);
+                    //...and add a blank last page
                     pslm.setCurrentPage(pslm.makeNewPage(true));
                 }
                 return;
@@ -959,16 +964,27 @@ public class PageBreaker extends AbstractBreaker {
                     relayedFirstNewFootnoteIndex, relayedFootnoteListIndex, relayedFootnoteElementIndex,
                     relayedFootnoteSeparatorLength, previousFootnoteListIndex,
                     previousFootnoteElementIndex);
-            relayedFootnotesList = null;
-            relayedLengthList = null;
-            relayedTotalFootnotesLength = 0;
-            relayedInsertedFootnotesLength = 0;
-            relayedFootnotesPending = false;
-            relayedNewFootnotes = false;
-            relayedFirstNewFootnoteIndex = 0;
-            relayedFootnoteListIndex = 0;
-            relayedFootnoteElementIndex = -1;
-            relayedFootnoteSeparatorLength = null;
+            if (alg.handlingFloat()) {
+                relayedFootnotesList = null;
+                relayedLengthList = null;
+                relayedTotalFootnotesLength = 0;
+                relayedInsertedFootnotesLength = 0;
+                relayedFootnotesPending = false;
+                relayedNewFootnotes = false;
+                relayedFirstNewFootnoteIndex = 0;
+                relayedFootnoteListIndex = 0;
+                relayedFootnoteElementIndex = -1;
+                relayedFootnoteSeparatorLength = null;
+            }
+        }
+    }
+
+    protected void addAreas(PageBreakingAlgorithm alg, int startPart, int partCount,
+                            BlockSequence originalList, BlockSequence effectiveList, final LayoutContext childLC) {
+        super.addAreas(alg, startPart, partCount, originalList, effectiveList, childLC);
+        if (!alg.handlingFloat()) {
+            PageSequenceLayoutManager pslm = (PageSequenceLayoutManager) getTopLevelLM();
+            alg.relayFootnotes(pslm);
         }
     }
 }
