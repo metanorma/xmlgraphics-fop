@@ -827,11 +827,14 @@ public interface Constants {
     /**For specifying extended text for abbreviation */
     int PR_X_ABBREVIATION = 294;
 
+    /**For specifying text for actual text */
+    int PR_X_ACTUAL_TEXT = 295;
+
     /**For shrink the text to fit block-container*/
-    int PR_X_SHRINK_TO_FIT = 295;
+    int PR_X_SHRINK_TO_FIT = 296;
 
     /** Number of property constants defined */
-    int PROPERTY_COUNT = 295;
+    int PROPERTY_COUNT = 296;
 
     // compound property constants
 
