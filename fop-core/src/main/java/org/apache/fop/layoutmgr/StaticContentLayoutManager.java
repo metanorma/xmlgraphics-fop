@@ -169,6 +169,14 @@ public class StaticContentLayoutManager extends BlockStackingLayoutManager {
             super(lm, ipd, displayAlign);
         }
 
+        @Override
+        protected void updateLayoutContext(LayoutContext context) {
+            super.updateLayoutContext(context);
+            if (StaticContentLayoutManager.this.regionFO != null) {
+                context.setWritingMode(StaticContentLayoutManager.this.regionFO.getWritingMode());
+            }
+        }
+
         /** {@inheritDoc} */
         protected void observeElementList(List elementList) {
             String elementListID = getStaticContentFO().getFlowName();
