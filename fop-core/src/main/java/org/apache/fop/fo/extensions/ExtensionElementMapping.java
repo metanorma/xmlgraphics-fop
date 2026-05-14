@@ -54,6 +54,8 @@ public class ExtensionElementMapping extends ElementMapping {
         PROPERTY_ATTRIBUTES.add("alt-text");
         PROPERTY_ATTRIBUTES.add("header");
         PROPERTY_ATTRIBUTES.add("abbreviation");
+        // Added for mn2pdf mathml text
+        PROPERTY_ATTRIBUTES.add("actual-text");
         // Added for mn2pdf Title /T
         PROPERTY_ATTRIBUTES.add("title");
         //fox:border-*-radius-*
@@ -75,6 +77,8 @@ public class ExtensionElementMapping extends ElementMapping {
         // used for scaling of background images
         PROPERTY_ATTRIBUTES.add("background-image-width");
         PROPERTY_ATTRIBUTES.add("background-image-height");
+        // reduce font size to fit container
+        PROPERTY_ATTRIBUTES.add("shrink-to-fit");
     }
 
     /**

@@ -191,11 +191,17 @@ public class PDFPainter extends AbstractIFPainter<PDFDocumentHandler> {
             PDFStructElem structElem = (PDFStructElem) getContext().getStructureTreeElement();
             if (structElem != null) { //structElem is null if the image is marked as an artifact
                 PDFDictionary d = new PDFDictionary();
-                int x = rect.x / 1000;
-                int y = rect.y / 1000;
-                int w = rect.width / 1000;
-                int h = rect.height / 1000;
-                d.put("BBox", new PDFArray(x, y, w, h));
+                double x = rect.x / 1000d;
+                double y = -rect.y / 1000d;
+                double w = rect.width / 1000d;
+                double h = rect.height / 1000d;
+
+                if (generator.getState().getTransform() != null) {
+                    x += generator.getState().getTransform().getTranslateX();
+                    y += generator.getState().getTransform().getTranslateY();
+                }
+
+                d.put("BBox", new PDFArray(x, y - h, x + w, y));
                 d.put("O", new PDFName("Layout"));
                 structElem.put("A", d);
             }
@@ -534,7 +540,11 @@ public class PDFPainter extends AbstractIFPainter<PDFDocumentHandler> {
     private double startSimulateStyle(Typeface tf, FontTriplet triplet) {
         double shear = 0;
         boolean simulateStyle = tf instanceof CustomFont && ((CustomFont) tf).getSimulateStyle();
-        if (simulateStyle) {
+        boolean isTransparent = isTransparent();
+        if (isTransparent) {
+            PDFTextUtil textutil = generator.getTextUtil();
+            textutil.setTextRenderingMode(PDFTextUtil.TR_INVISIBLE); // set transparent mode '3 Tr'
+        } else if (simulateStyle) {
             if (triplet.getWeight() == 700) {
                 generator.updateColor(state.getTextColor(), false, null);
                 generator.add("2 Tr 0.31543 w\n");
@@ -548,9 +558,20 @@ public class PDFPainter extends AbstractIFPainter<PDFDocumentHandler> {
 
     private void endSimulateStyle(Typeface tf, FontTriplet triplet) {
         boolean simulateStyle = tf instanceof CustomFont && ((CustomFont) tf).getSimulateStyle();
-        if (simulateStyle && triplet.getWeight() == 700) {
-            generator.add("0 Tr\n");
+        boolean isTransparent = isTransparent();
+        if (isTransparent) {
+            PDFTextUtil textutil = generator.getTextUtil();
+            textutil.setTextRenderingMode(PDFTextUtil.TR_FILL); //restore default mode
+        } else if (simulateStyle && triplet.getWeight() == 700) {
+                generator.add("0 Tr\n");
         }
+    }
+
+    private boolean isTransparent() {
+        if (state != null && state.getTextColor() != null) {
+            return state.getTextColor().getAlpha() == 0;
+        }
+        return false;
     }
 
     private static int[] paZero = new int[4];

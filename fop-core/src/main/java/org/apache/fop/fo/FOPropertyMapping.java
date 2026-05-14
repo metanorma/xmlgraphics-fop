@@ -1977,6 +1977,13 @@ public final class FOPropertyMapping implements Constants {
         m.setInherited(true);
         m.setDefault("false");
         addPropertyMaker("fox:disable-column-balancing", m);
+
+        // fox:shrink-to-fit
+        m  = new EnumProperty.Maker(PR_X_SHRINK_TO_FIT);
+        m.useGeneric(genericBoolean);
+        m.setInherited(true);
+        m.setDefault("false");
+        addPropertyMaker("fox:shrink-to-fit", m);
     }
 
     private void createLeaderAndRuleProperties() {
@@ -2660,6 +2667,12 @@ public final class FOPropertyMapping implements Constants {
         m.setInherited(false);
         m.setDefault("");
         addPropertyMaker("fox:alt-text", m);
+        
+        // fox:actual-text, used for mn2pdf mathml text
+        m = new StringProperty.Maker(PR_X_ACTUAL_TEXT);
+        m.setInherited(false);
+        m.setDefault("");
+        addPropertyMaker("fox:actual-text", m);
 
         // fox:title, used for mn2pdf title /T
         // (see https://github.com/metanorma/mn2pdf/issues/348)

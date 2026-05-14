@@ -76,14 +76,14 @@ public class KhmerTestCase {
         GlyphPositioningTable gpt =
                 new GlyphPositioningTable(null, lookups, Collections.singletonList(subtable5), processors);
 
-        ScriptProcessor scriptProcessor = ScriptProcessor.getInstance(OTFScript.KHMER, processors);
+        ScriptProcessor scriptProcessor = ScriptProcessor.getInstance(OTFScript.KHMER, processors, false);
         MultiByteFont multiByteFont = new MultiByteFont(null, null);
         GlyphSequence glyphSequence = multiByteFont.charSequenceToGlyphSequence("test", null);
         scriptProcessor.preProcess("test", multiByteFont, null);
         scriptProcessor.substitute(
                 glyphSequence, OTFScript.KHMER, OTFLanguage.DEFAULT, new GlyphTable.UseSpec[0], null);
         int[][] adjustments = new int[4][1];
-        gpt.position(glyphSequence, OTFScript.KHMER, OTFLanguage.DEFAULT, 0, null, adjustments);
+        gpt.position(glyphSequence, OTFScript.KHMER, OTFLanguage.DEFAULT, 0, null, adjustments, false);
         Assert.assertArrayEquals(adjustments[1], new int[]{12});
     }
 

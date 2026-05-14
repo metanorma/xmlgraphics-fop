@@ -182,7 +182,7 @@ public class LineLayoutManager extends InlineStackingLayoutManager
      * which was the first element in the paragraph
      * returned by each LM.
      */
-    private final class Update {
+    private static final class Update {
         private final InlineLevelLayoutManager inlineLM;
         private final int firstIndex;
 
@@ -400,7 +400,10 @@ public class LineLayoutManager extends InlineStackingLayoutManager
                 InlineLevelEventProducer eventProducer
                     = InlineLevelEventProducer.Provider.get(
                         getFObj().getUserAgent().getEventBroadcaster());
-                if (curChildLM.getFObj() == null) {
+                String elementId = getFObj().getId();
+                if (elementId != null && elementId.startsWith("__internal_layout__")) {
+                    // skip event
+                } else if (curChildLM.getFObj() == null) {
                     eventProducer.lineOverflows(this, getFObj().getName(), bestActiveNode.line,
                             -lack, getFObj().getLocator());
                 } else {
