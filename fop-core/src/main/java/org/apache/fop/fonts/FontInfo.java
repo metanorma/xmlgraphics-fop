@@ -26,9 +26,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.logging.Logger;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.fop.render.intermediate.EventProducingFilter;
+import org.metanorma.Constants;
+import org.metanorma.fop.SourceXMLDocument;
+import org.metanorma.utils.LoggerHelper;
 
 
 /**
@@ -212,7 +217,12 @@ public class FontInfo {
 
         if (fontTriplet != null) {
             if (fontTriplet != startKey) {
-                notifyFontReplacement(startKey, fontTriplet);
+                // To do: https://github.com/metanorma/mn2pdf/issues/360
+                if (SourceXMLDocument.mainFont.equals(startKey.getName()) ||
+                        Constants.DEBUG ||
+                        !(SourceXMLDocument.mainAdditionalFonts.contains(startKey.getName()))) {
+                    notifyFontReplacement(startKey, fontTriplet);
+                }
             }
             return fontTriplet;
         } else {
