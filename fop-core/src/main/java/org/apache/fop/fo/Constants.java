@@ -827,8 +827,11 @@ public interface Constants {
     /**For specifying extended text for abbreviation */
     int PR_X_ABBREVIATION = 294;
 
+    /**For specifying text for title /T (see https://github.com/metanorma/mn2pdf/issues/348) */
+    int PR_X_TITLE = 295;
+
     /** Number of property constants defined */
-    int PROPERTY_COUNT = 294;
+    int PROPERTY_COUNT = 295;
 
     // compound property constants
 
