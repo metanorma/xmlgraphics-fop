@@ -18,9 +18,15 @@
 /* $Id$ */
 package org.apache.fop.pdf;
 
+import org.apache.fop.apps.FOUserAgent;
 import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure.PDStructureElement;
+import org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure.PDStructureNode;
+import org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure.PDStructureTreeRoot;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -31,10 +37,15 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class PDFTagsTestCase {
+
+    StringBuilder tagsTree = new StringBuilder();
 
     @Test
     public void testPDF() throws Exception {
@@ -45,8 +56,14 @@ public class PDFTagsTestCase {
                 + "<filterList>\n"
                 + "    <value>null</value>\n"
                 + "  </filterList>\n"
+                + "      <fonts>\n"
+                + "        <font name=\"Univers\" embed-url=\"test/resources/fonts/ttf/DejaVuLGCSerif.ttf\">\n"
+                + "          <font-triplet name=\"Univers\" style=\"normal\" weight=\"normal\"/>\n"
+                + "          <font-triplet name=\"any\" style=\"normal\" weight=\"normal\"/>\n"
+                + "        </font>\n"
+                + "      </fonts>\n"
                 + "</renderer></renderers></fop>";
-        String fo = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><fo:root xmlns:fo=\"http://www.w3.org/1999/XSL/Format\" xmlns:fox=\"http://xmlgraphics.apache.org/fop/extensions\">\n"
+        String fo = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><fo:root xmlns:fo=\"http://www.w3.org/1999/XSL/Format\" xmlns:pdf=\"http://xmlgraphics.apache.org/fop/extensions/pdf\" xmlns:fox=\"http://xmlgraphics.apache.org/fop/extensions\" font-family=\"Univers\">\n"
                 + "  <fo:layout-master-set>\n"
                 + "    <fo:simple-page-master master-name=\"simple\">\n"
                 + "      <fo:region-body/>\n"
@@ -64,24 +81,24 @@ public class PDFTagsTestCase {
                 + "      <fo:table id=\"table1\" table-layout=\"fixed\" width=\"100%\">\n" +
                 "        <fo:table-header>\n" +
                 "          <fo:table-row>\n" +
-                "            <fo:table-cell font-weight=\"bold\" text-align=\"center\" number-rows-spanned=\"2\">\n" +
+                "            <fo:table-cell text-align=\"center\" number-rows-spanned=\"2\">\n" +
                 "              <fo:block>Defect</fo:block>\n" +
                 "            </fo:table-cell>\n" +
-                "            <fo:table-cell font-weight=\"bold\" number-columns-spanned=\"4\">\n" +
+                "            <fo:table-cell number-columns-spanned=\"4\">\n" +
                 "              <fo:block>Maximum permissible mass fraction of defects %</fo:block>\n" +
                 "            </fo:table-cell>\n" +
                 "          </fo:table-row>\n" +
-                "          <fo:table-row font-weight=\"bold\">\n" +
-                "            <fo:table-cell font-weight=\"bold\">\n" +
+                "          <fo:table-row>\n" +
+                "            <fo:table-cell>\n" +
                 "              <fo:block>Husked rice</fo:block>\n" +
                 "            </fo:table-cell>\n" +
-                "            <fo:table-cell font-weight=\"bold\">\n" +
+                "            <fo:table-cell>\n" +
                 "              <fo:block>Milled rice (non-glutinous)</fo:block>\n" +
                 "            </fo:table-cell>\n" +
-                "            <fo:table-cell font-weight=\"bold\">\n" +
+                "            <fo:table-cell>\n" +
                 "              <fo:block>Husked parboiled rice</fo:block>\n" +
                 "            </fo:table-cell>\n" +
-                "            <fo:table-cell font-weight=\"bold\">\n" +
+                "            <fo:table-cell>\n" +
                 "              <fo:block>Milled parboiled rice</fo:block>\n" +
                 "            </fo:table-cell>\n" +
                 "          </fo:table-row>\n" +
@@ -122,13 +139,16 @@ public class PDFTagsTestCase {
         FopFactory fopFactory = FopFactory.newInstance(new File(".").toURI(),
                 new ByteArrayInputStream(fopxconf.getBytes()));
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, fopFactory.newFOUserAgent(), out);
+        FOUserAgent foUserAgent = fopFactory.newFOUserAgent();
+        foUserAgent.getRendererOptions().put("pdf-a-mode", "PDF/A-3a");
+        Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, foUserAgent, out);
         Transformer transformer = TransformerFactory.newInstance().newTransformer();
         Source src = new StreamSource(new ByteArrayInputStream(fo.getBytes()));
         Result res = new SAXResult(fop.getDefaultHandler());
         transformer.transform(src, res);
 
         checkPDF(out.toByteArray());
+        checkPDFtags(out.toByteArray());
     }
 
     private void checkPDF(byte[] data) throws IOException {
@@ -147,10 +167,61 @@ public class PDFTagsTestCase {
         Assert.assertTrue(objects.contains("/ColSpan 4\n" + "  /Scope /Column"));
         // check for role="SKIP"
         Assert.assertTrue(!objects.contains("/Span"));
-        // check for P/Div
-        Assert.assertTrue(!objects.contains("/S /Div"));
+
         // check for "Add /T (title) for <Sect>" (https://github.com/metanorma/xmlgraphics-fop/issues/67)
         Assert.assertTrue(objects.contains("/T (Scope)"));
+        // check for "Annotation flags (Ff) for all Link annotations" (https://github.com/metanorma/xmlgraphics-fop/issues/72)
+        Assert.assertTrue(!objects.contains("/Contents (https://www.iso.org)\n" +
+                "/F 28"));
+        Assert.assertTrue(objects.contains("/Contents (https://www.iso.org)\n" +
+                "/F 4"));
     }
+
+    private void checkPDFtags(byte[] data) throws IOException {
+        try (PDDocument document = Loader.loadPDF(data)) {
+            PDStructureTreeRoot structureTreeRoot = document.getDocumentCatalog().getStructureTreeRoot();
+            List<Object> kids = structureTreeRoot.getKids();
+
+            for (Object kid : kids) {
+                tagsTree(kid);
+            }
+        }
+        // System.out.println(tagsTree.toString());
+        // check for omit P/Div
+        Assert.assertTrue(tagsTree.toString().contains("Document -> Part -> Sect -> P -> P -> P"));
+    }
+
+    private void tagsTree(Object element) {
+        if (element instanceof PDStructureNode) {
+            List<Object> kids = ((PDStructureNode) element).getKids();
+            for (int i = 0; i < kids.size(); i++) {
+                Object kid = kids.get(i);
+
+                if (kid instanceof PDStructureElement) {
+                    PDStructureElement pdStructureElement = (PDStructureElement) kid;
+
+                    List<String> tree = new ArrayList<>();
+                    tree.add(pdStructureElement.getStructureType());
+
+                    PDStructureNode p = pdStructureElement.getParent();
+
+                    while(p instanceof PDStructureElement) {
+                        PDStructureElement se = (PDStructureElement)p;
+                        tree.add(se.getStructureType());
+                        p = se.getParent();
+                    }
+                    Collections.reverse(tree);
+                    for (String item: tree) {
+                        tagsTree.append(" -> " + item);
+                    }
+                    tagsTree.append("\n");
+
+                    tagsTree(kid);
+                }
+            }
+        }
+    }
+
+
 
 }
