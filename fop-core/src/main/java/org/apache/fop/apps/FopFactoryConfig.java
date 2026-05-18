@@ -67,6 +67,9 @@ public interface FopFactoryConfig {
      * @return true if accessibility features have been requested
      */
     boolean isAccessibilityEnabled();
+
+    boolean isStaticRegionsPerPageForAccessibility();
+
     boolean isKeepEmptyTags();
 
     /**
@@ -172,6 +175,8 @@ public interface FopFactoryConfig {
     boolean isLegacySkipPagePositionOnly();
 
     boolean isLegacyLastPageChangeIPD();
+
+    boolean isLegacyFoWrapper();
 
     /** @return the hyphenation pattern names */
     Map<String, String> getHyphenationPatternNames();
