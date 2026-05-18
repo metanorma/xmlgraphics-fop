@@ -130,6 +130,7 @@ public class PDFTagsTestCase {
                 "          </fo:table-row>\n" +
                 "        </fo:table-body>\n" +
                 "      </fo:table>"
+                + "      <fo:block role=\"P/Title\">Section title</fo:block>\n"
                 + "      <fo:block>Text <fo:inline role=\"SKIP\">inline text</fo:inline></fo:block>\n"
                 + "      <fo:block>Text <fo:block><fo:block-container><fo:block>Div inside P</fo:block></fo:block-container></fo:block></fo:block>\n"
                 + "    </fo:flow>\n"
@@ -189,6 +190,8 @@ public class PDFTagsTestCase {
         // System.out.println(tagsTree.toString());
         // check for omit P/Div
         Assert.assertTrue(tagsTree.toString().contains("Document -> Part -> Sect -> P -> P -> P"));
+        // check for Title role mapped to P (https://github.com/metanorma/xmlgraphics-fop/issues/73)
+        Assert.assertTrue(tagsTree.toString().contains("Document -> Part -> Sect -> Title"));
     }
 
     private void tagsTree(Object element) {
