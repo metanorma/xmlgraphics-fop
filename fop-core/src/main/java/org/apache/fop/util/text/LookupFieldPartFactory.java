@@ -17,22 +17,9 @@
 
 /* $Id$ */
 
-package org.apache.fop.fo.flow.table;
+package org.apache.fop.util.text;
 
-/**
- * This class aims at easing testing, by preventing the event notification system from
- * getting in the way just to issue an Unimplemented Feature warning.
- */
-public final class UnimplementedWarningNeutralizer {
+import org.apache.fop.events.EventFormatter;
 
-    private UnimplementedWarningNeutralizer() { }
-
-    /**
-     * Neutralizes Unimplemented Feature events from the {@link TableAndCaption} and
-     * {@link TableCaption} classes.
-     */
-    public static void neutralizeUnimplementedWarning() {
-        TableAndCaption.notImplementedWarningGiven = true;
-        TableCaption.notImplementedWarningGiven = true;
-    }
+public class LookupFieldPartFactory extends EventFormatter.LookupFieldPartFactory {
 }

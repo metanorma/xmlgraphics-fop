@@ -252,6 +252,10 @@ public final class FopFactory implements ImageContext {
         return config.isLegacyLastPageChangeIPD();
     }
 
+    boolean isLegacyFoWrapper() {
+        return config.isLegacyFoWrapper();
+    }
+
     /**
      * Returns a new {@link Fop} instance. FOP will be configured with a default user agent
      * instance. Use this factory method if your output type requires an output stream.
@@ -371,6 +375,10 @@ public final class FopFactory implements ImageContext {
      */
     boolean isAccessibilityEnabled() {
         return config.isAccessibilityEnabled();
+    }
+
+    boolean isStaticRegionsPerPageForAccessibility() {
+        return config.isStaticRegionsPerPageForAccessibility();
     }
 
     boolean isKeepEmptyTags() {

@@ -178,6 +178,8 @@ public class PDFDocument {
 
     private boolean accessibilityEnabled;
 
+    private boolean staticRegionsPerPageForAccessibility;
+
     private boolean mergeFontsEnabled;
 
     private boolean mergeFormFieldsEnabled;
@@ -1017,6 +1019,14 @@ public class PDFDocument {
 
     public void enableAccessibility(boolean enableAccessibility) {
         this.accessibilityEnabled = enableAccessibility;
+    }
+
+    public void setStaticRegionsPerPageForAccessibility(boolean staticRegionsPerPageForAccessibility) {
+        this.staticRegionsPerPageForAccessibility = staticRegionsPerPageForAccessibility;
+    }
+
+    public boolean isStaticRegionsPerPageForAccessibility() {
+        return staticRegionsPerPageForAccessibility;
     }
 
     /**
