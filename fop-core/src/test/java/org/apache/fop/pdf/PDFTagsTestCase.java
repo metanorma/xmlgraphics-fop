@@ -75,6 +75,7 @@ public class PDFTagsTestCase {
                 + "      <fo:block>Link 2: <fo:basic-link external-destination=\"mailto:iso@iso.org\" fox:alt-text=\"iso@iso.org\">iso@iso.org</fo:basic-link></fo:block>\n"
                 + "      <fo:block>Link 3: <fo:basic-link internal-destination=\"foreword\" fox:alt-text=\"Foreword\">Foreword</fo:basic-link></fo:block>\n"
                 + "      <fo:block>Link 4: <fo:basic-link internal-destination=\"scope\" fox:alt-text=\"Link&#xa0;to&#xa0;Scope\">Scope</fo:basic-link></fo:block>\n"
+                + "      <fo:block>Link 5: <fo:basic-link internal-destination=\"scope\" fox:alt-text=\"Link&#xa0;to&#xa0;Scope\">Scope</fo:basic-link></fo:block>\n"
                 + "      <fo:block id=\"foreword\">Foreword</fo:block>\n"
                 + "      <fo:block id=\"scope\" role=\"Sect\" fox:title=\"Scope\">Scope</fo:block>\n"
                 + "      <fo:block id=\"note1\" role=\"Note\">Note 1: text.</fo:block>\n"
@@ -176,6 +177,22 @@ public class PDFTagsTestCase {
                 "/F 28"));
         Assert.assertTrue(objects.contains("/Contents (https://www.iso.org)\n" +
                 "/F 4"));
+
+        // check for internal link annotations (https://github.com/metanorma/xmlgraphics-fop/issues/75)
+        String internalLink = "/Contents (Link to Scope)\n" +
+                "/F 4\n" +
+                ">>\n" +
+                "endobj\n" +
+                " << /Type /Action\n" +
+                "/S /GoTo";
+        int count = 0;
+        int lastIndex = 0;
+        while ((lastIndex = objects.indexOf(internalLink, lastIndex)) != -1) {
+            count++;
+            lastIndex += internalLink.length();
+        }
+        Assert.assertTrue(count == 2);
+
     }
 
     private void checkPDFtags(byte[] data) throws IOException {
