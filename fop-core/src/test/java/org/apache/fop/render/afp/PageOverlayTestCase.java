@@ -42,7 +42,6 @@ public class PageOverlayTestCase {
     public void testPageOverlay() throws Exception {
         Assert.assertEquals(getPageOverlay(), "BEGIN DOCUMENT DOC00001 Triplets: 0x01,\n"
                 + "BEGIN PAGE_GROUP PGP00001\n"
-                + "END PAGE_GROUP PGP00001\n"
                 + "BEGIN PAGE PGN00001\n"
                 + "BEGIN ACTIVE_ENVIRONMENT_GROUP AEG00001\n"
                 + "MAP PAGE_OVERLAY Triplets: FULLY_QUALIFIED_NAME,RESOURCE_LOCAL_IDENTIFIER,\n"
@@ -51,6 +50,7 @@ public class PageOverlayTestCase {
                 + "END ACTIVE_ENVIRONMENT_GROUP AEG00001\n"
                 + "INCLUDE PAGE_OVERLAY\n"
                 + "END PAGE PGN00001\n"
+                + "END PAGE_GROUP PGP00001\n"
                 + "END DOCUMENT DOC00001\n");
     }
 
