@@ -122,7 +122,7 @@ public class PDFAttachmentTestCase {
 
     @Test
     public void testFileAttachmentAnnotation() throws Exception {
-        String fopxconf = "<fop version=\"1.0\">"
+        String fopxconf = "<fop version=\"1.0\" encoding=\"UTF-8\">"
                 + "<accessibility>true</accessibility>"
                 + "<renderers><renderer mime=\"application/pdf\">"
                 + "<linearization>true</linearization>"
@@ -162,7 +162,7 @@ public class PDFAttachmentTestCase {
                 "        </rdf:Description>\n" +
                 "      </rdf:RDF>\n" +
                 "    </x:xmpmeta>\n" +
-                "    <pdf:embedded-file link-as-file-annotation=\"true\" filename=\"simple_text.txt\" src=\"data:application/octet-stream;base64,U2ltcGxlIHRleHQuDQo=\" description=\"File “description”\" afrelationship=\"AFR_Data\" volatile=\"true\"/>\n" +
+                "    <pdf:embedded-file link-as-file-annotation=\"true\" filename=\"simple_text.txt\" src=\"data:application/octet-stream;base64,U2ltcGxlIHRleHQuDQo=\" description=\"File &#x201c;description&#x201d;\" afrelationship=\"AFR_Data\" volatile=\"true\"/>\n" +
                 "  </fo:declarations>"
                 + "  <fo:page-sequence master-reference=\"simple\">\n"
                 + "    <fo:flow flow-name=\"xsl-region-body\">\n"
@@ -191,7 +191,7 @@ public class PDFAttachmentTestCase {
         Assert.assertTrue(objects.contains("/Type /Annot /Subtype /FileAttachment\n" +
                 "/FS"));
 
-        byte[] bytesContents =  "File “description”".getBytes("UTF-16BE");
+        byte[] bytesContents =  ("File " + '\u201c' + "description" + '\u201d').getBytes("UTF-16BE");
 
         // "/Contents (" +
         Assert.assertTrue(objects.contains(new String(bytesContents) + ")\n" +
@@ -202,7 +202,7 @@ public class PDFAttachmentTestCase {
                 "  /UF (simple_text.txt)\n" +
                 "  /AFRelationship /AFR_Data"));
         //Assert.assertTrue(objects.contains("/Desc (File description)\n" +
-        Assert.assertTrue(objects.contains("/Desc <FEFF00460069006C00650020201C006400650073006300720069007000740069006F006E201D>\n" +
+        Assert.assertTrue(objects, objects.contains("/Desc <FEFF00460069006C00650020201C006400650073006300720069007000740069006F006E201D>\n" +
                 "  /V true"));
     }
 
