@@ -18,7 +18,7 @@
 <testcase>
   <info>
     <p>
-      This test checks that IDs coming from a block-container properly appear in the IF output.
+      This test checks for named destination page number in the IF output.
     </p>
   </info>
   <fo>
