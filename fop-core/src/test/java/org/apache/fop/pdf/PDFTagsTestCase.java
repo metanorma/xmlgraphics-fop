@@ -79,58 +79,58 @@ public class PDFTagsTestCase {
                 + "      <fo:block id=\"foreword\">Foreword</fo:block>\n"
                 + "      <fo:block id=\"scope\" role=\"Sect\" fox:title=\"Scope\">Scope</fo:block>\n"
                 + "      <fo:block id=\"note1\" role=\"Note\">Note 1: text.</fo:block>\n"
-                + "      <fo:table id=\"table1\" table-layout=\"fixed\" width=\"100%\">\n" +
-                "        <fo:table-header>\n" +
-                "          <fo:table-row>\n" +
-                "            <fo:table-cell text-align=\"center\" number-rows-spanned=\"2\">\n" +
-                "              <fo:block>Defect</fo:block>\n" +
-                "            </fo:table-cell>\n" +
-                "            <fo:table-cell number-columns-spanned=\"4\">\n" +
-                "              <fo:block>Maximum permissible mass fraction of defects %</fo:block>\n" +
-                "            </fo:table-cell>\n" +
-                "          </fo:table-row>\n" +
-                "          <fo:table-row>\n" +
-                "            <fo:table-cell>\n" +
-                "              <fo:block>Husked rice</fo:block>\n" +
-                "            </fo:table-cell>\n" +
-                "            <fo:table-cell>\n" +
-                "              <fo:block>Milled rice (non-glutinous)</fo:block>\n" +
-                "            </fo:table-cell>\n" +
-                "            <fo:table-cell>\n" +
-                "              <fo:block>Husked parboiled rice</fo:block>\n" +
-                "            </fo:table-cell>\n" +
-                "            <fo:table-cell>\n" +
-                "              <fo:block>Milled parboiled rice</fo:block>\n" +
-                "            </fo:table-cell>\n" +
-                "          </fo:table-row>\n" +
-                "        </fo:table-header>\n" +
-                "        <fo:table-body>\n" +
-                "          <fo:table-row min-height=\"4mm\">\n" +
-                "            <fo:table-cell number-rows-spanned=\"2\">\n" +
-                "              <fo:block>\n" +
-                "                <fo:block>Extraneous matter:</fo:block>\n" +
-                "              </fo:block>\n" +
-                "            </fo:table-cell>\n" +
-                "            <fo:table-cell number-columns-spanned=\"4\">\n" +
-                "              <fo:block> </fo:block>\n" +
-                "            </fo:table-cell>\n" +
-                "          </fo:table-row>\n" +
-                "          <fo:table-row min-height=\"4mm\">\n" +
-                "            <fo:table-cell>\n" +
-                "              <fo:block>1,0</fo:block>\n" +
-                "            </fo:table-cell>\n" +
-                "            <fo:table-cell>\n" +
-                "              <fo:block>0,5</fo:block>\n" +
-                "            </fo:table-cell>\n" +
-                "            <fo:table-cell>\n" +
-                "              <fo:block>1,0</fo:block>\n" +
-                "            </fo:table-cell>\n" +
-                "            <fo:table-cell>\n" +
-                "              <fo:block>0,5</fo:block>\n" +
-                "            </fo:table-cell>\n" +
-                "          </fo:table-row>\n" +
-                "        </fo:table-body>\n" +
-                "      </fo:table>"
+                + "      <fo:table id=\"table1\" table-layout=\"fixed\" width=\"100%\">\n"
+                + "        <fo:table-header>\n"
+                + "          <fo:table-row>\n"
+                + "            <fo:table-cell text-align=\"center\" number-rows-spanned=\"2\">\n"
+                + "              <fo:block>Defect</fo:block>\n"
+                + "            </fo:table-cell>\n"
+                + "            <fo:table-cell number-columns-spanned=\"4\">\n"
+                + "              <fo:block>Maximum permissible mass fraction of defects %</fo:block>\n"
+                + "            </fo:table-cell>\n"
+                + "          </fo:table-row>\n"
+                + "          <fo:table-row>\n"
+                + "            <fo:table-cell>\n"
+                + "              <fo:block>Husked rice</fo:block>\n"
+                + "            </fo:table-cell>\n"
+                + "            <fo:table-cell>\n"
+                + "              <fo:block>Milled rice (non-glutinous)</fo:block>\n"
+                + "            </fo:table-cell>\n"
+                + "            <fo:table-cell>\n"
+                + "              <fo:block>Husked parboiled rice</fo:block>\n"
+                + "            </fo:table-cell>\n"
+                + "            <fo:table-cell>\n"
+                + "              <fo:block>Milled parboiled rice</fo:block>\n"
+                + "            </fo:table-cell>\n"
+                + "          </fo:table-row>\n"
+                + "        </fo:table-header>\n"
+                + "        <fo:table-body>\n"
+                + "          <fo:table-row min-height=\"4mm\">\n"
+                + "            <fo:table-cell number-rows-spanned=\"2\">\n"
+                + "              <fo:block>\n"
+                + "                <fo:block>Extraneous matter:</fo:block>\n"
+                + "              </fo:block>\n"
+                + "            </fo:table-cell>\n"
+                + "            <fo:table-cell number-columns-spanned=\"4\">\n"
+                + "              <fo:block> </fo:block>\n"
+                + "            </fo:table-cell>\n"
+                + "          </fo:table-row>\n"
+                + "          <fo:table-row min-height=\"4mm\">\n"
+                + "            <fo:table-cell>\n"
+                + "              <fo:block>1,0</fo:block>\n"
+                + "            </fo:table-cell>\n"
+                + "            <fo:table-cell>\n"
+                + "              <fo:block>0,5</fo:block>\n"
+                + "            </fo:table-cell>\n"
+                + "            <fo:table-cell>\n"
+                + "              <fo:block>1,0</fo:block>\n"
+                + "            </fo:table-cell>\n"
+                + "            <fo:table-cell>\n"
+                + "              <fo:block>0,5</fo:block>\n"
+                + "            </fo:table-cell>\n"
+                + "          </fo:table-row>\n"
+                + "        </fo:table-body>\n"
+                + "      </fo:table>"
                 + "      <fo:block role=\"P/Title\">Section title</fo:block>\n"
                 + "      <fo:block>Text <fo:inline role=\"SKIP\">inline text</fo:inline></fo:block>\n"
                 + "      <fo:block>Text <fo:block><fo:block-container><fo:block>Div inside P</fo:block></fo:block-container></fo:block></fo:block>\n"
@@ -173,18 +173,18 @@ public class PDFTagsTestCase {
         // check for "Add /T (title) for <Sect>" (https://github.com/metanorma/xmlgraphics-fop/issues/67)
         Assert.assertTrue(objects.contains("/T (Scope)"));
         // check for "Annotation flags (Ff) for all Link annotations" (https://github.com/metanorma/xmlgraphics-fop/issues/72)
-        Assert.assertTrue(!objects.contains("/Contents (https://www.iso.org)\n" +
-                "/F 28"));
-        Assert.assertTrue(objects.contains("/Contents (https://www.iso.org)\n" +
-                "/F 4"));
+        Assert.assertTrue(!objects.contains("/Contents (https://www.iso.org)\n"
+                + "/F 28"));
+        Assert.assertTrue(objects.contains("/Contents (https://www.iso.org)\n"
+                + "/F 4"));
 
         // check for internal link annotations (https://github.com/metanorma/xmlgraphics-fop/issues/75)
-        String internalLink = "/Contents (Link to Scope)\n" +
-                "/F 4\n" +
-                ">>\n" +
-                "endobj\n" +
-                " << /Type /Action\n" +
-                "/S /GoTo";
+        String internalLink = "/Contents (Link to Scope)\n"
+                + "/F 4\n"
+                + ">>\n"
+                + "endobj\n"
+                + " << /Type /Action\n"
+                + "/S /GoTo";
         int count = 0;
         int lastIndex = 0;
         while ((lastIndex = objects.indexOf(internalLink, lastIndex)) != -1) {
@@ -225,13 +225,13 @@ public class PDFTagsTestCase {
 
                     PDStructureNode p = pdStructureElement.getParent();
 
-                    while(p instanceof PDStructureElement) {
+                    while (p instanceof PDStructureElement) {
                         PDStructureElement se = (PDStructureElement)p;
                         tree.add(se.getStructureType());
                         p = se.getParent();
                     }
                     Collections.reverse(tree);
-                    for (String item: tree) {
+                    for (String item : tree) {
                         tagsTree.append(" -> " + item);
                     }
                     tagsTree.append("\n");
