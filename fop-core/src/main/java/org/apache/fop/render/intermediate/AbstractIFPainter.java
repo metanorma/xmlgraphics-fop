@@ -41,7 +41,6 @@ import org.apache.xmlgraphics.image.loader.ImageFlavor;
 import org.apache.xmlgraphics.image.loader.ImageInfo;
 import org.apache.xmlgraphics.image.loader.ImageManager;
 import org.apache.xmlgraphics.image.loader.ImageSessionContext;
-import org.apache.xmlgraphics.image.loader.impl.imageio.ImageLoaderImageIO;
 import org.apache.xmlgraphics.image.loader.util.ImageUtil;
 
 import org.apache.fop.ResourceEventProducer;
@@ -161,7 +160,6 @@ public abstract class AbstractIFPainter<T extends IFDocumentHandler> implements 
 
         ImageFlavor[] flavors = imageHandlerRegistry.getSupportedFlavors(context, getImageForSupportedFlavors(info));
         info.getCustomObjects().put("warningincustomobject", true);
-        info.getCustomObjects().put(ImageLoaderImageIO.ICC_CONVERTER, manager.getRegistry().getIccConverter());
         org.apache.xmlgraphics.image.loader.Image img = manager.getImage(
                     info, flavors,
                     hints, sessionContext);
