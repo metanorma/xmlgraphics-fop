@@ -70,19 +70,19 @@ public class GlyphMapping {
                         MinOptMax areaIPD, boolean isHyphenated, boolean isSpace, boolean isZeroWidthSpace, boolean breakOppAfter,
                         Font font, int level, int[][] gposAdjustments) {
         this(startIndex, endIndex, wordSpaceCount, letterSpaceCount, areaIPD, isHyphenated,
-                isSpace, isZeroWidthSpace, breakOppAfter, font, level, gposAdjustments, null, null);
+                isSpace, isZeroWidthSpace, breakOppAfter, font, level, gposAdjustments, null, null, false);
     }
 
     public GlyphMapping(int startIndex, int endIndex, int wordSpaceCount, int letterSpaceCount,
                         MinOptMax areaIPD, boolean isHyphenated, boolean isSpace, boolean breakOppAfter,
-                        Font font, int level, int[][] gposAdjustments, String mapping, List associations) {
+                        Font font, int level, int[][] gposAdjustments, String mapping, List associations, boolean isUpright) {
         this(startIndex, endIndex, wordSpaceCount, letterSpaceCount, areaIPD, isHyphenated,
-                isSpace, false, breakOppAfter, font, level, gposAdjustments, mapping, associations);
+                isSpace, false, breakOppAfter, font, level, gposAdjustments, mapping, associations, isUpright);
     }
 
     public GlyphMapping(int startIndex, int endIndex, int wordSpaceCount, int letterSpaceCount,
             MinOptMax areaIPD, boolean isHyphenated, boolean isSpace, boolean isZeroWidthSpace, boolean breakOppAfter,
-            Font font, int level, int[][] gposAdjustments, String mapping, List associations) {
+            Font font, int level, int[][] gposAdjustments, String mapping, List associations, boolean isUpright) {
         assert startIndex <= endIndex;
         this.startIndex = startIndex;
         this.endIndex = endIndex;
