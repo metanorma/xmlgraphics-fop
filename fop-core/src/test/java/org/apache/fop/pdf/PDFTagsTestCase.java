@@ -170,6 +170,11 @@ public class PDFTagsTestCase {
         // check for role="SKIP"
         Assert.assertTrue(!objects.contains("/Span"));
 
+        // check for P/Div
+        Assert.assertTrue(!objects.contains("/S /Div"));
+        // check for "Add /T (title) for <Sect>" (https://github.com/metanorma/xmlgraphics-fop/issues/67)
+        Assert.assertTrue(objects.contains("/T (Scope)"));
+  
         // check for "Add /T (title) for <Sect>" (https://github.com/metanorma/xmlgraphics-fop/issues/67)
         Assert.assertTrue(objects.contains("/T (Scope)"));
         // check for "Annotation flags (Ff) for all Link annotations" (https://github.com/metanorma/xmlgraphics-fop/issues/72)
@@ -241,7 +246,6 @@ public class PDFTagsTestCase {
             }
         }
     }
-
 
 
 }

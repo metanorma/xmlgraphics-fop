@@ -131,6 +131,23 @@ public class PDFLink extends PDFObject {
                 dict += "/Contents " + PDFText.escapeText(altText) + "\n";
             }
         }*/
+      
+        if (action instanceof PDFFileAttachmentAnnotation) {
+            PDFFileAttachmentAnnotation pdfFileAttachmentAnnotation = (PDFFileAttachmentAnnotation) this.action;
+            ulx = brx + 3;
+            uly+=5;
+            brx+=10;
+            bry+=5;
+            //uly = bry - 10;*/
+            dict = "<< /Type /Annot /Subtype " + pdfFileAttachmentAnnotation.getFileAttachmentAnnotation()
+                + "/Rect [ "
+                + (ulx) + " " + (uly) + " "
+                + (brx) + " " + (bry) + " ]\n" + "/C [ "
+                + this.color + " ]\n"  + "/Border [ 0 0 0 ]\n"
+                + (this.structParent != null
+                    ? "/StructParent " + this.structParent.toString() + "\n" : "");
+        }
+        dict += fFlag + "\n>>";
         return dict;
     }
 
