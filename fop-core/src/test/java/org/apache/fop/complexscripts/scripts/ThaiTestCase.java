@@ -43,7 +43,7 @@ public class ThaiTestCase {
                 GlyphClassTable.createClassTable(Arrays.asList(0, GlyphDefinitionTable.GLYPH_CLASS_MARK)), null);
         font.setGDEF(
                 new GlyphDefinitionTable(Collections.singletonList(table), new HashMap<String, ScriptProcessor>()));
-        String actual = font.reorderCombiningMarks(in, null, OTFScript.THAI, null, null).toString();
+        String actual = font.reorderCombiningMarks(in, null, OTFScript.THAI, null, null, false).toString();
         Assert.assertTrue(actual.endsWith("\u0E2A"));
     }
 }

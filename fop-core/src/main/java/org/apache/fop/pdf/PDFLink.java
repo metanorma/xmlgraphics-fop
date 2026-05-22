@@ -89,9 +89,32 @@ public class PDFLink extends PDFObject {
         if (getDocumentSafely().getProfile().getPDFAMode().isEnabled()) {
             int f = 0;
             f |= 1 << (3 - 1); //Print, bit 3
-            f |= 1 << (4 - 1); //NoZoom, bit 4
+            if (!(this.action instanceof PDFFileAttachmentAnnotation)) {
+                f |= 1 << (4 - 1); //NoZoom, bit 4
+            }
             f |= 1 << (5 - 1); //NoRotate, bit 5
             fFlag = "/F " + f;
+        }
+        String contents_key = null;
+        if (this.action instanceof PDFUri) {
+            PDFUri pdfUri = (PDFUri) this.action;
+            String uri = pdfUri.getUri();
+            if (uri != null && !uri.isEmpty()) {
+                if (uri.startsWith("(")) {
+                    uri = uri.substring(1, uri.length() - 1);
+                }
+                if (uri.startsWith("mailto:")) {
+                    uri = uri.substring(uri.indexOf("mailto:") + 7);
+                    uri = "Email " + uri;
+                }
+                contents_key = "(" + uri + ")";
+            }
+        } else if (this.action instanceof PDFGoTo) {
+            PDFGoTo pdfGoto = (PDFGoTo) this.action;
+            String pdfGotoContents = pdfGoto.getContents();
+            if (pdfGotoContents != null && !pdfGotoContents.equals("()")) {
+                contents_key = pdfGoto.getContents();
+            }
         }
         String dict = "<< /Type /Annot\n" + "/Subtype /Link\n" + "/Rect [ "
                    + (ulx) + " " + (uly) + " "
@@ -99,12 +122,31 @@ public class PDFLink extends PDFObject {
                    + this.color + " ]\n" + "/Border [ 0 0 0 ]\n" + "/A "
                    + this.action.getAction() + "\n" + "/H /I\n"
                    + (this.structParent != null
-                           ? "/StructParent " + this.structParent.toString() + "\n" : "");
-        if (action instanceof PDFUri) {
+                           ? "/StructParent " + this.structParent.toString() + "\n" : "")
+                   + (contents_key != null && !contents_key.isEmpty()
+                           ? "/Contents " + contents_key + "\n" : "")
+                   + fFlag + "\n>>";
+        /*if (action instanceof PDFUri) {
             String altText = ((PDFUri) action).getAltText();
             if (altText != null && !altText.isEmpty()) {
                 dict += "/Contents " + PDFText.escapeText(altText) + "\n";
             }
+        }*/
+      
+        if (action instanceof PDFFileAttachmentAnnotation) {
+            PDFFileAttachmentAnnotation pdfFileAttachmentAnnotation = (PDFFileAttachmentAnnotation) this.action;
+            ulx = brx + 3;
+            uly+=5;
+            brx+=10;
+            bry+=5;
+            //uly = bry - 10;*/
+            dict = "<< /Type /Annot /Subtype " + pdfFileAttachmentAnnotation.getFileAttachmentAnnotation()
+                + "/Rect [ "
+                + (ulx) + " " + (uly) + " "
+                + (brx) + " " + (bry) + " ]\n" + "/C [ "
+                + this.color + " ]\n"  + "/Border [ 0 0 0 ]\n"
+                + (this.structParent != null
+                    ? "/StructParent " + this.structParent.toString() + "\n" : "");
         }
         dict += fFlag + "\n>>";
         return dict;

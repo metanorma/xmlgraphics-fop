@@ -349,6 +349,13 @@
     <Bug pattern="SE_BAD_FIELD"/>
   </Match>
   <Match>
+    <!-- 21 warnings -->
+    <Bug pattern="SIC_INNER_SHOULD_BE_STATIC"/>
+    <And>
+      <Class name="org.apache.fop.complexscripts.util.NumberConverter$JapaneseNumeralsFormatter"/>
+    </And>
+  </Match>
+  <Match>
     <!-- 20 warnings -->
     <Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON"/>
   </Match>
