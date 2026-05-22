@@ -2681,15 +2681,6 @@ public final class FOPropertyMapping implements Constants {
         m.setDefault("");
         addPropertyMaker("fox:title", m);
 
-
-        // fox:title, used for mn2pdf title /T
-        // (see https://github.com/metanorma/mn2pdf/issues/348)
-        m = new StringProperty.Maker(PR_X_TITLE);
-        m.setInherited(false);
-        m.setDefault("");
-        addPropertyMaker("fox:title", m);
-
-
         //fox:abbreviation used for accessibility
         m = new StringProperty.Maker(PR_X_ABBREVIATION);
         m.setInherited(false);

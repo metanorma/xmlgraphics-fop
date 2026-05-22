@@ -123,8 +123,7 @@ public class PDFLink extends PDFObject {
                    + (this.structParent != null
                            ? "/StructParent " + this.structParent.toString() + "\n" : "")
                    + (contents_key != null && !contents_key.isEmpty()
-                           ? "/Contents " + contents_key + "\n" : "")
-                   + fFlag + "\n>>";
+                           ? "/Contents " + contents_key + "\n" : "");
         /*if (action instanceof PDFUri) {
             String altText = ((PDFUri) action).getAltText();
             if (altText != null && !altText.isEmpty()) {
