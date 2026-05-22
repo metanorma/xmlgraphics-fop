@@ -31,6 +31,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.fop.apps.FOUserAgent;
 import org.apache.fop.area.Trait;
 import org.apache.fop.area.inline.TextArea;
+import org.apache.fop.complexscripts.util.Characters;
 import org.apache.fop.fo.Constants;
 import org.apache.fop.fo.FOText;
 import org.apache.fop.fo.flow.ChangeBar;
@@ -475,7 +476,7 @@ public class TextLayoutManager extends LeafNodeLayoutManager {
         }
 
         private boolean isWordEnd(int mappingIndex) {
-            return mappingIndex == lastIndex || getGlyphMapping(mappingIndex + 1).isSpace;
+            return mappingIndex == lastIndex || mapping.isUpright || getGlyphMapping(mappingIndex + 1).isSpace || getGlyphMapping(mappingIndex + 1).isUpright; //TODO If is vertical mode and GlyphMapping is hani, return true.
         }
 
         /**
@@ -499,8 +500,10 @@ public class TextLayoutManager extends LeafNodeLayoutManager {
             initWord(wordLength);
             // iterate over word's fragments, adding word chars (with bidi
             // levels), letter space adjustments, and glyph position adjustments
+            boolean isUpright = false;
             for (int i = startIndex; i <= endIndex; i++) {
                 GlyphMapping wordMapping = getGlyphMapping(i);
+                isUpright = isUpright || wordMapping.isUpright;
                 addWordChars(wordMapping);
                 addLetterAdjust(wordMapping);
                 if (addGlyphPositionAdjustments(wordMapping)) {
@@ -515,7 +518,7 @@ public class TextLayoutManager extends LeafNodeLayoutManager {
                 gposAdjustments = null;
             }
             textArea.addWord(wordChars.toString(), wordIPD, letterSpaceAdjust, getNonEmptyLevels(), gposAdjustments,
-                    blockProgressionOffset, isWordSpace(endIndex + 1));
+                    blockProgressionOffset, isWordSpace(endIndex + 1), isUpright);
         }
 
         private boolean isWordSpace(int mappingIndex) {
@@ -781,9 +784,13 @@ public class TextLayoutManager extends LeafNodeLayoutManager {
         boolean inWord = false;
         boolean inWhitespace = false;
         char ch = 0;
+        char prevChar = 0;
         int level = -1;
         int prevLevel = -1;
         boolean retainControls = false;
+        boolean isVertical =  context.getWritingMode().isVertical();
+        boolean prevCharIsUpright = false;
+        boolean inUpright = false;
         Font lastFont = null;
         int lastFontPos = -1;
         while (nextStart < foText.length()) {
@@ -817,11 +824,16 @@ public class TextLayoutManager extends LeafNodeLayoutManager {
                             + ", inSpace = " + inWhitespace
                             + "}");
             }
+            if (isVertical) {
+                inUpright = prevCharIsUpright || (prevCharIsUpright = Characters.isUprightOrientation(ch));
+            }
+
             if (inWord) {
                 boolean processWord = breakOpportunity
                         || GlyphMapping.isSpace(ch)
                         || CharUtilities.isExplicitBreak(ch)
-                        || ((prevLevel != -1) && (level != prevLevel));
+                        || ((prevLevel != -1) && (level != prevLevel) && !Character.isHighSurrogate(prevChar))
+                        || inUpright;
                 if (!processWord && foText.getCommonFont().getFontSelectionStrategy() == EN_CHARACTER_BY_CHARACTER) {
                     if (lastFont == null || lastFontPos != nextStart - 1) {
                         lastFont = FontSelector.selectFontForCharactersInText(
@@ -836,7 +848,7 @@ public class TextLayoutManager extends LeafNodeLayoutManager {
                 if (processWord) {
                     // this.foText.charAt(lastIndex) == CharUtilities.SOFT_HYPHEN
                     prevMapping = processWord(alignment, sequence, prevMapping, ch,
-                        breakOpportunity, true, prevLevel, retainControls);
+                        breakOpportunity, true, prevLevel, retainControls, context.getWritingMode().isVertical());
                 }
             } else if (inWhitespace) {
                 if (ch != CharUtilities.SPACE || breakOpportunity) {
@@ -893,12 +905,13 @@ public class TextLayoutManager extends LeafNodeLayoutManager {
             inWhitespace = ch == CharUtilities.SPACE
                     && foText.getWhitespaceTreatment() != Constants.EN_PRESERVE;
             prevLevel = level;
+            prevChar = ch;
             nextStart++;
         }
 
         // Process any last elements
         if (inWord) {
-            processWord(alignment, sequence, prevMapping, ch, false, false, prevLevel, retainControls);
+            processWord(alignment, sequence, prevMapping, ch, false, false, prevLevel, retainControls, context.getWritingMode().isVertical());
         } else if (inWhitespace) {
             processWhitespace(alignment, sequence, !keepTogether, prevLevel);
         } else if (mapping != null) {
@@ -966,7 +979,7 @@ public class TextLayoutManager extends LeafNodeLayoutManager {
 
     private GlyphMapping processWord(final int alignment, final KnuthSequence sequence,
             GlyphMapping prevMapping, final char ch, final boolean breakOpportunity,
-            final boolean checkEndsWithHyphen, int level, boolean retainControls) {
+            final boolean checkEndsWithHyphen, int level, boolean retainControls, boolean isVertical) {
 
         //Word boundary found, process widths and kerning
         int lastIndex = nextStart;
@@ -982,7 +995,7 @@ public class TextLayoutManager extends LeafNodeLayoutManager {
                 && prevMapping.endIndex > 0 ? foText.charAt(prevMapping.endIndex - 1) : 0;
         GlyphMapping mapping = GlyphMapping.doGlyphMapping(foText, thisStart, lastIndex, font,
                 letterSpaceIPD, letterSpaceAdjustArray, precedingChar, breakOpportunityChar,
-                endsWithHyphen, level, false, false, retainControls);
+                endsWithHyphen, level, false, false, retainControls, isVertical);
         prevMapping = mapping;
         addGlyphMapping(mapping);
         tempStart = nextStart;
@@ -1375,7 +1388,7 @@ public class TextLayoutManager extends LeafNodeLayoutManager {
                     alignmentContext, notifyPos(mainPosition), false));
         } else {
             // adjustable letter spacing
-            int unsuppressibleLetterSpaces = suppressibleLetterSpace
+            int unsuppressibleLetterSpaces = (suppressibleLetterSpace &&  mapping.letterSpaceCount > 0)
                     ? mapping.letterSpaceCount - 1
                     : mapping.letterSpaceCount;
             baseList.add(new KnuthInlineBox(mapping.areaIPD.getOpt()
