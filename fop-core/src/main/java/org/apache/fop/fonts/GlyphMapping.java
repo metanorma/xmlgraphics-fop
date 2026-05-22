@@ -50,6 +50,7 @@ public class GlyphMapping {
     public MinOptMax areaIPD;
     public final boolean isHyphenated;
     public final boolean isSpace;
+    public final boolean isZeroWidthSpace; // to check for zero-width space (otherwise we get redundant spaces in copy-paste text from PDF)
     public boolean breakOppAfter;
     public final Font font;
     public final int level;
@@ -66,7 +67,21 @@ public class GlyphMapping {
     }
 
     public GlyphMapping(int startIndex, int endIndex, int wordSpaceCount, int letterSpaceCount,
-            MinOptMax areaIPD, boolean isHyphenated, boolean isSpace, boolean breakOppAfter,
+                        MinOptMax areaIPD, boolean isHyphenated, boolean isSpace, boolean isZeroWidthSpace, boolean breakOppAfter,
+                        Font font, int level, int[][] gposAdjustments) {
+        this(startIndex, endIndex, wordSpaceCount, letterSpaceCount, areaIPD, isHyphenated,
+                isSpace, isZeroWidthSpace, breakOppAfter, font, level, gposAdjustments, null, null, false);
+    }
+
+    public GlyphMapping(int startIndex, int endIndex, int wordSpaceCount, int letterSpaceCount,
+                        MinOptMax areaIPD, boolean isHyphenated, boolean isSpace, boolean breakOppAfter,
+                        Font font, int level, int[][] gposAdjustments, String mapping, List associations, boolean isUpright) {
+        this(startIndex, endIndex, wordSpaceCount, letterSpaceCount, areaIPD, isHyphenated,
+                isSpace, false, breakOppAfter, font, level, gposAdjustments, mapping, associations, isUpright);
+    }
+
+    public GlyphMapping(int startIndex, int endIndex, int wordSpaceCount, int letterSpaceCount,
+            MinOptMax areaIPD, boolean isHyphenated, boolean isSpace, boolean isZeroWidthSpace, boolean breakOppAfter,
             Font font, int level, int[][] gposAdjustments, String mapping, List associations, boolean isUpright) {
         assert startIndex <= endIndex;
         this.startIndex = startIndex;
@@ -77,6 +92,7 @@ public class GlyphMapping {
         this.areaIPD = areaIPD;
         this.isHyphenated = isHyphenated;
         this.isSpace = isSpace;
+        this.isZeroWidthSpace = isZeroWidthSpace;
         this.breakOppAfter = breakOppAfter;
         this.font = font;
         this.level = level;
@@ -125,7 +141,7 @@ public class GlyphMapping {
         if ((script == null) || "auto".equals(script)) {
             script = CharScript.scriptTagFromCode(CharScript.dominantScript(ics));
         }
-        if ((language == null) || "none".equals(language)) {
+        if ((language == null) || "none".equals(language) || "ar".equals(language)) {
             language = "dflt";
         }
 
