@@ -30,6 +30,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.fop.area.Area;
 import org.apache.fop.area.BlockParent;
 import org.apache.fop.fo.pagination.Flow;
+import org.apache.fop.fo.pagination.Region;
 import org.apache.fop.util.ListUtil;
 
 /**
@@ -205,7 +206,7 @@ public class FlowLayoutManager extends BlockStackingLayoutManager {
         LayoutContext childLC = LayoutContext.newInstance();
         childLC.setStackLimitBP(context.getStackLimitBP());
         childLC.setRefIPD(context.getRefIPD());
-        childLC.setWritingMode(getCurrentPage().getSimplePageMaster().getWritingMode());
+        childLC.setWritingMode(getCurrentPage().getSimplePageMaster().getRegion(Region.FO_REGION_BODY).getWritingMode());
         return childLC;
     }
 

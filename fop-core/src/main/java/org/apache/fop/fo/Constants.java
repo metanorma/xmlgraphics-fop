@@ -830,8 +830,14 @@ public interface Constants {
     /**For specifying text for actual text */
     int PR_X_ACTUAL_TEXT = 295;
 
+    /**For shrink the text to fit block-container*/
+    int PR_X_SHRINK_TO_FIT = 296;
+  
+    /**For specifying text for title /T (see https://github.com/metanorma/mn2pdf/issues/348) */
+    int PR_X_TITLE = 297;
+  
     /** Number of property constants defined */
-    int PROPERTY_COUNT = 295;
+    int PROPERTY_COUNT = 297;
 
     // compound property constants
 

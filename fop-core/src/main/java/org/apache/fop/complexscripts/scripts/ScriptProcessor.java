@@ -226,19 +226,21 @@ public abstract class ScriptProcessor {
     /**
      * Obtain script processor instance associated with specified script.
      * @param script a script identifier
+     * @param isVertical
      * @return a script processor instance or null if none found
      */
-    public static synchronized ScriptProcessor getInstance(String script, Map<String, ScriptProcessor> processors) {
+    public static synchronized ScriptProcessor getInstance(String script, Map<String, ScriptProcessor> processors, boolean isVertical) {
         ScriptProcessor sp = null;
         assert processors != null;
-        if ((sp = processors.get(script)) == null) {
-            processors.put(script, sp = createProcessor(script));
+        String key = isVertical ? script + "_vert" : script;
+        if ((sp = processors.get(key)) == null) {
+            processors.put(key, sp = createProcessor(script, isVertical));
         }
         return sp;
     }
 
     // [TBD] - rework to provide more configurable binding between script name and script processor constructor
-    private static ScriptProcessor createProcessor(String script) {
+    private static ScriptProcessor createProcessor(String script, boolean isVertical) {
         ScriptProcessor sp = null;
         int sc = CharScript.scriptCodeFromTag(script);
         if (sc == CharScript.SCRIPT_ARABIC) {
@@ -246,11 +248,11 @@ public abstract class ScriptProcessor {
         } else if (CharScript.isIndicScript(sc)) {
             sp = IndicScriptProcessor.makeProcessor(script);
         } else if (sc == CharScript.SCRIPT_THAI) {
-            sp = new ThaiScriptProcessor(script);
+            sp = new ThaiScriptProcessor(script, isVertical);
         } else if (sc == CharScript.SCRIPT_HEBREW) {
-            sp = new HebrewScriptProcessor(script);
+            sp = new HebrewScriptProcessor(script, isVertical);
         } else {
-            sp = new DefaultScriptProcessor(script);
+            sp = new DefaultScriptProcessor(script, isVertical);
         }
         return sp;
     }

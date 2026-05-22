@@ -108,9 +108,9 @@ public final class GenerateArabicTestData implements ArabicWordFormsConstants {
                 String wf;
                 while ((wf = lr.readLine()) != null) {
                     GlyphSequence igs = tf.mapCharsToGlyphs(wf);
-                    GlyphSequence ogs = gsub.substitute(igs, script, language);
+                    GlyphSequence ogs = gsub.substitute(igs, script, language, false);
                     int[][] paa = new int [ ogs.getGlyphCount() ] [ 4 ];
-                    if (!gpos.position(ogs, script, language, 1000, widths, paa)) {
+                    if (!gpos.position(ogs, script, language, 1000, widths, paa, false)) {
                         paa = null;
                     }
                     data.add(new Object[] { wf, getGlyphs(igs), getGlyphs(ogs), paa });

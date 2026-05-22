@@ -86,6 +86,7 @@ public class Block extends FObjMixed implements BreakPropertySet,
     private int wrapOption;
     private int disableColumnBalancing;
     private int visibility;
+    private String title; // Sect /T (see https://github.com/metanorma/mn2pdf/issues/348)
     // Unused but valid items, commented out for performance:
     //     private CommonAccessibility commonAccessibility;
     //     private CommonAural commonAural;
@@ -138,6 +139,7 @@ public class Block extends FObjMixed implements BreakPropertySet,
         wrapOption = pList.get(PR_WRAP_OPTION).getEnum();
         disableColumnBalancing = pList.get(PR_X_DISABLE_COLUMN_BALANCING).getEnum();
         visibility = pList.get(PR_VISIBILITY).getEnum();
+        title = pList.get(PR_X_TITLE).getString();
     }
 
     /** {@inheritDoc} */
@@ -171,6 +173,13 @@ public class Block extends FObjMixed implements BreakPropertySet,
      * @return the {@link CommonFont} */
     public CommonFont getCommonFont() {
         return commonFont;
+    }
+
+    /**
+     * Set the Common Font
+     */
+    public void setCommonFont(CommonFont font) {
+     commonFont = font;
     }
 
     /** @return the {@link CommonHyphenation} */
@@ -231,6 +240,14 @@ public class Block extends FObjMixed implements BreakPropertySet,
     /** @return the "line-height" trait */
     public SpaceProperty getLineHeight() {
         return lineHeight;
+    }
+
+    /**
+     * Set the line height
+     * @param lineHeight
+     */
+    public void setLineHeight(SpaceProperty lineHeight) {
+        this.lineHeight = lineHeight;
     }
 
     /** @return the "span" trait */
@@ -361,5 +378,10 @@ public class Block extends FObjMixed implements BreakPropertySet,
 
      public int getVisibility() {
          return visibility;
+     }
+
+     /** @return  the Title property. For Sect Title /T  */
+     public String getTitle() {
+         return title;
      }
 }
