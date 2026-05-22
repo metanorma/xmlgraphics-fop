@@ -162,6 +162,11 @@ public final class FopFactoryBuilder {
         return this;
     }
 
+    public FopFactoryBuilder setStaticRegionsPerPageForAccessibility(boolean staticRegionsPerPageForAccessibility) {
+        fopFactoryConfigBuilder.setStaticRegionsPerPageForAccessibility(staticRegionsPerPageForAccessibility);
+        return this;
+    }
+
     public FopFactoryBuilder setKeepEmptyTags(boolean b) {
         fopFactoryConfigBuilder.setKeepEmptyTags(b);
         return this;
@@ -365,6 +370,11 @@ public final class FopFactoryBuilder {
         return this;
     }
 
+    public FopFactoryBuilder setLegacyFoWrapper(boolean b) {
+        fopFactoryConfigBuilder.setLegacyFoWrapper(b);
+        return this;
+    }
+
     public static class FopFactoryConfigImpl implements FopFactoryConfig {
 
         private final EnvironmentProfile enviro;
@@ -372,6 +382,8 @@ public final class FopFactoryBuilder {
         private final ImageManager imageManager;
 
         private boolean accessibility;
+
+        private boolean staticRegionsPerPageForAccessibility;
 
         private boolean keepEmptyTags = true;
 
@@ -415,6 +427,8 @@ public final class FopFactoryBuilder {
 
         private boolean legacyLastPageChangeIPD;
 
+        private boolean legacyFoWrapper;
+
         private static final class ImageContextImpl implements ImageContext {
 
             private final FopFactoryConfig config;
@@ -437,6 +451,10 @@ public final class FopFactoryBuilder {
         /** {@inheritDoc} */
         public boolean isAccessibilityEnabled() {
             return accessibility;
+        }
+
+        public boolean isStaticRegionsPerPageForAccessibility() {
+            return staticRegionsPerPageForAccessibility;
         }
 
         public boolean isKeepEmptyTags() {
@@ -551,6 +569,10 @@ public final class FopFactoryBuilder {
             return legacyLastPageChangeIPD;
         }
 
+        public boolean isLegacyFoWrapper() {
+            return legacyFoWrapper;
+        }
+
         public Map<String, String> getHyphenationPatternNames() {
             return hyphPatNames;
         }
@@ -563,6 +585,9 @@ public final class FopFactoryBuilder {
     private interface FopFactoryConfigBuilder {
 
         void setAccessibility(boolean enableAccessibility);
+
+        void setStaticRegionsPerPageForAccessibility(boolean staticRegionsPerPageForAccessibility);
+
         void setKeepEmptyTags(boolean b);
 
         void setLayoutManagerMakerOverride(LayoutManagerMaker lmMaker);
@@ -606,6 +631,8 @@ public final class FopFactoryBuilder {
         void setLegacySkipPagePositionOnly(boolean b);
 
         void setLegacyLastPageChangeIPD(boolean b);
+
+        void setLegacyFoWrapper(boolean b);
     }
 
     private static final class CompletedFopFactoryConfigBuilder implements FopFactoryConfigBuilder {
@@ -620,6 +647,11 @@ public final class FopFactoryBuilder {
         public void setAccessibility(boolean enableAccessibility) {
             throwIllegalStateException();
         }
+
+        public void setStaticRegionsPerPageForAccessibility(boolean staticRegionsPerPageForAccessibility) {
+            throwIllegalStateException();
+        }
+
         public void setKeepEmptyTags(boolean b) {
             throwIllegalStateException();
         }
@@ -709,6 +741,10 @@ public final class FopFactoryBuilder {
         public void setLegacyLastPageChangeIPD(boolean b) {
             throwIllegalStateException();
         }
+
+        public void setLegacyFoWrapper(boolean b) {
+            throwIllegalStateException();
+        }
     }
 
     private static final class ActiveFopFactoryConfigBuilder implements FopFactoryConfigBuilder {
@@ -721,6 +757,10 @@ public final class FopFactoryBuilder {
 
         public void setAccessibility(boolean enableAccessibility) {
             config.accessibility = enableAccessibility;
+        }
+
+        public void setStaticRegionsPerPageForAccessibility(boolean staticRegionsPerPageForAccessibility) {
+            config.staticRegionsPerPageForAccessibility = staticRegionsPerPageForAccessibility;
         }
 
         public void setKeepEmptyTags(boolean b) {
@@ -812,6 +852,10 @@ public final class FopFactoryBuilder {
 
         public void setLegacyLastPageChangeIPD(boolean b) {
             config.legacyLastPageChangeIPD = b;
+        }
+
+        public void setLegacyFoWrapper(boolean b) {
+            config.legacyFoWrapper = b;
         }
     }
 

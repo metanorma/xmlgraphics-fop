@@ -245,12 +245,11 @@ public class BlockContainerLayoutManager extends SpacedBorderedPaddedBlockLayout
                 } else {
                     curLM = (LayoutManager) lmStack.pop();
                 }
+                curLM.setFinished(false);
                 setCurrentChildLM(curLM);
-            } else {
-                curLM = getChildLM();
             }
 
-            while (curLM != null) {
+            while ((curLM = getChildLM()) != null) {
                 childLC = makeChildLayoutContext(context);
 
                 // get elements from curLM
@@ -289,7 +288,6 @@ public class BlockContainerLayoutManager extends SpacedBorderedPaddedBlockLayout
                     }
                     contentList.addAll(returnedList);
                     if (returnedList.isEmpty()) {
-                        //Avoid NoSuchElementException below (happens with empty blocks)
                         continue;
                     }
                     if (ElementListUtils.endsWithForcedBreak(returnedList)) {
@@ -308,7 +306,6 @@ public class BlockContainerLayoutManager extends SpacedBorderedPaddedBlockLayout
                 context.updateKeepWithNextPending(childLC.getKeepWithNextPending());
                 childLC.clearKeepsPending();
                 prevLM = curLM;
-                curLM = getChildLM();
             }
             wrapPositionElements(contentList, returnList);
         } else {
@@ -599,7 +596,7 @@ public class BlockContainerLayoutManager extends SpacedBorderedPaddedBlockLayout
                 rect, relDims);
     }
 
-    private class BlockContainerPosition extends NonLeafPosition {
+    private static class BlockContainerPosition extends NonLeafPosition {
 
         private BlockContainerBreaker breaker;
 
