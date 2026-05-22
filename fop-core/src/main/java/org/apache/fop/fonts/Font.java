@@ -465,10 +465,10 @@ public class Font implements Substitutable, Positionable {
 
     /** {@inheritDoc} */
     public CharSequence performSubstitution(CharSequence cs,
-        String script, String language, List associations, boolean retainControls) {
+        String script, String language, List associations, boolean retainControls, boolean isVertical) {
         if (metric instanceof Substitutable) {
             Substitutable s = (Substitutable) metric;
-            return s.performSubstitution(cs, script, language, associations, retainControls);
+            return s.performSubstitution(cs, script, language, associations, retainControls, isVertical);
         } else {
             throw new UnsupportedOperationException();
         }
@@ -476,10 +476,10 @@ public class Font implements Substitutable, Positionable {
 
     /** {@inheritDoc} */
     public CharSequence reorderCombiningMarks(CharSequence cs, int[][] gpa,
-        String script, String language, List associations) {
+        String script, String language, List associations, boolean isVertical) {
         if (metric instanceof Substitutable) {
             Substitutable s = (Substitutable) metric;
-            return s.reorderCombiningMarks(cs, gpa, script, language, associations);
+            return s.reorderCombiningMarks(cs, gpa, script, language, associations, isVertical);
         } else {
             throw new UnsupportedOperationException();
         }
@@ -496,18 +496,18 @@ public class Font implements Substitutable, Positionable {
     }
 
     /** {@inheritDoc} */
-    public int[][] performPositioning(CharSequence cs, String script, String language, int fontSize) {
+    public int[][] performPositioning(CharSequence cs, String script, String language, int fontSize, boolean isVertical) {
         if (metric instanceof Positionable) {
             Positionable p = (Positionable) metric;
-            return p.performPositioning(cs, script, language, fontSize);
+            return p.performPositioning(cs, script, language, fontSize, isVertical);
         } else {
             throw new UnsupportedOperationException();
         }
     }
 
     /** {@inheritDoc} */
-    public int[][] performPositioning(CharSequence cs, String script, String language) {
-        return performPositioning(cs, script, language, fontSize);
+    public int[][] performPositioning(CharSequence cs, String script, String language, boolean isVertical) {
+        return performPositioning(cs, script, language, fontSize, isVertical);
     }
 
 }
