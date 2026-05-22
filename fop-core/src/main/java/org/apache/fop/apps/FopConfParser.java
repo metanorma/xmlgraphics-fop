@@ -34,7 +34,6 @@ import org.xml.sax.SAXException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.apache.xmlgraphics.image.loader.impl.imageio.ImageLoaderImageIO;
 import org.apache.xmlgraphics.image.loader.spi.ImageImplRegistry;
 import org.apache.xmlgraphics.image.loader.util.Penalty;
 import org.apache.xmlgraphics.io.ResourceResolver;
@@ -459,7 +458,6 @@ public class FopConfParser {
         } catch (ConfigurationException e) {
             LogUtil.handleException(LOG, e, strict);
         }
-        registry.setICCConverter(parent.getAttribute(ImageLoaderImageIO.ICC_CONVERTER, null));
     }
 
     /**
