@@ -205,7 +205,7 @@ public class GSUBTestCase implements ScriptContextTester, GlyphContextTester {
         MultiByteFont font = (MultiByteFont) fontLoader.getFont();
         String in = "\u006A\u0301";
         String out = "\u0237\u0301";
-        String sub = font.performSubstitution(in, "latn", "dflt", null, false).toString();
+        String sub = font.performSubstitution(in, "latn", "dflt", null, false, false).toString();
         assertEquals(sub, out);
     }
 }

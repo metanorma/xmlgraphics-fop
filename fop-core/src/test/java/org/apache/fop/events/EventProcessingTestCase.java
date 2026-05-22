@@ -112,6 +112,12 @@ public class EventProcessingTestCase {
     }
 
     @Test
+    public void testReferenceIdOnPage() throws Exception {
+        doTest("referenceid.fo",
+                AreaEventProducer.class.getName() + ".unresolvedIDReferenceOnPage");
+    }
+
+    @Test
     public void testResource() throws Exception {
         doTest("resource.fo",
                 ResourceEventProducer.class.getName() + ".imageNotFound");
