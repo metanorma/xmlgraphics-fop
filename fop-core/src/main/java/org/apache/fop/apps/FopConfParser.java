@@ -34,7 +34,6 @@ import org.xml.sax.SAXException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.apache.xmlgraphics.image.loader.impl.imageio.ImageLoaderImageIO;
 import org.apache.xmlgraphics.image.loader.spi.ImageImplRegistry;
 import org.apache.xmlgraphics.image.loader.util.Penalty;
 import org.apache.xmlgraphics.io.ResourceResolver;
@@ -249,7 +248,7 @@ public class FopConfParser {
                     FopFactoryConfig.DEFAULT_PAGE_HEIGHT);
             fopFactoryBuilder.setPageHeight(pageHeight);
             if (LOG.isInfoEnabled()) {
-                LOG.info("Default page-height set to: " + pageHeight);
+                // LOG.info("Default page-height set to: " + pageHeight);
             }
         }
         if (pageConfig.getAttribute("width", null) != null) {
@@ -257,7 +256,7 @@ public class FopConfParser {
                     FopFactoryConfig.DEFAULT_PAGE_WIDTH);
             fopFactoryBuilder.setPageWidth(pageWidth);
             if (LOG.isInfoEnabled()) {
-                LOG.info("Default page-width set to: " + pageWidth);
+                // LOG.info("Default page-width set to: " + pageWidth);
             }
         }
 
@@ -459,7 +458,6 @@ public class FopConfParser {
         } catch (ConfigurationException e) {
             LogUtil.handleException(LOG, e, strict);
         }
-        registry.setICCConverter(parent.getAttribute(ImageLoaderImageIO.ICC_CONVERTER, null));
     }
 
     /**

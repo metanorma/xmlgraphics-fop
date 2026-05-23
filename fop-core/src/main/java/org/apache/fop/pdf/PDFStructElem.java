@@ -23,14 +23,13 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 import org.apache.fop.accessibility.StructureTreeElement;
+import org.apache.fop.fo.extensions.InternalElementMapping;
 import org.apache.fop.pdf.StandardStructureAttributes.Table;
 import org.apache.fop.util.LanguageTags;
+import org.xml.sax.Attributes;
 
 /**
  * Class representing a PDF Structure Element.
@@ -67,10 +66,25 @@ public class PDFStructElem extends StructureHierarchyMember implements Structure
     public PDFStructElem(PDFObject parent, StructureType structureType) {
         this(parent);
         this.structureType = structureType;
-        put("S", structureType.getName());
+        // https://github.com/metanorma/mn2pdf/issues/406
+        put("S", structureType.getTagType()); // .getName()
+        if (structureType.getName().getName().equals("Note")) {
+            // Note tag shall have ID entry (see https://github.com/metanorma/mn2pdf/issues/288)
+            put("ID", generateHexID(16));
+        }
         if (parent != null) {
             put("P", null);
         }
+    }
+
+    private String generateHexID(int length) {
+        Random r = new Random();
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            int value = r.nextInt(255);
+            result.append(Integer.toHexString(value));
+        }
+        return result.toString().toUpperCase();
     }
 
     private PDFStructElem(PDFObject parent) {
@@ -244,22 +258,29 @@ public class PDFStructElem extends StructureHierarchyMember implements Structure
         return kidsAttached;
     }
 
-    public void setTableAttributeColSpan(int colSpan) {
-        setTableAttributeRowColumnSpan("ColSpan", colSpan);
+    public void setTableAttributeColSpan(int colSpan, Attributes attributes) {
+        setTableAttributeRowColumnSpan("ColSpan", colSpan, attributes);
     }
 
-    public void setTableAttributeRowSpan(int rowSpan) {
-        setTableAttributeRowColumnSpan("RowSpan", rowSpan);
+    public void setTableAttributeRowSpan(int rowSpan, Attributes attributes) {
+        setTableAttributeRowColumnSpan("RowSpan", rowSpan, attributes);
     }
 
-    private void setTableAttributeRowColumnSpan(String typeSpan, int span) {
+    private void setTableAttributeRowColumnSpan(String typeSpan, int span, Attributes attributes) {
         PDFDictionary attribute = new PDFDictionary();
         attribute.put("O", Table.NAME);
         attribute.put(typeSpan, span);
-        if (attributes == null) {
-            attributes = new ArrayList<PDFDictionary>(2);
+        String scopeAttribute = attributes.getValue(InternalElementMapping.URI,
+                InternalElementMapping.SCOPE);
+        Table.Scope scope = (scopeAttribute == null)
+                ? Table.Scope.COLUMN
+                : Table.Scope.valueOf(scopeAttribute.toUpperCase(Locale.ENGLISH));
+        attribute.put("Scope", scope.getName());
+
+        if (this.attributes == null) {
+            this.attributes = new ArrayList<PDFDictionary>(attribute.entries.size());
         }
-        attributes.add(attribute);
+        this.attributes.add(attribute);
     }
 
     public List<PDFObject> getKids() {
@@ -270,7 +291,7 @@ public class PDFStructElem extends StructureHierarchyMember implements Structure
         if (getDocument() != null && getDocument().getProfile().getPDFUAMode().isEnabled()) {
             if (entries.containsKey("Alt") && "".equals(get("Alt"))) {
                 put("Alt", "No alternate text specified");
-            } else if (kids != null) {
+            } else if (kids != null && structureType != null) {
                 for (PDFObject kid : kids) {
                     if (kid instanceof PDFStructElem && isBSLE(((PDFStructElem) kid))) {
                         structureType = StandardStructureTypes.Grouping.DIV;
