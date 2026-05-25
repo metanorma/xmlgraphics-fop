@@ -38,11 +38,11 @@ import org.apache.fop.fonts.DefaultFontConfig.DefaultFontConfigParser;
 import org.apache.fop.fonts.FontEventAdapter;
 import org.apache.fop.pdf.PDFEncryptionParams;
 import org.apache.fop.pdf.PDFFilterList;
+import org.apache.fop.pdf.PDFMergeFontsParams;
 import org.apache.fop.pdf.PDFSignParams;
 import org.apache.fop.render.RendererConfig;
 import org.apache.fop.render.RendererConfigOption;
 import org.apache.fop.util.LogUtil;
-
 import static org.apache.fop.render.pdf.PDFEncryptionOption.ENCRYPTION_LENGTH;
 import static org.apache.fop.render.pdf.PDFEncryptionOption.ENCRYPTION_PARAMS;
 import static org.apache.fop.render.pdf.PDFEncryptionOption.ENCRYPT_METADATA;
@@ -58,6 +58,7 @@ import static org.apache.fop.render.pdf.PDFEncryptionOption.OWNER_PASSWORD;
 import static org.apache.fop.render.pdf.PDFEncryptionOption.USER_PASSWORD;
 import static org.apache.fop.render.pdf.PDFRendererOption.DISABLE_SRGB_COLORSPACE;
 import static org.apache.fop.render.pdf.PDFRendererOption.FILTER_LIST;
+import static org.apache.fop.render.pdf.PDFRendererOption.FORCE_URI_BASIC_LINK;
 import static org.apache.fop.render.pdf.PDFRendererOption.FORM_XOBJECT;
 import static org.apache.fop.render.pdf.PDFRendererOption.LINEARIZATION;
 import static org.apache.fop.render.pdf.PDFRendererOption.MERGE_FONTS;
@@ -152,15 +153,28 @@ public final class PDFRendererConfig implements RendererConfig {
                 configureEncryptionParams(cfg, userAgent, strict);
                 parseAndPut(OUTPUT_PROFILE, cfg);
                 parseAndPut(DISABLE_SRGB_COLORSPACE, cfg);
-                parseAndPut(MERGE_FONTS, cfg);
+                configureMergeFontsParams(cfg);
                 parseAndPut(MERGE_FORM_FIELDS, cfg);
                 parseAndPut(LINEARIZATION, cfg);
                 parseAndPut(FORM_XOBJECT, cfg);
                 parseAndPut(OBJECT_STREAMS, cfg);
+                parseAndPut(FORCE_URI_BASIC_LINK, cfg);
                 parseAndPut(VERSION, cfg);
                 configureSignParams(cfg);
             } catch (ConfigurationException e) {
                 LogUtil.handleException(LOG, e, strict);
+            }
+        }
+
+        private void configureMergeFontsParams(Configuration cfg) throws ConfigurationException {
+            Configuration mergeFontsCfd = cfg.getChild(MERGE_FONTS.getName(), false);
+            if (mergeFontsCfd != null) {
+                Boolean enabled = (Boolean) MERGE_FONTS.parse(mergeFontsCfd.getValue());
+                if (enabled) {
+                    boolean remapSingleByteFont = mergeFontsCfd.getAttributeAsBoolean("remap-singlebyte-font", true);
+                    PDFMergeFontsParams mergeFontsParams = new PDFMergeFontsParams(remapSingleByteFont);
+                    configOptions.put(MERGE_FONTS, mergeFontsParams);
+                }
             }
         }
 

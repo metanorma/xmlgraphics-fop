@@ -17,19 +17,20 @@
 
 /* $Id$ */
 
-package org.apache.fop;
+package org.apache.fop.util;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
+import org.apache.fop.render.intermediate.IFPainter;
 
-/**
- * Test suite for basic functionality of FOP's transcoders.
- */
-@RunWith(Suite.class)
-@SuiteClasses({
-    BasicPDFTranscoderTestCase.class,
-    BasicPSTranscoderTestCase.class
-})
-public class BasicTranscoderTestSuite {
+public final class StringUtils {
+
+    private StringUtils() {
+    }
+
+    public static String processSoftHyphen(String text, IFPainter painter) {
+        if (!painter.supportsSoftHyphen()) {
+            return text.replace(CharUtilities.SOFT_HYPHEN, '-');
+        }
+        return text;
+    }
+
 }

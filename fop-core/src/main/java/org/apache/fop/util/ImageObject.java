@@ -15,23 +15,8 @@
  * limitations under the License.
  */
 
-/* $Id$ */
+package org.apache.fop.util;
 
-package org.apache.fop;
-
-import org.apache.batik.transcoder.Transcoder;
-
-import org.apache.fop.svg.PDFTranscoder;
-
-/**
- * Basic runtime test for the PDF transcoder. It is used to verify that
- * nothing obvious is broken after compiling.
- */
-public class BasicPDFTranscoderTestCase extends AbstractBasicTranscoderTest {
-
-    @Override
-    protected Transcoder createTranscoder() {
-        return new PDFTranscoder();
-    }
+public interface ImageObject {
 
 }

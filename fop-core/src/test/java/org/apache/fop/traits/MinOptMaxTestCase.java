@@ -20,7 +20,6 @@
 package org.apache.fop.traits;
 
 import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -37,6 +36,7 @@ public class MinOptMaxTestCase {
     @Test
     public void testZero() {
         assertEquals(MinOptMax.getInstance(0), MinOptMax.ZERO);
+        assertTrue(MinOptMax.getInstance(0, 0, 0) == MinOptMax.ZERO);
     }
 
     @Test

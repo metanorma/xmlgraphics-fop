@@ -16,22 +16,16 @@
  */
 
 /* $Id$ */
+package org.apache.fop.pdf;
 
-package org.apache.fop;
+public class PDFMergeFontsParams {
+    private boolean remapSingleByteFontEnabled;
 
-import org.apache.batik.transcoder.Transcoder;
-
-import org.apache.fop.render.ps.PSTranscoder;
-
-/**
- * Basic runtime test for the PS transcoder. It is used to verify that
- * nothing obvious is broken after compiling.
- */
-public class BasicPSTranscoderTestCase extends AbstractBasicTranscoderTest {
-
-    @Override
-    protected Transcoder createTranscoder() {
-        return new PSTranscoder();
+    public PDFMergeFontsParams(boolean remapSingleByteFontEnabled) {
+        this.remapSingleByteFontEnabled = remapSingleByteFontEnabled;
     }
 
+    public boolean isRemapSingleByteFontEnabled() {
+        return remapSingleByteFontEnabled;
+    }
 }

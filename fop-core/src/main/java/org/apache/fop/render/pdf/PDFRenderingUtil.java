@@ -89,7 +89,6 @@ import org.apache.fop.render.pdf.extensions.PDFEmbeddedFileAttachment;
 import org.apache.fop.render.pdf.extensions.PDFObjectType;
 import org.apache.fop.render.pdf.extensions.PDFPageExtension;
 import org.apache.fop.render.pdf.extensions.PDFReferenceExtension;
-
 import static org.apache.fop.render.pdf.PDFEncryptionOption.ENCRYPTION_PARAMS;
 import static org.apache.fop.render.pdf.PDFEncryptionOption.NO_ACCESSCONTENT;
 import static org.apache.fop.render.pdf.PDFEncryptionOption.NO_ANNOTATIONS;
@@ -252,22 +251,24 @@ class PDFRenderingUtil {
     }
 
     public void renderXMPMetadata(XMPMetadata metadata) {
-        Metadata docXMP = metadata.getMetadata();
-        Metadata fopXMP = PDFMetadata.createXMPFromPDFDocument(pdfDoc);
-        //Merge FOP's own metadata into the one from the XSL-FO document
-        List<Class> exclude = new ArrayList<Class>();
-        if (pdfDoc.getProfile().getPDFAMode().isPart1()) {
-            exclude.add(DublinCoreSchema.class);
-        }
-        fopXMP.mergeInto(docXMP, exclude);
-        XMPBasicAdapter xmpBasic = XMPBasicSchema.getAdapter(docXMP);
-        //Metadata was changed so update metadata date
-        xmpBasic.setMetadataDate(new java.util.Date());
-        PDFMetadata.updateInfoFromMetadata(docXMP, pdfDoc.getInfo());
+        if (pdfDoc.getRoot().getMetadata() == null) {
+            Metadata docXMP = metadata.getMetadata();
+            Metadata fopXMP = PDFMetadata.createXMPFromPDFDocument(pdfDoc);
+            //Merge FOP's own metadata into the one from the XSL-FO document
+            List<Class> exclude = new ArrayList<Class>();
+            if (pdfDoc.getProfile().getPDFAMode().isPart1()) {
+                exclude.add(DublinCoreSchema.class);
+            }
+            fopXMP.mergeInto(docXMP, exclude);
+            XMPBasicAdapter xmpBasic = XMPBasicSchema.getAdapter(docXMP);
+            //Metadata was changed so update metadata date
+            xmpBasic.setMetadataDate(new java.util.Date());
+            PDFMetadata.updateInfoFromMetadata(docXMP, pdfDoc.getInfo());
 
-        PDFMetadata pdfMetadata = pdfDoc.getFactory().makeMetadata(
-                docXMP, metadata.isReadOnly());
-        pdfDoc.getRoot().setMetadata(pdfMetadata);
+            PDFMetadata pdfMetadata = pdfDoc.getFactory().makeMetadata(
+                    docXMP, metadata.isReadOnly());
+            pdfDoc.getRoot().setMetadata(pdfMetadata);
+        }
     }
 
     public void generateDefaultXMPMetadata() {
@@ -632,11 +633,12 @@ class PDFRenderingUtil {
 
         pdfDoc.enableAccessibility(userAgent.isAccessibilityEnabled());
         pdfDoc.setStaticRegionsPerPageForAccessibility(userAgent.isStaticRegionsPerPageForAccessibility());
-        pdfDoc.setMergeFontsEnabled(rendererConfig.getMergeFontsEnabled());
+        pdfDoc.setMergeFontsParams(rendererConfig.getMergeFontsParams());
         pdfDoc.setMergeFormFieldsEnabled(rendererConfig.getMergeFormFieldsEnabled());
         pdfDoc.setLinearizationEnabled(rendererConfig.getLinearizationEnabled());
         pdfDoc.setFormXObjectEnabled(rendererConfig.getFormXObjectEnabled());
         pdfDoc.setObjectStreamsEnabled(rendererConfig.getObjectStreamsEnabled());
+        pdfDoc.setForceUriBasicLink(rendererConfig.getForceUriBasicLinkEnabled());
 
         return this.pdfDoc;
     }

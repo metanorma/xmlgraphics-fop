@@ -24,6 +24,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -36,7 +37,6 @@ import java.util.Map.Entry;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.apache.fontbox.cff.CFFStandardString;
 import org.apache.fontbox.cff.CFFType1Font;
 import org.apache.fontbox.cff.CharStringCommand;
@@ -203,7 +203,7 @@ public class OTFSubSetFile extends OTFSubSetWriter {
         writeBytes(cffReader.getHeader());
 
         //Name Index
-        writeIndex(Arrays.asList(embedFontName.getBytes("UTF-8")));
+        writeIndex(Arrays.asList(embedFontName.getBytes(StandardCharsets.UTF_8)));
 
         Offsets offsets = new Offsets();
 
@@ -355,7 +355,7 @@ public class OTFSubSetFile extends OTFSubSetWriter {
         int sidAStringIndex = stringIndexData.size() + 390;
         int sidB = dictEntry.getOperands().get(1).intValue();
         if (sidB > 390) {
-            stringIndexData.add("Identity".getBytes("UTF-8"));
+            stringIndexData.add("Identity".getBytes(StandardCharsets.UTF_8));
         }
         int sidBStringIndex = stringIndexData.size() + 390;
         byte[] cidEntryByteData = dictEntry.getByteData();
@@ -407,7 +407,7 @@ public class OTFSubSetFile extends OTFSubSetWriter {
                 if (index < cffReader.getStringIndex().getNumObjects()) {
                     byte[] value = cffReader.getStringIndex().getValue(index);
                     if (mbFont != null) {
-                        mbFont.mapUsedGlyphName(v, new String(value, "UTF-8"));
+                        mbFont.mapUsedGlyphName(v, new String(value, StandardCharsets.UTF_8));
                     }
                     gidToSID.put(v, stringIndexData.size() + 391);
                     stringIndexData.add(value);

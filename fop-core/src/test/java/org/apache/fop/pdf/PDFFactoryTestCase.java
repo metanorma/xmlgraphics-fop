@@ -27,9 +27,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -283,6 +285,32 @@ public class PDFFactoryTestCase {
     }
 
     @Test
+    public void testNullLinkAltText() throws IOException {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        defaultLinkAltText(bos, false, null);
+
+        assertFalse("If the alt text is null, it should not be added to the dictionary",
+                bos.toString().contains("/Contents"));
+
+        defaultLinkAltText(bos, false, null);
+        assertFalse("If the alt text is null, it should not be added to the dictionary",
+                bos.toString().contains("/Contents"));
+    }
+
+    @Test
+    public void testEmptyLinkAltText() throws IOException {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        defaultLinkAltText(bos, false, "");
+
+        assertFalse("If the alt text is empty, it should not be added to the dictionary",
+                bos.toString().contains("/Contents"));
+
+        defaultLinkAltText(bos, false, "");
+        assertFalse("If the alt text is empty, it should not be added to the dictionary",
+                bos.toString().contains("/Contents"));
+    }
+
+    @Test
     public void testLinkAltText() throws IOException {
         PDFDocument doc = new PDFDocument("");
         PDFFactory pdfFactory = new PDFFactory(doc);
@@ -292,5 +320,84 @@ public class PDFFactoryTestCase {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         link.output(bos);
         assertTrue(bos.toString().contains("/Contents (a)")); // was (b), see PDFLink.java for /Contents
+    }
+		
+    @Test
+    public void testValidLinkAltText() throws IOException {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+        String altText = defaultLinkAltText(bos, false, "b");
+        assertTrue("Alt Text must not use the encryption",
+                bos.toString().contains("/Contents (" + altText + ")"));
+
+        String encryptedAltText = defaultLinkAltText(bos, true, "b");
+        assertTrue("Alt Text must use the encryption",
+                bos.toString().contains("/Contents " + encryptedAltText));
+    }
+
+    private String defaultLinkAltText(ByteArrayOutputStream bos, boolean useEncryption, String originalAltText)
+            throws IOException {
+        PDFDocument doc = new PDFDocument("");
+        if (useEncryption) {
+            doc.setEncryption(new PDFEncryptionParams("", "", true, true, true, true, true));
+        }
+
+        PDFFactory pdfFactory = new PDFFactory(doc);
+        PDFAction action = createPDFAction(pdfFactory, doc, "a", originalAltText);
+
+        PDFLink link = pdfFactory.makeLink(new Rectangle(), "a", 0, 0);
+        link.setAction(action);
+
+        link.output(bos);
+        if (useEncryption && originalAltText != null && !originalAltText.isEmpty()) {
+            ByteArrayOutputStream encryptedAltTextBos = new ByteArrayOutputStream();
+            String encryptedAltText = new String(link.encodeText(((PDFUri) action).getAltText()),
+                    StandardCharsets.ISO_8859_1);
+            encryptedAltTextBos.write(PDFDocument.encode(encryptedAltText));
+
+            return encryptedAltTextBos.toString();
+        } else {
+            return originalAltText;
+        }
+    }
+
+    @Test
+    public void testExternalActionDefaultBehaviour() throws IOException {
+        ByteArrayOutputStream bos = getOutputFromPdfAction("a.pdf", false);
+        assertTrue("Must use GoToRemote when flag is false", bos.toString().contains("/S /GoToR"));
+    }
+
+    @Test
+    public void testExternalActionForceUriBasicLinkBehaviour() throws IOException {
+        ByteArrayOutputStream bos = getOutputFromPdfAction("a.pdf", true);
+        assertTrue("Must use URI when flag is true", bos.toString().contains("/URI (a.pdf)"));
+    }
+
+    @Test
+    public void testExternalActionNonPdf() throws IOException {
+        ByteArrayOutputStream legacyBos = getOutputFromPdfAction("a.png", true);
+        ByteArrayOutputStream defaultBos = getOutputFromPdfAction("a.png", false);
+
+        assertEquals("Both legacy and default behaviour should use URI for non-PDF files",
+                legacyBos.toString(), defaultBos.toString());
+    }
+
+    private ByteArrayOutputStream getOutputFromPdfAction(String fileName, boolean forceUriBasicLink)
+        throws IOException {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        PDFDocument doc = new PDFDocument("");
+        doc.setForceUriBasicLink(forceUriBasicLink);
+
+        createPDFAction(new PDFFactory(doc), doc, fileName, "").output(bos);
+
+        return bos;
+    }
+
+    private PDFAction createPDFAction(PDFFactory pdfFactory, PDFDocument doc, String fileName, String originalAltText) {
+        PDFAction action = pdfFactory.getExternalAction(fileName, false, originalAltText);
+        action.setObjectNumber(1);
+        action.setDocument(doc);
+
+        return action;
     }
 }

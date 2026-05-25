@@ -172,6 +172,11 @@ public final class FopFactoryBuilder {
         return this;
     }
 
+    public FopFactoryBuilder setImageCache(boolean b) {
+        fopFactoryConfigBuilder.setImageCache(b);
+        return this;
+    }
+
     /**
      * Sets the {@link LayoutManagerMaker} so that users can configure how FOP creates
      * {@link org.apache.fop.layoutmgr.LayoutManager}s.
@@ -375,6 +380,16 @@ public final class FopFactoryBuilder {
         return this;
     }
 
+    public FopFactoryBuilder setLegacyInvalidBreakPosition(boolean value) {
+        fopFactoryConfigBuilder.setLegacyInvalidBreakPosition(value);
+        return this;
+    }
+
+    public FopFactoryBuilder setUseParentIPDImageScaling(boolean value) {
+        fopFactoryConfigBuilder.setUseParentIPDImageScaling(value);
+        return this;
+    }
+
     public static class FopFactoryConfigImpl implements FopFactoryConfig {
 
         private final EnvironmentProfile enviro;
@@ -386,6 +401,8 @@ public final class FopFactoryBuilder {
         private boolean staticRegionsPerPageForAccessibility;
 
         private boolean keepEmptyTags = true;
+
+        private boolean imageCache = true;
 
         private LayoutManagerMaker layoutManagerMaker;
 
@@ -429,6 +446,10 @@ public final class FopFactoryBuilder {
 
         private boolean legacyFoWrapper;
 
+        private boolean legacyInvalidBreakPosition = FopFactoryConfig.DEFAULT_LEGACY_INVALID_BREAK_POSITION;
+
+        private boolean useParentIPDImageScaling = FopFactoryConfig.DEFAULT_USE_PARENT_IPD_IMAGE_SCALING;
+
         private static final class ImageContextImpl implements ImageContext {
 
             private final FopFactoryConfig config;
@@ -459,6 +480,10 @@ public final class FopFactoryBuilder {
 
         public boolean isKeepEmptyTags() {
             return keepEmptyTags;
+        }
+
+        public boolean isImageCacheEnabled() {
+            return imageCache;
         }
 
         /** {@inheritDoc} */
@@ -573,6 +598,14 @@ public final class FopFactoryBuilder {
             return legacyFoWrapper;
         }
 
+        public boolean isLegacyInvalidBreakPosition() {
+            return legacyInvalidBreakPosition;
+        }
+
+        public boolean isUseParentIPDImageScaling() {
+            return useParentIPDImageScaling;
+        }
+
         public Map<String, String> getHyphenationPatternNames() {
             return hyphPatNames;
         }
@@ -590,6 +623,8 @@ public final class FopFactoryBuilder {
 
         void setKeepEmptyTags(boolean b);
 
+        void setImageCache(boolean b);
+
         void setLayoutManagerMakerOverride(LayoutManagerMaker lmMaker);
 
         void setBaseURI(URI baseURI);
@@ -599,6 +634,10 @@ public final class FopFactoryBuilder {
         void setStrictFOValidation(boolean validateStrictly);
 
         void setStrictUserConfigValidation(boolean validateStrictly);
+
+        void setLegacyInvalidBreakPosition(boolean invalidBreakPosition);
+
+        void setUseParentIPDImageScaling(boolean useParentContentAreaIPD);
 
         void setBreakIndentInheritanceOnReferenceAreaBoundary(boolean value);
 
@@ -656,6 +695,10 @@ public final class FopFactoryBuilder {
             throwIllegalStateException();
         }
 
+        public void setImageCache(boolean b) {
+            throwIllegalStateException();
+        }
+
         public void setLayoutManagerMakerOverride(LayoutManagerMaker lmMaker) {
             throwIllegalStateException();
 
@@ -674,6 +717,14 @@ public final class FopFactoryBuilder {
         }
 
         public void setStrictUserConfigValidation(boolean validateStrictly) {
+            throwIllegalStateException();
+        }
+
+        public void setLegacyInvalidBreakPosition(boolean ignoreInvalidBreakPosition) {
+            throwIllegalStateException();
+        }
+
+        public void setUseParentIPDImageScaling(boolean useParentContentAreaIPD) {
             throwIllegalStateException();
         }
 
@@ -767,6 +818,10 @@ public final class FopFactoryBuilder {
             config.keepEmptyTags = b;
         }
 
+        public void setImageCache(boolean b) {
+            config.imageCache = b;
+        }
+
         public void setLayoutManagerMakerOverride(LayoutManagerMaker lmMaker) {
             config.layoutManagerMaker = lmMaker;
         }
@@ -788,8 +843,7 @@ public final class FopFactoryBuilder {
             config.hasStrictUserValidation = validateStrictly;
         }
 
-        public void setBreakIndentInheritanceOnReferenceAreaBoundary(
-                boolean value) {
+        public void setBreakIndentInheritanceOnReferenceAreaBoundary(boolean value) {
             config.breakIndentInheritanceOnReferenceBoundary = value;
         }
 
@@ -856,6 +910,14 @@ public final class FopFactoryBuilder {
 
         public void setLegacyFoWrapper(boolean b) {
             config.legacyFoWrapper = b;
+        }
+
+        public void setLegacyInvalidBreakPosition(boolean legacyInvalidBreakPosition) {
+            config.legacyInvalidBreakPosition = legacyInvalidBreakPosition;
+        }
+
+        public void setUseParentIPDImageScaling(boolean useParentIPDImageScaling) {
+            config.useParentIPDImageScaling = useParentIPDImageScaling;
         }
     }
 

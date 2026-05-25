@@ -21,7 +21,7 @@ package org.apache.fop.pdf;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -79,16 +79,43 @@ public class PDFStructureTreeTestCase {
     }
 
     private ByteArrayOutputStream foToOutput(String fo)
-            throws IOException, SAXException, TransformerException {
+            throws SAXException, TransformerException {
         FopFactory fopFactory = FopFactory.newInstance(new File(".").toURI());
         FOUserAgent userAgent = fopFactory.newFOUserAgent();
         userAgent.setAccessibility(true);
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, userAgent, bos);
         Transformer transformer = TransformerFactory.newInstance().newTransformer();
-        Source src = new StreamSource(new ByteArrayInputStream(fo.getBytes("UTF-8")));
+        Source src = new StreamSource(new ByteArrayInputStream(fo.getBytes(StandardCharsets.UTF_8)));
         Result res = new SAXResult(fop.getDefaultHandler());
         transformer.transform(src, res);
         return bos;
+    }
+
+    @Test
+    public void testFootnote() throws Exception {
+        String fo = "<fo:root xmlns:fo=\"http://www.w3.org/1999/XSL/Format\">\n"
+                + "  <fo:layout-master-set>\n"
+                + "    <fo:simple-page-master master-name=\"simple\" page-height=\"27.9cm\" page-width=\"21.6cm\">\n"
+                + "      <fo:region-body />\n"
+                + "    </fo:simple-page-master>\n"
+                + "  </fo:layout-master-set>\n"
+                + "  <fo:page-sequence master-reference=\"simple\">\n"
+                + "    <fo:flow flow-name=\"xsl-region-body\">\n"
+                + "      <fo:block>Text<fo:footnote>\n"
+                + "      <fo:inline>1</fo:inline>\n"
+                + "      <fo:footnote-body>\n"
+                + "         <fo:block>footnote</fo:block>\n"
+                + "          </fo:footnote-body>\n"
+                + "        </fo:footnote>\n"
+                + "      </fo:block>\n"
+                + "    </fo:flow>\n"
+                + "  </fo:page-sequence>\n"
+                + "</fo:root>\n";
+        ByteArrayOutputStream bos = foToOutput(fo);
+        String pdf = bos.toString();
+        Assert.assertTrue(pdf.contains("/ID (Note ID "));
+        Assert.assertTrue(pdf.contains("/S /Note"));
+        Assert.assertTrue(pdf.contains("/S /Reference"));
     }
 }
