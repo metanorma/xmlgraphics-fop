@@ -416,7 +416,7 @@ class StructureTreeEventTrigger extends FOEventHandler {
 
     @Override
     public void startExternalDocument(ExternalDocument externalDocument) {
-        startElementWithIDAndAltText(externalDocument, null);
+        startElementWithIDAndAltText(externalDocument, null, null);
         endElement(externalDocument);
     }
 

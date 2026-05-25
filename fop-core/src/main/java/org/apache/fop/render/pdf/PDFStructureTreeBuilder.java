@@ -358,11 +358,11 @@ public class PDFStructureTreeBuilder implements StructureTreeEventHandler {
         protected void setAttributes(PDFStructElem structElem, Attributes attributes) {
             String columnSpan = attributes.getValue("number-columns-spanned");
             if (columnSpan != null) {
-                structElem.setTableAttributeColSpan(Integer.parseInt(columnSpan), attributes);
+                structElem.setTableAttributeColSpan(Integer.parseInt(columnSpan));
             }
             String rowSpan = attributes.getValue("number-rows-spanned");
             if (rowSpan != null) {
-                structElem.setTableAttributeRowSpan(Integer.parseInt(rowSpan), attributes);
+                structElem.setTableAttributeRowSpan(Integer.parseInt(rowSpan));
             }
         }
 
