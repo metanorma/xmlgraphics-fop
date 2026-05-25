@@ -32,8 +32,6 @@ import org.apache.fop.complexscripts.util.Characters;
 import org.apache.fop.traits.MinOptMax;
 import org.apache.fop.util.CharUtilities;
 
-import static org.apache.fop.fonts.type1.AdobeStandardEncoding.i;
-
 /**
  * Stores the mapping of a text fragment to glyphs, along with various information.
  */

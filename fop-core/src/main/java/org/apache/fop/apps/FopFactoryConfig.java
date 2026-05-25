@@ -40,6 +40,11 @@ import org.apache.fop.layoutmgr.LayoutManagerMaker;
 // part of the API. Why would a user care how the internal objects are passed around? They shouldn't.
 public interface FopFactoryConfig {
 
+    /**
+     * Defines if FOP should allow breaks at positions deemed invalid
+     */
+    boolean DEFAULT_LEGACY_INVALID_BREAK_POSITION = false;
+
     /** Defines if FOP should use an alternative rule to determine text indents */
     boolean DEFAULT_BREAK_INDENT_INHERITANCE = false;
 
@@ -62,6 +67,11 @@ public interface FopFactoryConfig {
     float DEFAULT_TARGET_RESOLUTION = 72.0f; //dpi
 
     /**
+     * Defines if FOP should use the parent's layout manager for the content area IPD
+     */
+    boolean DEFAULT_USE_PARENT_IPD_IMAGE_SCALING = false;
+
+    /**
      * Whether accessibility features are switched on.
      *
      * @return true if accessibility features have been requested
@@ -71,6 +81,8 @@ public interface FopFactoryConfig {
     boolean isStaticRegionsPerPageForAccessibility();
 
     boolean isKeepEmptyTags();
+
+    boolean isImageCacheEnabled();
 
     /**
      * Returns the overriding LayoutManagerMaker instance, if any.
@@ -177,6 +189,10 @@ public interface FopFactoryConfig {
     boolean isLegacyLastPageChangeIPD();
 
     boolean isLegacyFoWrapper();
+
+    boolean isLegacyInvalidBreakPosition();
+
+    boolean isUseParentIPDImageScaling();
 
     /** @return the hyphenation pattern names */
     Map<String, String> getHyphenationPatternNames();

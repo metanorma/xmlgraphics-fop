@@ -40,6 +40,7 @@ import org.apache.xmlgraphics.image.loader.ImageManager;
 import org.apache.xmlgraphics.image.loader.impl.AbstractImageSessionContext.FallbackResolver;
 import org.apache.xmlgraphics.util.UnitConv;
 
+import org.apache.fop.afp.fonts.CharacterSetBuilder;
 import org.apache.fop.apps.io.InternalResourceResolver;
 import org.apache.fop.apps.io.ResourceResolverFactory;
 import org.apache.fop.configuration.Configuration;
@@ -55,6 +56,8 @@ import org.apache.fop.render.RendererFactory;
 import org.apache.fop.render.XMLHandlerRegistry;
 import org.apache.fop.util.ColorSpaceCache;
 import org.apache.fop.util.ContentHandlerFactoryRegistry;
+import org.apache.fop.util.ImageObjectCache;
+import org.apache.fop.util.ImageObjectCacheImpl;
 
 /**
  * Factory class which instantiates new Fop and FOUserAgent instances. This
@@ -85,6 +88,7 @@ public final class FopFactory implements ImageContext {
 
     private final ColorSpaceCache colorSpaceCache;
 
+    private final ImageObjectCache imageObjectCache;
     private final FopFactoryConfig config;
 
     private final InternalResourceResolver resolver;
@@ -93,12 +97,20 @@ public final class FopFactory implements ImageContext {
 
     private HyphenationTreeCache hyphenationTreeCache;
 
+    private CharacterSetBuilder singleByteCharacterSetBuilder;
+    private CharacterSetBuilder doubleByteCharacterSetBuilder;
+
     private FopFactory(FopFactoryConfig config) {
         this.config = config;
         this.resolver = ResourceResolverFactory.createInternalResourceResolver(config.getBaseURI(),
                 config.getResourceResolver());
         this.elementMappingRegistry = new ElementMappingRegistry(this);
         this.colorSpaceCache = new ColorSpaceCache(resolver);
+        if (config.isImageCacheEnabled()) {
+            this.imageObjectCache = new ImageObjectCacheImpl();
+        } else {
+            this.imageObjectCache = new ImageObjectCache();
+        }
         this.rendererFactory = new RendererFactory(config.preferRenderer());
         this.xmlHandlers = new XMLHandlerRegistry();
         this.imageHandlers = new ImageHandlerRegistry();
@@ -254,6 +266,14 @@ public final class FopFactory implements ImageContext {
 
     boolean isLegacyFoWrapper() {
         return config.isLegacyFoWrapper();
+    }
+
+    public boolean isLegacyInvalidBreakPosition() {
+        return config.isLegacyInvalidBreakPosition();
+    }
+
+    public boolean isUseParentIPDImageScaling() {
+        return config.isUseParentIPDImageScaling();
     }
 
     /**
@@ -488,6 +508,14 @@ public final class FopFactory implements ImageContext {
     }
 
     /**
+     * Returns the ImageObjectCache for this instance.
+     * @return the image object cache
+     */
+    public ImageObjectCache getImageObjectCache() {
+        return this.imageObjectCache;
+    }
+
+    /**
      * Returns the color space cache for this instance.
      * <p>
      * Note: this method should not be considered as part of FOP's external API.
@@ -502,5 +530,19 @@ public final class FopFactory implements ImageContext {
             hyphenationTreeCache = new HyphenationTreeCache();
         }
         return hyphenationTreeCache;
+    }
+
+    public CharacterSetBuilder getDoubleByteCharacterSetBuilder() {
+        if (doubleByteCharacterSetBuilder == null) {
+            doubleByteCharacterSetBuilder = new CharacterSetBuilder.DoubleByteLoader();
+        }
+        return doubleByteCharacterSetBuilder;
+    }
+
+    public CharacterSetBuilder getSingleByteCharacterSetBuilder() {
+        if (singleByteCharacterSetBuilder == null) {
+            singleByteCharacterSetBuilder = new CharacterSetBuilder.SingleByteLoader();
+        }
+        return singleByteCharacterSetBuilder;
     }
 }

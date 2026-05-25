@@ -44,6 +44,7 @@ import org.apache.fop.Version;
 import org.apache.fop.accessibility.Accessibility;
 import org.apache.fop.accessibility.DummyStructureTreeEventHandler;
 import org.apache.fop.accessibility.StructureTreeEventHandler;
+import org.apache.fop.afp.fonts.CharacterSetBuilder;
 import org.apache.fop.apps.io.InternalResourceResolver;
 import org.apache.fop.configuration.Configuration;
 import org.apache.fop.configuration.ConfigurationException;
@@ -68,6 +69,7 @@ import org.apache.fop.render.XMLHandlerRegistry;
 import org.apache.fop.render.intermediate.IFDocumentHandler;
 import org.apache.fop.util.ColorSpaceCache;
 import org.apache.fop.util.ContentHandlerFactoryRegistry;
+import org.apache.fop.util.ImageObjectCache;
 
 /**
  * This is the user agent for FOP.
@@ -540,6 +542,26 @@ public class FOUserAgent {
     }
 
     /**
+     * Are invalid positions to be allowed when breaking text?
+     *
+     * @return if invalid break positions are to be allowed
+     * @see FopFactory#isLegacyInvalidBreakPosition()
+     */
+    public boolean isLegacyInvalidBreakPosition() {
+        return factory.isLegacyInvalidBreakPosition();
+    }
+
+    /**
+     *  Should we use the parent's layout manager for the content area IPD?
+     *
+     * @return if FOP should use the parent's layout manager for the content area IPD
+     * @see FopFactory#isUseParentIPDImageScaling()
+     */
+    public boolean isUseParentIPDImageScaling() {
+        return factory.isUseParentIPDImageScaling();
+    }
+
+    /**
      * @return true if the indent inheritance should be broken when crossing reference area
      *         boundaries (for more info, see the javadoc for the relative member variable)
      * @see FopFactory#isBreakIndentInheritanceOnReferenceAreaBoundary()
@@ -816,6 +838,11 @@ public class FOUserAgent {
         return factory.getImageHandlerRegistry();
     }
 
+    /** @return the image object cache */
+    public ImageObjectCache getImageObjectCache() {
+        return factory.getImageObjectCache();
+    }
+
     /** @return the color space cache */
     public ColorSpaceCache getColorSpaceCache() {
         return factory.getColorSpaceCache();
@@ -872,5 +899,13 @@ public class FOUserAgent {
 
     public boolean isLegacyFoWrapper() {
         return factory.isLegacyFoWrapper();
+    }
+
+    public CharacterSetBuilder getDoubleByteCharacterSetBuilder() {
+        return factory.getDoubleByteCharacterSetBuilder();
+    }
+
+    public CharacterSetBuilder getSingleByteCharacterSetBuilder() {
+        return factory.getSingleByteCharacterSetBuilder();
     }
 }

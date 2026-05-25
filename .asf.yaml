@@ -4,7 +4,17 @@ github:
   labels:
     - fop
     - apache
-
+  rulesets:
+    - name: "Branch Protection"
+      type: branch
+      branches:
+        includes:
+          - "main"
+          - "fop*"
+          - "release*"
+      restrict_deletion: true
+      restrict_force_push: true
+      required_linear_history: true
 notifications:
   commits:      commits@xmlgraphics.apache.org
   # issues:       fop-dev@xmlgraphics.apache.org

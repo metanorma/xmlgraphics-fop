@@ -81,7 +81,7 @@ public enum PDFRendererOption implements RendererConfigOption {
             return Boolean.valueOf(value);
         }
     },
-    MERGE_FONTS("merge-fonts", false) {
+    MERGE_FONTS("merge-fonts", null) {
         @Override
         Boolean deserialize(String value) {
             return Boolean.valueOf(value);
@@ -126,6 +126,12 @@ public enum PDFRendererOption implements RendererConfigOption {
         @Override
         Object deserialize(String value) {
             throw new UnsupportedOperationException();
+        }
+    },
+    FORCE_URI_BASIC_LINK("force-uri-basic-link", false) {
+        @Override
+        Boolean deserialize(String value) {
+            return Boolean.valueOf(value);
         }
     };
 

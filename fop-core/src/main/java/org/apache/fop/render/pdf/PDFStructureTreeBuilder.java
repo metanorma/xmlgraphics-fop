@@ -63,6 +63,7 @@ public class PDFStructureTreeBuilder implements StructureTreeEventHandler {
         addBuilder("character", new LanguageHolderBuilder(StandardStructureTypes.InlineLevelStructure.SPAN));
         addBuilder("external-graphic",          new ImageBuilder());
         addBuilder("instream-foreign-object",   new ImageBuilder());
+        addBuilder("external-document", new ImageBuilder());
         addBuilder("inline",                    new InlineHolderBuilder());
         addBuilder("inline-container",          StandardStructureTypes.Grouping.DIV);
         addBuilder("page-number",               StandardStructureTypes.InlineLevelStructure.QUOTE);
@@ -86,8 +87,8 @@ public class PDFStructureTreeBuilder implements StructureTreeEventHandler {
         addBuilder("basic-link",                new LinkBuilder());
         // Out-of-Line Formatting Objects
         addBuilder("float",                     StandardStructureTypes.Grouping.DIV);
-        addBuilder("footnote",                  StandardStructureTypes.InlineLevelStructure.NOTE);
-        addBuilder("footnote-body",             StandardStructureTypes.Grouping.SECT);
+        addBuilder("footnote",                  StandardStructureTypes.InlineLevelStructure.REFERENCE);
+        addBuilder("footnote-body",             StandardStructureTypes.InlineLevelStructure.NOTE);
         // Other Formatting Objects
         addBuilder("wrapper",                   StandardStructureTypes.InlineLevelStructure.SPAN);
         addBuilder("marker",                    StandardStructureTypes.Grouping.PRIVATE);

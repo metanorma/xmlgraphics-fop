@@ -22,9 +22,9 @@ package org.apache.fop.render.ps.svg;
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 
 import org.apache.commons.io.IOUtils;
@@ -68,7 +68,8 @@ public class GradientTestCase {
         svgGraphics2D.setGraphicContext(new GraphicContext());
         svgGraphics2D.translate(100, 100);
         svgGraphics2D.applyPaint(gradient, true);
-        String expected = IOUtils.toString(getClass().getResourceAsStream(expectedResourceName), "utf-8");
+        String expected = IOUtils.toString(
+                getClass().getResourceAsStream(expectedResourceName), StandardCharsets.UTF_8);
         assertEquals(expected.replace("\r", ""), out.toString());
     }
 

@@ -63,6 +63,8 @@ public class FopConfParser {
     private static final String LEGACY_SKIP_PAGE_POSITION_ONLY = "legacy-skip-page-position-only";
     private static final String LEGACY_LAST_PAGE_CHANGE_IPD = "legacy-last-page-change-ipd";
     private static final String LEGACY_FO_WRAPPER = "legacy-fo-wrapper";
+    private static final String LEGACY_INVALID_BREAK_POSITION = "legacy-invalid-break-position";
+    private static final String USE_PARENT_IPD_IMAGE_SCALING = "use-parent-ipd-image-scaling";
 
     private static final Log LOG = LogFactory.getLog(FopConfParser.class);
     private static final String ACCESSIBILITY = "accessibility";
@@ -208,6 +210,14 @@ public class FopConfParser {
             }
         }
 
+        if (cfg.getChild("image-cache", false) != null) {
+            try {
+                fopFactoryBuilder.setImageCache(cfg.getChild("image-cache").getValueAsBoolean());
+            } catch (ConfigurationException e) {
+                LogUtil.handleException(LOG, e, false);
+            }
+        }
+
         // base definitions for relative path resolution
         if (cfg.getChild("base", false) != null) {
             try {
@@ -328,6 +338,22 @@ public class FopConfParser {
                         cfg.getChild(LEGACY_FO_WRAPPER).getValueAsBoolean());
             } catch (ConfigurationException e) {
                 LogUtil.handleException(LOG, e, false);
+            }
+        }
+        if (cfg.getChild(LEGACY_INVALID_BREAK_POSITION, false) != null) {
+            try {
+                fopFactoryBuilder.setLegacyInvalidBreakPosition(
+                        cfg.getChild(LEGACY_INVALID_BREAK_POSITION).getValueAsBoolean());
+            } catch (ConfigurationException e) {
+                LogUtil.handleException(LOG, e, strict);
+            }
+        }
+        if (cfg.getChild(USE_PARENT_IPD_IMAGE_SCALING, false) != null) {
+            try {
+                fopFactoryBuilder.setUseParentIPDImageScaling(
+                        cfg.getChild(USE_PARENT_IPD_IMAGE_SCALING).getValueAsBoolean());
+            } catch (ConfigurationException e) {
+                LogUtil.handleException(LOG, e, strict);
             }
         }
 

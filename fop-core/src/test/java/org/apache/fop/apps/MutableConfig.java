@@ -61,6 +61,10 @@ public final class MutableConfig implements FopFactoryConfig {
         return delegate.isKeepEmptyTags();
     }
 
+    public boolean isImageCacheEnabled() {
+        return delegate.isImageCacheEnabled();
+    }
+
     public LayoutManagerMaker getLayoutManagerMakerOverride() {
         return delegate.getLayoutManagerMakerOverride();
     }
@@ -79,6 +83,14 @@ public final class MutableConfig implements FopFactoryConfig {
 
     public boolean validateUserConfigStrictly() {
         return delegate.validateUserConfigStrictly();
+    }
+
+    public boolean isLegacyInvalidBreakPosition() {
+        return delegate.isLegacyInvalidBreakPosition();
+    }
+
+    public boolean isUseParentIPDImageScaling() {
+        return delegate.isUseParentIPDImageScaling();
     }
 
     public boolean isBreakIndentInheritanceOnReferenceAreaBoundary() {

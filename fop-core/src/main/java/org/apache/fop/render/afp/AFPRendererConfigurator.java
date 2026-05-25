@@ -126,6 +126,9 @@ public class AFPRendererConfigurator extends PrintRendererConfigurator {
         if (config.getDefaultResourceGroupUri() != null) {
             documentHandler.setDefaultResourceGroupUri(config.getDefaultResourceGroupUri());
         }
+        if (config.isMetadataInObjectContainer() != null) {
+            documentHandler.setMetadataInObjectContainer(config.isMetadataInObjectContainer());
+        }
         AFPResourceLevelDefaults resourceLevelDefaults = config.getResourceLevelDefaults();
         if (resourceLevelDefaults != null) {
             documentHandler.setResourceLevelDefaults(resourceLevelDefaults);
@@ -161,7 +164,7 @@ public class AFPRendererConfigurator extends PrintRendererConfigurator {
         List<AFPFontInfo> afpFonts = new ArrayList<AFPFontInfo>();
         for (AFPFontConfigData config : fontConfig.getFontConfig()) {
             afpFonts.add(config.getFontInfo(userAgent.getFontManager().getResourceResolver(),
-                    eventProducer));
+                    eventProducer, userAgent));
         }
         return afpFonts;
     }

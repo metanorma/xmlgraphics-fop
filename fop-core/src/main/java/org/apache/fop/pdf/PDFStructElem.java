@@ -21,7 +21,6 @@ package org.apache.fop.pdf;
 
 import java.io.IOException;
 import java.io.OutputStream;
-
 import java.io.Serializable;
 import java.util.*;
 
@@ -258,27 +257,25 @@ public class PDFStructElem extends StructureHierarchyMember implements Structure
         return kidsAttached;
     }
 
-    public void setTableAttributeColSpan(int colSpan, Attributes attributes) {
-        setTableAttributeRowColumnSpan("ColSpan", colSpan, attributes);
+    public void setTableAttributeColSpan(int colSpan) {
+        setTableAttributeRowColumnSpan("ColSpan", colSpan, Table.Scope.COLUMN);
     }
 
-    public void setTableAttributeRowSpan(int rowSpan, Attributes attributes) {
-        setTableAttributeRowColumnSpan("RowSpan", rowSpan, attributes);
+    public void setTableAttributeRowSpan(int rowSpan) {
+        setTableAttributeRowColumnSpan("RowSpan", rowSpan, Table.Scope.ROW);
     }
 
-    private void setTableAttributeRowColumnSpan(String typeSpan, int span, Attributes attributes) {
+    private void setTableAttributeRowColumnSpan(String typeSpan, int span, Table.Scope scope) {
         PDFDictionary attribute = new PDFDictionary();
         attribute.put("O", Table.NAME);
         attribute.put(typeSpan, span);
-        String scopeAttribute = attributes.getValue(InternalElementMapping.URI,
-                InternalElementMapping.SCOPE);
-        Table.Scope scope = (scopeAttribute == null)
-                ? Table.Scope.COLUMN
-                : Table.Scope.valueOf(scopeAttribute.toUpperCase(Locale.ENGLISH));
-        attribute.put("Scope", scope.getName());
+        if (this.getStructureType() == StandardStructureTypes.Table.THEAD
+                || this.getStructureType() == StandardStructureTypes.Table.TH) {
+            attribute.put("Scope", scope.getName());
+        }
 
-        if (this.attributes == null) {
-            this.attributes = new ArrayList<PDFDictionary>(attribute.entries.size());
+        if (attributes == null) {
+            attributes = new ArrayList<PDFDictionary>(attribute.entries.size());
         }
         this.attributes.add(attribute);
     }
@@ -288,6 +285,9 @@ public class PDFStructElem extends StructureHierarchyMember implements Structure
     }
 
     public int output(OutputStream stream) throws IOException {
+        if (structureType == StandardStructureTypes.InlineLevelStructure.NOTE) {
+            put("ID", "Note ID " + getObjectNumber().getNumber());
+        }
         if (getDocument() != null && getDocument().getProfile().getPDFUAMode().isEnabled()) {
             if (entries.containsKey("Alt") && "".equals(get("Alt"))) {
                 put("Alt", "No alternate text specified");
@@ -301,7 +301,16 @@ public class PDFStructElem extends StructureHierarchyMember implements Structure
                 }
             }
         }
-        return super.output(stream);
+        int len = super.output(stream);
+        close();
+        return len;
+    }
+
+    private void close() {
+        parent = null;
+        parentElement = null;
+        entries = null;
+        kids = null;
     }
 
     private boolean isBSLE(PDFStructElem kid) {
