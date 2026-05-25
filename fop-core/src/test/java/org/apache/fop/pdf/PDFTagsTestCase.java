@@ -165,7 +165,7 @@ public class PDFTagsTestCase {
         Assert.assertTrue(objects.contains("/Contents (Foreword)"));
         Assert.assertTrue(objects.contains("/Contents (Link to Scope)"));
         Assert.assertTrue(objects.contains("/Note\n" + "  /ID ("));
-        Assert.assertTrue(objects.contains("/RowSpan 2\n" + "  /Scope /Column"));
+        Assert.assertTrue(objects.contains("/RowSpan 2\n" + "  /Scope /Row"));
         Assert.assertTrue(objects.contains("/ColSpan 4\n" + "  /Scope /Column"));
         // check for role="SKIP"
         Assert.assertTrue(!objects.contains("/Span"));
