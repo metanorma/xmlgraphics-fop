@@ -20,9 +20,11 @@ package org.apache.fop.pdf;
 
 import java.awt.Dimension;
 import java.awt.Rectangle;
-import java.io.*;
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -34,13 +36,13 @@ import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.fop.apps.Fop;
-import org.apache.fop.apps.MimeConstants;
 import org.junit.Assert;
 import org.junit.Test;
 
 import org.apache.fop.apps.FOUserAgent;
+import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
+import org.apache.fop.apps.MimeConstants;
 import org.apache.fop.fonts.FontInfo;
 import org.apache.fop.render.intermediate.IFContext;
 import org.apache.fop.render.intermediate.IFException;
@@ -48,7 +50,6 @@ import org.apache.fop.render.intermediate.extensions.Link;
 import org.apache.fop.render.intermediate.extensions.URIAction;
 import org.apache.fop.render.pdf.PDFDocumentHandler;
 import org.apache.fop.render.pdf.extensions.PDFEmbeddedFileAttachment;
-
 import static org.apache.fop.pdf.PDFLinearizationTestCase.readObjs;
 
 
@@ -130,43 +131,50 @@ public class PDFAttachmentTestCase {
                 + "    <value>null</value>\n"
                 + "  </filterList>\n"
                 + "</renderer></renderers></fop>";
-        String fo = "<fo:root xmlns:fo=\"http://www.w3.org/1999/XSL/Format\" xmlns:pdf=\"http://xmlgraphics.apache.org/fop/extensions/pdf\" xmlns:fox=\"http://xmlgraphics.apache.org/fop/extensions\">\n"
+        String fo = "<fo:root xmlns:fo=\"http://www.w3.org/1999/XSL/Format\""
+                + " xmlns:pdf=\"http://xmlgraphics.apache.org/fop/extensions/pdf\""
+                + " xmlns:fox=\"http://xmlgraphics.apache.org/fop/extensions\">\n"
                 + "  <fo:layout-master-set>\n"
                 + "    <fo:simple-page-master master-name=\"simple\">\n"
                 + "      <fo:region-body/>\n"
                 + "    </fo:simple-page-master>\n"
                 + "  </fo:layout-master-set>\n"
-                + "<fo:declarations>\n" +
-                "    <pdf:catalog>\n" +
-                "      <pdf:dictionary key=\"ViewerPreferences\" type=\"normal\">\n" +
-                "        <pdf:boolean key=\"DisplayDocTitle\">true</pdf:boolean>\n" +
-                "      </pdf:dictionary>\n" +
-                "    </pdf:catalog>\n" +
-                "    <x:xmpmeta xmlns:x=\"adobe:ns:meta/\">\n" +
-                "      <rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\">\n" +
-                "        <rdf:Description xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:pdf=\"http://ns.adobe.com/pdf/1.3/\" rdf:about=\"\">\n" +
-                "          <dc:title>\n" +
-                "            <rdf:Alt>\n" +
-                "              <rdf:li xml:lang=\"x-default\">Document for test attachment</rdf:li>\n" +
-                "            </rdf:Alt>\n" +
-                "          </dc:title>\n" +
-                "          <dc:creator>\n" +
-                "            <rdf:Seq>\n" +
-                "              <rdf:li>Metanorma</rdf:li>\n" +
-                "            </rdf:Seq>\n" +
-                "          </dc:creator>\n" +
-                "          <pdf:Keywords>PDF, file attachment, test.</pdf:Keywords>\n" +
-                "        </rdf:Description>\n" +
-                "        <rdf:Description xmlns:xmp=\"http://ns.adobe.com/xap/1.0/\" rdf:about=\"\">\n" +
-                "          <xmp:CreatorTool/>\n" +
-                "        </rdf:Description>\n" +
-                "      </rdf:RDF>\n" +
-                "    </x:xmpmeta>\n" +
-                "    <pdf:embedded-file link-as-file-annotation=\"true\" filename=\"simple_text.txt\" src=\"data:application/octet-stream;base64,U2ltcGxlIHRleHQuDQo=\" description=\"File &#x201c;description&#x201d;\" afrelationship=\"AFR_Data\" volatile=\"true\"/>\n" +
-                "  </fo:declarations>"
+                + "<fo:declarations>\n"
+                + "    <pdf:catalog>\n"
+                + "      <pdf:dictionary key=\"ViewerPreferences\" type=\"normal\">\n"
+                + "        <pdf:boolean key=\"DisplayDocTitle\">true</pdf:boolean>\n"
+                + "      </pdf:dictionary>\n"
+                + "    </pdf:catalog>\n"
+                + "    <x:xmpmeta xmlns:x=\"adobe:ns:meta/\">\n"
+                + "      <rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\">\n"
+                + "        <rdf:Description xmlns:dc=\"http://purl.org/dc/elements/1.1/\""
+                + " xmlns:pdf=\"http://ns.adobe.com/pdf/1.3/\" rdf:about=\"\">\n"
+                + "          <dc:title>\n"
+                + "            <rdf:Alt>\n"
+                + "              <rdf:li xml:lang=\"x-default\">Document for test attachment</rdf:li>\n"
+                + "            </rdf:Alt>\n"
+                + "          </dc:title>\n"
+                + "          <dc:creator>\n"
+                + "            <rdf:Seq>\n"
+                + "              <rdf:li>Metanorma</rdf:li>\n"
+                + "            </rdf:Seq>\n"
+                + "          </dc:creator>\n"
+                + "          <pdf:Keywords>PDF, file attachment, test.</pdf:Keywords>\n"
+                + "        </rdf:Description>\n"
+                + "        <rdf:Description xmlns:xmp=\"http://ns.adobe.com/xap/1.0/\" rdf:about=\"\">\n"
+                + "          <xmp:CreatorTool/>\n"
+                + "        </rdf:Description>\n"
+                + "      </rdf:RDF>\n"
+                + "    </x:xmpmeta>\n"
+                + "    <pdf:embedded-file link-as-file-annotation=\"true\" filename=\"simple_text.txt\""
+                + " src=\"data:application/octet-stream;base64,U2ltcGxlIHRleHQuDQo=\""
+                + " description=\"File &#x201c;description&#x201d;\" afrelationship=\"AFR_Data\" volatile=\"true\"/>\n"
+                + "  </fo:declarations>"
                 + "  <fo:page-sequence master-reference=\"simple\">\n"
                 + "    <fo:flow flow-name=\"xsl-region-body\">\n"
-                + "      <fo:block>File: <fo:basic-link fox:alt-text=\"reference to Attachment\" external-destination=\"url(embedded-file:simple_text.txt)\" role=\"Annot\">reference to Attachment</fo:basic-link></fo:block>\n"
+                + "      <fo:block>File: <fo:basic-link fox:alt-text=\"reference to Attachment\""
+                + " external-destination=\"url(embedded-file:simple_text.txt)\" role=\"Annot\">"
+                + "reference to Attachment</fo:basic-link></fo:block>\n"
                 + "    </fo:flow>\n"
                 + "  </fo:page-sequence>\n"
                 + "</fo:root>\n";
@@ -188,22 +196,23 @@ public class PDFAttachmentTestCase {
 
         String objects = objs.values().stream().collect(Collectors.joining(" "));
 
-        Assert.assertTrue(objects.contains("/Type /Annot /Subtype /FileAttachment\n" +
-                "/FS"));
+        Assert.assertTrue(objects.contains("/Type /Annot /Subtype /FileAttachment\n"
+                + "/FS"));
 
         byte[] bytesContents =  ("File " + '\u201c' + "description" + '\u201d').getBytes("UTF-16BE");
 
         // "/Contents (" +
-        Assert.assertTrue(objects.contains(new String(bytesContents) + ")\n" +
-                "/Name /Paperclip"));
+        Assert.assertTrue(objects.contains(new String(bytesContents) + ")\n"
+                + "/Name /Paperclip"));
 
-        Assert.assertTrue(objects.contains("/Type /Filespec\n" +
-                "  /F (simple_text.txt)\n" +
-                "  /UF (simple_text.txt)\n" +
-                "  /AFRelationship /AFR_Data"));
+        Assert.assertTrue(objects.contains("/Type /Filespec\n"
+                + "  /F (simple_text.txt)\n"
+                + "  /UF (simple_text.txt)\n"
+                + "  /AFRelationship /AFR_Data"));
         //Assert.assertTrue(objects.contains("/Desc (File description)\n" +
-        Assert.assertTrue(objects, objects.contains("/Desc <FEFF00460069006C00650020201C006400650073006300720069007000740069006F006E201D>\n" +
-                "  /V true"));
+        Assert.assertTrue(objects, objects.contains(
+                "/Desc <FEFF00460069006C00650020201C006400650073006300720069007000740069006F006E201D>\n"
+                + "  /V true"));
     }
 
 }

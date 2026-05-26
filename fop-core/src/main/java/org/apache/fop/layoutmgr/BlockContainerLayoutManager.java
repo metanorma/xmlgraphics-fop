@@ -379,7 +379,8 @@ public class BlockContainerLayoutManager extends SpacedBorderedPaddedBlockLayout
         BlockContainerBreaker breaker = new BlockContainerBreaker(this, range);
         breaker.doLayout(relDims.bpd, autoHeight);
         boolean contentOverflows = breaker.isOverflow();
-        if (getBlockContainerFO().isShrinkToFit() && autoHeight == false && (contentOverflows || horizontalOverflow > 0)) {
+        if (getBlockContainerFO().isShrinkToFit() && autoHeight == false && (contentOverflows
+                || horizontalOverflow > 0)) {
             ShrinkToFitHelper shrinkToFitHelper = new ShrinkToFitHelper(range).invoke();
             breaker = shrinkToFitHelper.getBreaker();
             contentOverflows = shrinkToFitHelper.isContentOverflows();
@@ -541,7 +542,8 @@ public class BlockContainerLayoutManager extends SpacedBorderedPaddedBlockLayout
         BlockContainerBreaker breaker = new BlockContainerBreaker(this, range);
         breaker.doLayout((autoHeight ? 0 : relDims.bpd), autoHeight);
         boolean contentOverflows = breaker.isOverflow();
-        if (getBlockContainerFO().isShrinkToFit() && autoHeight == false && (contentOverflows || horizontalOverflow > 0)) {
+        if (getBlockContainerFO().isShrinkToFit() && autoHeight == false && (contentOverflows
+                || horizontalOverflow > 0)) {
             ShrinkToFitHelper shrinkToFitHelper = new ShrinkToFitHelper(range).invoke();
             breaker = shrinkToFitHelper.getBreaker();
             contentOverflows = shrinkToFitHelper.isContentOverflows();
@@ -1075,20 +1077,26 @@ public class BlockContainerLayoutManager extends SpacedBorderedPaddedBlockLayout
 
         @Override
         public String toString() {
-            return "ScaleLength{" +
-                    "length=" + length +
-                    ", scale=" + scale +
-                    '}';
+            return "ScaleLength{"
+                    + "length=" + length
+                    + ", scale=" + scale
+                    + '}';
         }
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
 
             ScaleLength that = (ScaleLength) o;
 
-            if (Double.compare(that.scale, scale) != 0) return false;
+            if (Double.compare(that.scale, scale) != 0) {
+                return false;
+            }
             return length.equals(that.length);
         }
 
@@ -1152,10 +1160,10 @@ public class BlockContainerLayoutManager extends SpacedBorderedPaddedBlockLayout
 
         private void reduceFontSize(FONode foNode, double scale) {
             FONode.FONodeIterator iter = foNode.getChildNodes();
-            if(iter == null) {
+            if (iter == null) {
                 return;
             }
-            while (iter.hasNext()){
+            while (iter.hasNext()) {
                 FONode curNode = iter.next();
                 if (curNode instanceof org.apache.fop.fo.flow.Block) {
                     org.apache.fop.fo.flow.Block block = (org.apache.fop.fo.flow.Block) curNode;

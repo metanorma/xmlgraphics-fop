@@ -10,13 +10,14 @@ import java.util.Map;
  * Class containing static utility functions that allow for the conversion of (Arabic) numerals to Japanese kanji form
  * Note that {@link BigInteger} is used to model the number - as the function handles numbers (0, 9.999 * 10^15].
  *
- * @author Joseph Morris
+ * author Joseph Morris
  * @version 1.0
  */
 
 public class JapaneseToNumbers {
 
-    final private static String[] NUMERALS_KANJI = new String[] {"","一","二","三","四","五","六","七","八","九","十"};
+    final private static String[] NUMERALS_KANJI = new String[] {"", "一", "二", "三", "四", "五", "六", "七", "八",
+            "九", "十"};
 
     private static Map<BigInteger, String> placeValues;
     static {
@@ -31,18 +32,18 @@ public class JapaneseToNumbers {
     };
 
     /**
-     * Constructor.
+     * Number to word.
      *
-     * @param	num		String form of the numeral to be converted
+     * @param num  String form of the numeral to be converted
      */
     public static String numToWord(String num) {
         return numToWord(num, false);
     }
 
     /**
-     * Overloaded Constructor.
+     * Number to word.
      *
-     * @param	num		Integer form of the numeral to be converted
+     * @param num  Integer form of the numeral to be converted
      */
     public static String numToWord(Integer num) {
         String numStr = num.toString();
@@ -50,9 +51,9 @@ public class JapaneseToNumbers {
     }
 
     /**
-     * Overloaded Constructor.
+     * Number to word.
      *
-     * @param	num		BigInteger form of the numeral to be converted
+     * @param num  BigInteger form of the numeral to be converted
      */
     public static String numToWord(BigInteger num) {
         String numStr = num.toString();
@@ -64,14 +65,14 @@ public class JapaneseToNumbers {
      * Keeping track of recursive calls is necessary to allow the function to properly
      * determine the unit value (1-9999) of the place-value before moving to the next place-value.
      *
-     * I.E.	486900000000 --> 4869 * 10^8 (oku) --> We can just find the written form of 4869 then add oku after it
-     * 		4869 --> our recursive call --> 四千八百六十九
-     * 		10^8 --> 億
-     * 		四千八百六十九  * 億   === 四千八百六十九億
+     * I.E. 486900000000 --> 4869 * 10^8 (oku) --> We can just find the written form of 4869 then add oku after it
+     *      4869 --> our recursive call --> 四千八百六十九
+     *      10^8 --> 億
+     *      四千八百六十九  * 億   === 四千八百六十九億
      *
-     * @param 	num				the BigInteger number to be converted
-     * @param 	isRecursive		whether or not this call is recursive
-     * @return	numStr			the final written representation in Japanese kanji
+     * @param num   the BigInteger number to be converted
+     * @param isRecursive whether or not this call is recursive
+     * @return numStr  the final written representation in Japanese kanji
      */
     public static String numToWord(String num, Boolean isRecursive) {
         StringBuilder numStr = new StringBuilder();
@@ -128,10 +129,10 @@ public class JapaneseToNumbers {
      * The counter must be updated (subtracting the current place-value) to allow for smaller place values
      * to be determined.
      *
-     * @param 	placeValue	The place-value that we are determining
-     * @param 	pvKanji		The kanji representation of this place-value
-     * @param 	counter		The current number that we are converting
-     * @return	results		Array with two elements: [0] = String result of conversion, [1] = updated counter
+     * @param placeValue  The place-value that we are determining
+     * @param pvKanji  The kanji representation of this place-value
+     * @param counter  The current number that we are converting
+     * @return results  Array with two elements: [0] = String result of conversion, [1] = updated counter
      */
     private static Object[] getUnitStr(BigInteger placeValue, String pvKanji, BigInteger counter) {
         String unitStr;

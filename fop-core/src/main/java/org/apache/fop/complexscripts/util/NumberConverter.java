@@ -20,7 +20,6 @@
 package org.apache.fop.complexscripts.util;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -1543,7 +1542,7 @@ public class NumberConverter {
                 List<Integer> items = new ArrayList<>();
 
                 String numStr = JapaneseToNumbers.numToWord((int)number); // add  + 10 for two characters testing
-                for (char ch: numStr.toCharArray()) {
+                for (char ch : numStr.toCharArray()) {
                     items.add((int)ch);
                 }
 

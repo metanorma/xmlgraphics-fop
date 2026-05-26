@@ -237,7 +237,7 @@ public abstract class AbstractGraphics extends FObj
     public String getAltText() {
         return altText;
     }
-    
+
     /** @return  the actual text property. */
     public String getActualText() {
         return actualText;

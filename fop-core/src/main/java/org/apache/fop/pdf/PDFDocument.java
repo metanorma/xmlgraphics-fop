@@ -291,19 +291,24 @@ public class PDFDocument {
         try {
             String strKeyContents = "/Contents (";
             // for https://github.com/metanorma/mn2pdf/issues/423
-            // Embedded file *Desc* and file attachment annotation *Contents* entries have bad text content - needs to be UTF-16BE
+            // Embedded file *Desc* and file attachment annotation *Contents* entries have bad
+            // text content - needs to be UTF-16BE
             if (text.contains("/FileAttachment") && text.contains(strKeyContents)) {
-                String strBeforeContents = text.substring(0, text.indexOf(strKeyContents) + strKeyContents.length());
-                String strAfterContents = text.substring(text.indexOf(strKeyContents) + strKeyContents.length());
+                String strBeforeContents = text.substring(0, text.indexOf(strKeyContents)
+                        + strKeyContents.length());
+                String strAfterContents = text.substring(text.indexOf(strKeyContents)
+                        + strKeyContents.length());
                 int posEndContents = strBeforeContents.length() + strAfterContents.indexOf(")\n");
-                String strContents = text.substring(text.indexOf(strKeyContents) + strKeyContents.length(), posEndContents);
+                String strContents = text.substring(text.indexOf(strKeyContents) + strKeyContents.length(),
+                        posEndContents);
                 String strEnd = text.substring(posEndContents);
                 byte[] bytesStart = strBeforeContents.getBytes(ENCODING);
                 byte[] bytesBOM = {(byte) 0xFE, (byte) 0xFF};
                 byte[] bytesContents =  strContents.getBytes("UTF-16BE");
                 byte[] bytesEnd = strEnd.getBytes(ENCODING);
 
-                byte[] combined = ByteBuffer.allocate(bytesStart.length + bytesBOM.length + bytesContents.length + bytesEnd.length)
+                byte[] combined = ByteBuffer.allocate(bytesStart.length + bytesBOM.length
+                                + bytesContents.length + bytesEnd.length)
                         .put(bytesStart)
                         .put(bytesBOM)
                         .put(bytesContents)

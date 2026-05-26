@@ -1,3 +1,21 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* $Id$ */
 package org.apache.fop.render.pdf;
 
 import java.awt.geom.AffineTransform;
@@ -13,10 +31,9 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamSource;
 
-import static org.junit.Assert.assertTrue;
 import org.junit.Test;
-
 import org.xml.sax.SAXException;
+import static org.junit.Assert.assertTrue;
 
 import org.apache.fop.apps.FOUserAgent;
 import org.apache.fop.apps.Fop;
@@ -27,8 +44,10 @@ import org.apache.fop.render.intermediate.IFDocumentHandler;
 import org.apache.fop.render.intermediate.IFException;
 import org.apache.fop.render.intermediate.IFPainter;
 
+
+
 public class PDFVertTestCase {
-    private final static String TEST_MIME = "Test";
+    private static final String TEST_MIME = "Test";
 
     @Test
     public void testFO() throws IOException, SAXException, TransformerException, IFException {
@@ -66,14 +85,16 @@ public class PDFVertTestCase {
                 public IFPainter startPageContent() throws IFException {
                     return new PDFPainter(this, logicalStructureHandler) {
                         @Override
-                        public void drawText(int x, int y, int letterSpacing, int wordSpacing, int[][] dp, String text) throws IFException {
+                        public void drawText(int x, int y, int letterSpacing, int wordSpacing, int[][] dp, String text)
+                                throws IFException {
                             AffineTransform tr = generator.getState().getData().getTransform();
-                            for(int i=0; i<text.length(); i++) {
+                            for (int i = 0; i < text.length(); i++) {
                                 int cp = text.codePointAt(i);
-                                if(!Character.isWhitespace(cp)) {
+                                if (!Character.isWhitespace(cp)) {
                                     boolean isHieroglyph = cp >= 0x2e80;
                                     boolean isRotated = tr.getShearX() < tr.getShearY();
-                                    assertTrue("Character '" + text.charAt(i) + "' should " + (isRotated?"not ":"") + "be rotated", isHieroglyph != isRotated);
+                                    assertTrue("Character '" + text.charAt(i) + "' should "
+                                            + (isRotated ? "not " : "") + "be rotated", isHieroglyph != isRotated);
                                 }
                             }
                             super.drawText(x, y, letterSpacing, wordSpacing, dp, text);

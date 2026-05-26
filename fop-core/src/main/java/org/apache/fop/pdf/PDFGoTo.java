@@ -128,7 +128,7 @@ public class PDFGoTo extends PDFAction {
         str = str
                 .replaceAll("[\\s\\u200b\\u00a0]+", " ")
                 .trim()
-                .replaceAll("[\\.,:;]+$","");
+                .replaceAll("[\\.,:;]+$", "");
         contents = PDFText.escapeText(str, false);
     }
 

@@ -22,7 +22,7 @@ package org.apache.fop.pdf;
 /**
  * PDF annotation for /FileAttachment
  * @since PDF 1.3
- * @author Alexander Dyuzhev (https://github.com/Intelligent2013)
+ * author Alexander Dyuzhev (https://github.com/Intelligent2013)
  */
 public class PDFFileAttachmentAnnotation extends PDFAction {
 
@@ -61,11 +61,11 @@ public class PDFFileAttachmentAnnotation extends PDFAction {
                 "/Contents (" + annotationDesc + ")\n" +
                 "/Name /Paperclip\n" +
                 "\n");*/
-        sb.append("/FileAttachment\n" +
-                "/FS " + objNumber + "\n" +
-                "/Contents (" + annotationDesc + ")\n" +
-                "/Name /Paperclip\n" +
-                "\n");
+        sb.append("/FileAttachment\n"
+                + "/FS " + objNumber + "\n"
+                + "/Contents (" + annotationDesc + ")\n"
+                + "/Name /Paperclip\n"
+                + "\n");
 
         return sb.toString();
     }
@@ -89,7 +89,7 @@ public class PDFFileAttachmentAnnotation extends PDFAction {
 
         PDFFileAttachmentAnnotation launch = (PDFFileAttachmentAnnotation) obj;
 
-        if (!launch.objId.equals(objId  )) {
+        if (!launch.objId.equals(objId)) {
             return false;
         }
 

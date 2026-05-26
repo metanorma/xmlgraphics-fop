@@ -19,7 +19,6 @@
 
 package org.apache.fop.fo.flow;
 
-import org.apache.fop.traits.WritingModeTraitsGetter;
 import org.xml.sax.Locator;
 
 import org.apache.fop.apps.FOPException;
@@ -37,6 +36,7 @@ import org.apache.fop.fo.properties.SpaceProperty;
 import org.apache.fop.traits.Direction;
 import org.apache.fop.traits.WritingMode;
 import org.apache.fop.traits.WritingModeTraits;
+import org.apache.fop.traits.WritingModeTraitsGetter;
 
 public class InlineContainer extends FObj implements WritingModeTraitsGetter {
 

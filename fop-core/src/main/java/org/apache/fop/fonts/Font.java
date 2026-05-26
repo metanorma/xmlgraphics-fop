@@ -496,7 +496,8 @@ public class Font implements Substitutable, Positionable {
     }
 
     /** {@inheritDoc} */
-    public int[][] performPositioning(CharSequence cs, String script, String language, int fontSize, boolean isVertical) {
+    public int[][] performPositioning(CharSequence cs, String script, String language, int fontSize,
+                                      boolean isVertical) {
         if (metric instanceof Positionable) {
             Positionable p = (Positionable) metric;
             return p.performPositioning(cs, script, language, fontSize, isVertical);

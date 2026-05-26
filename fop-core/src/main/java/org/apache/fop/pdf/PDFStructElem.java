@@ -22,13 +22,15 @@ package org.apache.fop.pdf;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+import java.util.Random;
 
 import org.apache.fop.accessibility.StructureTreeElement;
-import org.apache.fop.fo.extensions.InternalElementMapping;
 import org.apache.fop.pdf.StandardStructureAttributes.Table;
 import org.apache.fop.util.LanguageTags;
-import org.xml.sax.Attributes;
 
 /**
  * Class representing a PDF Structure Element.

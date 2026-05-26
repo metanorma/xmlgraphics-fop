@@ -161,8 +161,8 @@ public class PDFDocumentNavigationHandler implements IFDocumentNavigationHandler
                 PDFStructElem pdfStructElem = (PDFStructElem)a.getStructureTreeElement();
                 if (pdfStructElem != null) {
                     if (pdfStructElem.get("Alt") != null) {
-                        String alt_text = (String) pdfStructElem.get("Alt");
-                        pdfGoTo.setContents(alt_text);
+                        String altText = (String) pdfStructElem.get("Alt");
+                        pdfGoTo.setContents(altText);
                     }
                 }
                 getPDFDoc().assignObjectNumber(pdfGoTo);

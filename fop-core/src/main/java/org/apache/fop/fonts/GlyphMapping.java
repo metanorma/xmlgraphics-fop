@@ -48,7 +48,8 @@ public class GlyphMapping {
     public MinOptMax areaIPD;
     public final boolean isHyphenated;
     public final boolean isSpace;
-    public final boolean isZeroWidthSpace; // to check for zero-width space (otherwise we get redundant spaces in copy-paste text from PDF)
+    public final boolean isZeroWidthSpace; // to check for zero-width space (otherwise we get redundant spaces in
+                                           // copy-paste text from PDF)
     public boolean breakOppAfter;
     public final Font font;
     public final int level;
@@ -65,17 +66,20 @@ public class GlyphMapping {
     }
 
     public GlyphMapping(int startIndex, int endIndex, int wordSpaceCount, int letterSpaceCount,
-                        MinOptMax areaIPD, boolean isHyphenated, boolean isSpace, boolean isZeroWidthSpace, boolean breakOppAfter,
-                        Font font, int level, int[][] gposAdjustments) {
+                        MinOptMax areaIPD, boolean isHyphenated, boolean isSpace, boolean isZeroWidthSpace,
+                        boolean breakOppAfter, Font font, int level, int[][] gposAdjustments) {
         this(startIndex, endIndex, wordSpaceCount, letterSpaceCount, areaIPD, isHyphenated,
-                isSpace, isZeroWidthSpace, breakOppAfter, font, level, gposAdjustments, null, null, false);
+                isSpace, isZeroWidthSpace, breakOppAfter, font, level, gposAdjustments, null, null,
+                false);
     }
 
     public GlyphMapping(int startIndex, int endIndex, int wordSpaceCount, int letterSpaceCount,
                         MinOptMax areaIPD, boolean isHyphenated, boolean isSpace, boolean breakOppAfter,
-                        Font font, int level, int[][] gposAdjustments, String mapping, List associations, boolean isUpright) {
+                        Font font, int level, int[][] gposAdjustments, String mapping, List associations,
+                        boolean isUpright) {
         this(startIndex, endIndex, wordSpaceCount, letterSpaceCount, areaIPD, isHyphenated,
-                isSpace, false, breakOppAfter, font, level, gposAdjustments, mapping, associations, isUpright);
+                isSpace, false, breakOppAfter, font, level, gposAdjustments, mapping, associations,
+                isUpright);
     }
 
     public GlyphMapping(int startIndex, int endIndex, int wordSpaceCount, int letterSpaceCount,
@@ -103,7 +107,8 @@ public class GlyphMapping {
     public static GlyphMapping doGlyphMapping(TextFragment text, int startIndex, int endIndex,
             Font font, MinOptMax letterSpaceIPD, MinOptMax[] letterSpaceAdjustArray,
             char precedingChar, char breakOpportunityChar, final boolean endsWithHyphen, int level,
-            boolean dontOptimizeForIdentityMapping, boolean retainAssociations, boolean retainControls, boolean isVertical) {
+            boolean dontOptimizeForIdentityMapping, boolean retainAssociations, boolean retainControls,
+                                              boolean isVertical) {
         GlyphMapping mapping;
         if (font.performsSubstitution() || font.performsPositioning()) {
             mapping = processWordMapping(text, startIndex, endIndex, font,
@@ -119,7 +124,8 @@ public class GlyphMapping {
     private static GlyphMapping processWordMapping(TextFragment text, int startIndex,
             int endIndex, final Font font, final char breakOpportunityChar,
             final boolean endsWithHyphen, int level,
-            boolean dontOptimizeForIdentityMapping, boolean retainAssociations, boolean retainControls, boolean isVertical) {
+            boolean dontOptimizeForIdentityMapping, boolean retainAssociations, boolean retainControls,
+                                                   boolean isVertical) {
         int nLS = 0; // # of letter spaces
         String script = text.getScript();
         String language = text.getLanguage();
@@ -206,7 +212,8 @@ public class GlyphMapping {
     }
 
     private static boolean useKerningAdjustments(final Font font, String script, String language) {
-        return font.hasKerning() && !font.hasFeature(GlyphTable.GLYPH_TABLE_TYPE_POSITIONING, script, language, "kern");
+        return font.hasKerning() && !font.hasFeature(GlyphTable.GLYPH_TABLE_TYPE_POSITIONING, script, language,
+                "kern");
     }
 
     /**
@@ -327,8 +334,10 @@ public class GlyphMapping {
         wordIPD = wordIPD.plus(letterSpaceIPD.mult(letterSpaces));
 
         // create and return the AreaInfo object
-        return new GlyphMapping(startIndex, endIndex, 0, letterSpaces, wordIPD, endsWithHyphen, false,
-                (breakOpportunityChar != 0) && !isSpace(breakOpportunityChar), font, level, null);
+        return new GlyphMapping(startIndex, endIndex, 0, letterSpaces, wordIPD, endsWithHyphen,
+                false,
+                (breakOpportunityChar != 0) && !isSpace(breakOpportunityChar), font, level,
+                null);
     }
 
     private static void addToLetterAdjust(MinOptMax[] letterSpaceAdjustArray, int index, int width) {

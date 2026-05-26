@@ -206,7 +206,8 @@ public class FlowLayoutManager extends BlockStackingLayoutManager {
         LayoutContext childLC = LayoutContext.newInstance();
         childLC.setStackLimitBP(context.getStackLimitBP());
         childLC.setRefIPD(context.getRefIPD());
-        childLC.setWritingMode(getCurrentPage().getSimplePageMaster().getRegion(Region.FO_REGION_BODY).getWritingMode());
+        childLC.setWritingMode(getCurrentPage().getSimplePageMaster().getRegion(Region.FO_REGION_BODY)
+                .getWritingMode());
         return childLC;
     }
 
@@ -335,7 +336,8 @@ public class FlowLayoutManager extends BlockStackingLayoutManager {
                             new Position(this), false));
                 } else if (!ListUtil.getLast(returnedList).isGlue()) {
                     // add a null penalty to allow a break between blocks
-                    returnedList.add(new KnuthPenalty(0, 0, false, new Position(this), false));
+                    returnedList.add(new KnuthPenalty(0, 0, false, new Position(this),
+                            false));
                 }
             }
             prevElement = currElement;

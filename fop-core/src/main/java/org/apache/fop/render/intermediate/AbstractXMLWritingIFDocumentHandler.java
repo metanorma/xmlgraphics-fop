@@ -37,7 +37,7 @@ import org.apache.fop.util.GenerationHelperContentHandler;
 public abstract class AbstractXMLWritingIFDocumentHandler extends AbstractIFDocumentHandler {
 
     private String encoding = "";
-    
+
     /**
      * Default SAXTransformerFactory that can be used by subclasses.
      */

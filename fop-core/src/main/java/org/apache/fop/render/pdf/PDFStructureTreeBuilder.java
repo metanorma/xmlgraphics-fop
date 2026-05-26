@@ -19,11 +19,14 @@
 
 package org.apache.fop.render.pdf;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import javax.xml.XMLConstants;
 
-import org.apache.fop.pdf.*;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
 
@@ -33,9 +36,16 @@ import org.apache.fop.events.EventBroadcaster;
 import org.apache.fop.fo.extensions.ExtensionElementMapping;
 import org.apache.fop.fo.extensions.InternalElementMapping;
 import org.apache.fop.fo.pagination.Flow;
+import org.apache.fop.pdf.PDFFactory;
+import org.apache.fop.pdf.PDFParentTree;
+import org.apache.fop.pdf.PDFStructElem;
+import org.apache.fop.pdf.PDFStructTreeRoot;
 import org.apache.fop.pdf.StandardStructureAttributes.Table.Scope;
+import org.apache.fop.pdf.StandardStructureTypes;
 import org.apache.fop.pdf.StandardStructureTypes.Grouping;
 import org.apache.fop.pdf.StandardStructureTypes.Table;
+import org.apache.fop.pdf.StructureHierarchyMember;
+import org.apache.fop.pdf.StructureType;
 import org.apache.fop.util.LanguageTags;
 import org.apache.fop.util.XMLUtil;
 
@@ -144,7 +154,7 @@ public class PDFStructureTreeBuilder implements StructureTreeEventHandler {
             }
 
 
-            List<String> tags_ancestor = new ArrayList<>();
+            List<String> tagsAncestor = new ArrayList<>();
             try {
                 PDFStructElem ancestor = ((PDFStructElem) parent).getParentStructElem();
                 // if Span in LBody, then skip Span tag
@@ -152,14 +162,16 @@ public class PDFStructureTreeBuilder implements StructureTreeEventHandler {
                 //tags.append(structureType + " ");
                 while (ancestor != null) {
                     tags.append(ancestor.getStructureType().toString() + " ");
-                    tags_ancestor.add(ancestor.getStructureType().toString());
+                    tagsAncestor.add(ancestor.getStructureType().toString());
                     ancestor = ancestor.getParentStructElem();
                 }
                 //System.out.println(tags);
-            }catch (Exception ex) {}
+            } catch (Exception ex) {
+                System.out.println("");
+            }
 
             // if Div inside P, then skip it
-            if (structureType.toString().equals("Div") && tags_ancestor.contains("P")) {
+            if (structureType.toString().equals("Div") && tagsAncestor.contains("P")) {
                 return (PDFStructElem)parent;
             }
 
@@ -282,7 +294,7 @@ public class PDFStructureTreeBuilder implements StructureTreeEventHandler {
                 altTextNode = "No alternate text specified";
             }
             structElem.put("Alt", altTextNode);
-            
+
             String actualTextNode = attributes.getValue(ExtensionElementMapping.URI, "actual-text");
             if (actualTextNode != null) {
                 structElem.put("ActualText", actualTextNode);

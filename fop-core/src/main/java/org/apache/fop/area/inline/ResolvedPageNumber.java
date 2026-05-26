@@ -48,11 +48,12 @@ public class ResolvedPageNumber extends TextArea {
 
     @Override
     public void addWord(String word, int offset, int level) {
-        if(isVertical) {
-            for(int i=0; i<word.length(); i++) {
-                addWord(word.substring(i, i+1), font.getFontSize(), null, null, null, offset, false, true);
+        if (isVertical) {
+            for (int i = 0; i < word.length(); i++) {
+                addWord(word.substring(i, i + 1), font.getFontSize(), null, null, null, offset, false, true);
             }
-        } else
+        } else {
             super.addWord(word, offset, level);
+        }
     }
 }
