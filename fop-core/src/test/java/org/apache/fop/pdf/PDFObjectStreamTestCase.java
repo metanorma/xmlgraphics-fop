@@ -37,8 +37,6 @@ public class PDFObjectStreamTestCase {
     public void testObjectStreamsEnabled() throws IOException {
         PDFDocument doc = new PDFDocument("");
         String out = buildObjectStreamsPDF(doc);
-        /*Assert.assertTrue(out, out.contains("<<\n  /Type /ObjStm\n  /N 6\n  /First 33\n  /Length 446\n>>\n"
-                + "stream\n4 0\n5 52\n6 121\n7 245\n8 287\n9 344\n<<\n/Producer"));*/
         Assert.assertTrue(out, out.contains("<<\n  /Type /ObjStm\n  /N 6\n  /First 32\n  /Length 369\n>>\n"
                 + "stream\n4 0\n5 52\n6 83\n7 207\n8 249\n9 306\n<<\n/Producer"));
     }

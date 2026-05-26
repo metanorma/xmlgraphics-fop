@@ -108,6 +108,9 @@ public class PDFLink extends PDFObject {
                     uri = "Email " + uri;
                 }
                 contents_key = "(" + uri + ")";
+                if (getDocumentSafely().isEncryptionActive()) {
+                    contents_key = new String(encodeText(contents_key), StandardCharsets.ISO_8859_1);
+                }
             }
         } else if (this.action instanceof PDFGoTo) {
             PDFGoTo pdfGoto = (PDFGoTo) this.action;
