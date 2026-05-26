@@ -332,7 +332,7 @@ public class PDFFactoryTestCase {
         assertTrue("Alt Text must not use the encryption",
                 bos.toString().contains("/Contents (" + dest + ")")); //altText,  was (b), see PDFLink.java for /Contents
 
-        String encryptedAltText = defaultLinkAltText(bos, true, "(b)"); // was "b"
+        String encryptedAltText = defaultLinkAltText(bos, true, "(a)"); // was "b"
         assertTrue("Alt Text must use the encryption",
                 bos.toString().contains("/Contents " + encryptedAltText));
     }
