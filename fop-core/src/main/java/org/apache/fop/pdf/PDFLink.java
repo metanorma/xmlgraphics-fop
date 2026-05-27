@@ -95,7 +95,7 @@ public class PDFLink extends PDFObject {
             // f |= 1 << (5 - 1); //NoRotate, bit 5
             fFlag = "/F " + f;
         }
-        String contents_key = null;
+        String contentsKey = null;
         if (this.action instanceof PDFUri) {
             PDFUri pdfUri = (PDFUri) this.action;
             String uri = pdfUri.getUri();
@@ -107,13 +107,16 @@ public class PDFLink extends PDFObject {
                     uri = uri.substring(uri.indexOf("mailto:") + 7);
                     uri = "Email " + uri;
                 }
-                contents_key = "(" + uri + ")";
+                contentsKey = "(" + uri + ")";
+                if (getDocumentSafely().isEncryptionActive()) {
+                    contentsKey = new String(encodeText(contentsKey), StandardCharsets.ISO_8859_1);
+                }
             }
         } else if (this.action instanceof PDFGoTo) {
             PDFGoTo pdfGoto = (PDFGoTo) this.action;
             String pdfGotoContents = pdfGoto.getContents();
             if (pdfGotoContents != null && !pdfGotoContents.equals("()")) {
-                contents_key = pdfGoto.getContents();
+                contentsKey = pdfGoto.getContents();
             }
         }
         String dict = "<< /Type /Annot\n" + "/Subtype /Link\n" + "/Rect [ "
@@ -123,8 +126,8 @@ public class PDFLink extends PDFObject {
                    + this.action.getAction() + "\n" + "/H /I\n"
                    + (this.structParent != null
                            ? "/StructParent " + this.structParent.toString() + "\n" : "")
-                   + (contents_key != null && !contents_key.isEmpty()
-                           ? "/Contents " + contents_key + "\n" : "");
+                   + (contentsKey != null && !contentsKey.isEmpty()
+                           ? "/Contents " + contentsKey + "\n" : "");
         /*if (action instanceof PDFUri) {
             String altText = ((PDFUri) action).getAltText();
             if (altText != null && !altText.isEmpty()) {
@@ -136,13 +139,13 @@ public class PDFLink extends PDFObject {
                 dict += "/Contents " + altText + "\n";
             }
         }*/
-      
+
         if (action instanceof PDFFileAttachmentAnnotation) {
             PDFFileAttachmentAnnotation pdfFileAttachmentAnnotation = (PDFFileAttachmentAnnotation) this.action;
             ulx = brx + 3;
-            uly+=5;
-            brx+=10;
-            bry+=5;
+            uly += 5;
+            brx += 10;
+            bry += 5;
             //uly = bry - 10;*/
             dict = "<< /Type /Annot /Subtype " + pdfFileAttachmentAnnotation.getFileAttachmentAnnotation()
                 + "/Rect [ "

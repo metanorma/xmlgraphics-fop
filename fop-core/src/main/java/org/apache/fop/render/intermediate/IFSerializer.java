@@ -862,9 +862,9 @@ implements IFConstants, IFPainter, IFDocumentNavigationHandler {
     }
 
     private void noteActionBookmark(AbstractAction action) {
-        if (action == null) {
+        /* if (action == null) {
             //throw new NullPointerException("action must not be null");
-        }
+        } */
         if (action != null && !action.isComplete()) {
             assert action.hasID();
             incompleteActions.put(action.getID(), action);

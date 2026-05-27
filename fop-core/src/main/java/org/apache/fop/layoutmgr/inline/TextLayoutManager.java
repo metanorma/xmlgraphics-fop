@@ -152,7 +152,8 @@ public class TextLayoutManager extends LeafNodeLayoutManager {
     }
 
     private KnuthBox makeAuxiliaryZeroWidthBox() {
-        return new KnuthInlineBox(0, null, notifyPos(new LeafPosition(this, -1)), true);
+        return new KnuthInlineBox(0, null, notifyPos(new LeafPosition(this, -1)),
+                true);
     }
 
     /** {@inheritDoc} */
@@ -475,7 +476,9 @@ public class TextLayoutManager extends LeafNodeLayoutManager {
         }
 
         private boolean isWordEnd(int mappingIndex) {
-            return mappingIndex == lastIndex || mapping.isUpright || getGlyphMapping(mappingIndex + 1).isSpace || getGlyphMapping(mappingIndex + 1).isUpright; //TODO If is vertical mode and GlyphMapping is hani, return true.
+            return mappingIndex == lastIndex || mapping.isUpright || getGlyphMapping(mappingIndex + 1).isSpace
+                    || getGlyphMapping(mappingIndex + 1)
+                    .isUpright; //TODO If is vertical mode and GlyphMapping is hani, return true.
         }
 
         /**
@@ -521,9 +524,11 @@ public class TextLayoutManager extends LeafNodeLayoutManager {
         }
 
         private boolean isWordSpace(int mappingIndex) {
-            // !getGlyphMapping(mappingIndex).isZeroWidthSpace - no need add space for zero-width space, otherwise we get redundant spaces in copy-paste text from PDF
+            // !getGlyphMapping(mappingIndex).isZeroWidthSpace - no need add space for zero-width space,
+            // otherwise we get redundant spaces in copy-paste text from PDF
             return userAgent.isAccessibilityEnabled()
-                    && mappingIndex < mappings.size() - 1 && getGlyphMapping(mappingIndex).isSpace && !getGlyphMapping(mappingIndex).isZeroWidthSpace;
+                    && mappingIndex < mappings.size() - 1 && getGlyphMapping(mappingIndex).isSpace
+                    && !getGlyphMapping(mappingIndex).isZeroWidthSpace;
         }
 
         private int[] getNonEmptyLevels() {
@@ -832,7 +837,8 @@ public class TextLayoutManager extends LeafNodeLayoutManager {
                         || CharUtilities.isExplicitBreak(ch)
                         || ((prevLevel != -1) && (level != prevLevel) && !Character.isHighSurrogate(prevChar))
                         || inUpright;
-                if (!processWord && foText.getCommonFont().getFontSelectionStrategy() == EN_CHARACTER_BY_CHARACTER && !Character.isHighSurrogate(prevChar)) {
+                if (!processWord && foText.getCommonFont().getFontSelectionStrategy() == EN_CHARACTER_BY_CHARACTER
+                        && !Character.isHighSurrogate(prevChar)) {
                     if (lastFont == null || lastFontPos != nextStart - 1) {
                         lastFont = FontSelector.selectFontForCharactersInText(
                                 foText, nextStart - 1, nextStart, foText, this);
@@ -846,7 +852,8 @@ public class TextLayoutManager extends LeafNodeLayoutManager {
                 if (processWord) {
                     // this.foText.charAt(lastIndex) == CharUtilities.SOFT_HYPHEN
                     prevMapping = processWord(alignment, sequence, prevMapping, ch,
-                        breakOpportunity, true, prevLevel, retainControls, context.getWritingMode().isVertical());
+                        breakOpportunity, true, prevLevel, retainControls,
+                            context.getWritingMode().isVertical());
                 }
             } else if (inWhitespace) {
                 if (ch != CharUtilities.SPACE || breakOpportunity) {
@@ -880,7 +887,8 @@ public class TextLayoutManager extends LeafNodeLayoutManager {
                     areaIPD = wordSpaceIPD;
                 }
 
-                mapping = new GlyphMapping(nextStart, nextStart + 1, 1, 0, areaIPD, false, true,
+                mapping = new GlyphMapping(nextStart, nextStart + 1, 1, 0, areaIPD,
+                        false, true,
                         breakOpportunity, spaceFont, level, null);
                 thisStart = nextStart + 1;
             } else if (CharUtilities.isFixedWidthSpace(ch) || CharUtilities.isZeroWidthSpace(ch)) {
@@ -891,8 +899,9 @@ public class TextLayoutManager extends LeafNodeLayoutManager {
                 // to check for zero-width space (otherwise we get redundant spaces in copy-paste text from PDF)
                 boolean isZeroWidthSpace = (ch == CharUtilities.ZERO_WIDTH_SPACE);
 
-                mapping = new GlyphMapping(nextStart, nextStart + 1, 0, 0, ipd, false, true, isZeroWidthSpace,
-                                        breakOpportunity, font, level, null);
+                mapping = new GlyphMapping(nextStart, nextStart + 1, 0, 0, ipd,
+                        false, true, isZeroWidthSpace,
+                                breakOpportunity, font, level, null);
                 thisStart = nextStart + 1;
             } else if (CharUtilities.isExplicitBreak(ch)) {
                 //mandatory break-character: only advance index
@@ -909,7 +918,8 @@ public class TextLayoutManager extends LeafNodeLayoutManager {
 
         // Process any last elements
         if (inWord) {
-            processWord(alignment, sequence, prevMapping, ch, false, false, prevLevel, retainControls, context.getWritingMode().isVertical());
+            processWord(alignment, sequence, prevMapping, ch, false, false, prevLevel,
+                    retainControls, context.getWritingMode().isVertical());
         } else if (inWhitespace) {
             processWhitespace(alignment, sequence, !keepTogether, prevLevel);
         } else if (mapping != null) {

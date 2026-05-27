@@ -258,17 +258,17 @@ public class FopConfParser {
             String pageHeight = pageConfig.getAttribute("height",
                     FopFactoryConfig.DEFAULT_PAGE_HEIGHT);
             fopFactoryBuilder.setPageHeight(pageHeight);
-            if (LOG.isInfoEnabled()) {
+            /* if (LOG.isInfoEnabled()) {
                 // LOG.info("Default page-height set to: " + pageHeight);
-            }
+            }*/
         }
         if (pageConfig.getAttribute("width", null) != null) {
             String pageWidth = pageConfig.getAttribute("width",
                     FopFactoryConfig.DEFAULT_PAGE_WIDTH);
             fopFactoryBuilder.setPageWidth(pageWidth);
-            if (LOG.isInfoEnabled()) {
+            /* if (LOG.isInfoEnabled()) {
                 // LOG.info("Default page-width set to: " + pageWidth);
-            }
+            }*/
         }
 
         if (cfg.getChild("complex-scripts") != null) {

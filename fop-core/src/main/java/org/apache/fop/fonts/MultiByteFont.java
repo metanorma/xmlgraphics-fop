@@ -328,9 +328,11 @@ public class MultiByteFont extends CIDFont implements Substitutable, Positionabl
         return cc;
     }
 
+    /* commented, earlier called from mapGlyphsToChars, but commented in the patch from FOP-2529
     private int findCharacterFromGlyphIndex(int gi) {
         return findCharacterFromGlyphIndex(gi, true, -1);
     }
+     */
 
     protected BitSet getGlyphIndices() {
         BitSet bitset = new BitSet();
@@ -579,7 +581,8 @@ public class MultiByteFont extends CIDFont implements Substitutable, Positionabl
         CharSequence cs, int[][] gpa, String script, String language, List associations, boolean isVertical) {
         if (gdef != null) {
             GlyphSequence igs = mapCharsToGlyphs(cs, associations);
-            GlyphSequence ogs = gdef.reorderCombiningMarks(igs, getUnscaledWidths(igs), gpa, script, language, isVertical);
+            GlyphSequence ogs = gdef.reorderCombiningMarks(igs, getUnscaledWidths(igs), gpa, script, language,
+                    isVertical);
             if (associations != null) {
                 associations.clear();
                 associations.addAll(ogs.getAssociations());
@@ -678,13 +681,13 @@ public class MultiByteFont extends CIDFont implements Substitutable, Positionabl
             }
             notifyMapOperation();
             gi = findGlyphIndex(cc);
-            
+
             if (gi == SingleByteEncoding.NOT_FOUND_CODE_POINT && cc == 0x061C) { // ARABIC LETTER MARK
                 //replace to ZERO-WIDTH SPACE
                 cc = 0x200B;
                 gi = findGlyphIndex(cc);
             }
-            
+
             if (gi == SingleByteEncoding.NOT_FOUND_CODE_POINT) {
                 warnMissingGlyph((char) cc, cs);
                 gi = giMissing;

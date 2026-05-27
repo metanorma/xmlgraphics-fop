@@ -18,11 +18,14 @@
 /* $Id$ */
 package org.apache.fop.pdf;
 
-import org.apache.fop.apps.Fop;
-import org.apache.fop.apps.FopFactory;
-import org.apache.fop.apps.MimeConstants;
-import org.junit.Assert;
-import org.junit.Test;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -30,10 +33,13 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamSource;
-import java.io.*;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+import org.apache.fop.apps.Fop;
+import org.apache.fop.apps.FopFactory;
+import org.apache.fop.apps.MimeConstants;
 
 public class PDFOldProcSet {
 
@@ -93,7 +99,7 @@ public class PDFOldProcSet {
                 }
                 sb.setLength(0);
             } else {
-                sb.append((char)data);
+                sb.append((char) data);
             }
         }
         return objs;

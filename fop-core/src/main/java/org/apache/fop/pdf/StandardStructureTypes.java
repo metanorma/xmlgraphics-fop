@@ -119,7 +119,7 @@ public final class StandardStructureTypes {
             return name;
         }
 
-        public void setTagType (String tagType) {
+        public void setTagType(String tagType) {
             this.tagType = name;
             if (tagType != null) {
                 this.tagType = new PDFName(tagType);

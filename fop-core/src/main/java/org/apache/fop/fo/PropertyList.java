@@ -497,7 +497,8 @@ public abstract class PropertyList {
                     if (getExplicit(propId) != null) {
                         return;
                     }
-                    if (attributeName.equals("fox:alt-text")) { //to prevent warning "String-valued property starts with quot..." for mathml fox:alt-text
+                    if (attributeName.equals("fox:alt-text")) {
+                        //to prevent warning "String-valued property starts with quot..." for mathml fox:alt-text
                         prop = StringProperty.getInstance(attributeValue);
                     } else {
                         prop = propertyMaker.make(this, attributeValue, parentFO);
