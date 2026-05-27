@@ -158,10 +158,11 @@ public class PDFStructureTreeBuilder implements StructureTreeEventHandler {
             try {
                 PDFStructElem ancestor = ((PDFStructElem) parent).getParentStructElem();
                 // if Span in LBody, then skip Span tag
-                StringBuilder tags = new StringBuilder();
+                // variable tags for debug purposes
+                // StringBuilder tags = new StringBuilder();
                 //tags.append(structureType + " ");
                 while (ancestor != null) {
-                    tags.append(ancestor.getStructureType().toString() + " ");
+                    // tags.append(ancestor.getStructureType().toString() + " ");
                     tagsAncestor.add(ancestor.getStructureType().toString());
                     ancestor = ancestor.getParentStructElem();
                 }

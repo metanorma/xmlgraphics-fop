@@ -328,9 +328,11 @@ public class MultiByteFont extends CIDFont implements Substitutable, Positionabl
         return cc;
     }
 
+    /* commented, earlier called from mapGlyphsToChars, but commented in the patch from FOP-2529
     private int findCharacterFromGlyphIndex(int gi) {
         return findCharacterFromGlyphIndex(gi, true, -1);
     }
+     */
 
     protected BitSet getGlyphIndices() {
         BitSet bitset = new BitSet();

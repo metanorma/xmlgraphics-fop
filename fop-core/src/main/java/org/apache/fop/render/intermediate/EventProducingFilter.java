@@ -49,13 +49,17 @@ public class EventProducingFilter extends IFDocumentHandlerProxy {
     public void endPage() throws IFException {
         super.endPage();
         pageNumberEnded++;
-        currentPage = pageNumberEnded;
+        setCurrentPage(pageNumberEnded);
         RendererEventProducer.Provider.get(userAgent.getEventBroadcaster())
                 .endPage(this, pageNumberEnded);
     }
 
     public static int getCurrentPage() {
         return currentPage;
+    }
+
+    public static void setCurrentPage(int value) {
+        currentPage = value;
     }
 
 }

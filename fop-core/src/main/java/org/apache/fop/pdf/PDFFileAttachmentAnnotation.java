@@ -83,7 +83,7 @@ public class PDFFileAttachmentAnnotation extends PDFAction {
             return true;
         }
 
-        if (obj == null || !(obj instanceof PDFJavaScriptLaunchAction)) {
+        if (obj == null || !(obj instanceof PDFFileAttachmentAnnotation)) {
             return false;
         }
 
