@@ -158,9 +158,10 @@
   </profiles>
 
   <scm>
-    <connection>scm:git:https://github.com/apache/xmlgraphics-fop.git</connection>
-    <url>https://github.com/apache/xmlgraphics-fop.git</url>
-    <developerConnection></developerConnection>
+    <connection>scm:git:https://github.com/metanorma/xmlgraphics-fop.git</connection>
+    <url>https://github.com/metanorma/xmlgraphics-fop.git</url>
+    <developerConnection>scm:git:https://github.com/metanorma/xmlgraphics-fop.git</developerConnection>
+    <tag>HEAD</tag>
   </scm>
 
   <repositories>
@@ -192,9 +193,15 @@
   </repositories>
 
   <distributionManagement>
+    <repository>
+      <id>github</id>
+      <name>GitHub Metanorma Apache Maven Packages</name>
+      <url>https://maven.pkg.github.com/metanorma/xmlgraphics-fop</url>
+    </repository>
     <snapshotRepository>
-      <id>apache.snapshots.https</id>
-      <url>https://repository.apache.org/content/repositories/snapshots</url>
+      <id>github</id>
+      <name>GitHub Metanorma Apache Maven Packages</name>
+      <url>https://maven.pkg.github.com/metanorma/xmlgraphics-fop</url>
     </snapshotRepository>
   </distributionManagement>
 
