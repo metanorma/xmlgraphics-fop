@@ -1,0 +1,20 @@
+runs:
+  using: "composite"
+  steps:
+  - name: Set up JDK 8
+    uses: actions/setup-java@v4
+    with:
+      java-version: '8'
+      distribution: 'zulu'
+      cache: maven
+
+  - name: Cache Maven dependencies
+    uses: actions/cache@v4
+    with:
+      path: |
+        ~/.m2/repository
+        .m2/repository
+      key: ${{ runner.os }}-maven-8-${{ hashFiles('**/pom.xml') }}
+      restore-keys: |
+        ${{ runner.os }}-maven-8-
+        ${{ runner.os }}-maven-

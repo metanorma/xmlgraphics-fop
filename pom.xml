@@ -2,13 +2,13 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.apache.xmlgraphics</groupId>
+  <groupId>org.metanorma</groupId>
   <artifactId>fop-parent</artifactId>
-  <version>2.11.0-SNAPSHOT</version>
-  <name>Apache FOP Parent</name>
-  <description>XML Graphics Format Object Processor</description>
+  <version>2.11.1</version>
+  <name>Apache FOP Parent (Metanorma Fork)</name>
+  <description>XML Graphics Format Object Processor - Metanorma Fork</description>
   <packaging>pom</packaging>
-  <url>http://xmlgraphics.apache.org/fop/</url>
+  <url>https://github.com/metanorma/xmlgraphics-fop</url>
 
   <properties>
     <ant.version>1.10.14</ant.version>
@@ -158,9 +158,10 @@
   </profiles>
 
   <scm>
-    <connection>scm:git:https://github.com/apache/xmlgraphics-fop.git</connection>
-    <url>https://github.com/apache/xmlgraphics-fop.git</url>
-    <developerConnection></developerConnection>
+    <connection>scm:git:https://github.com/metanorma/xmlgraphics-fop.git</connection>
+    <url>https://github.com/metanorma/xmlgraphics-fop.git</url>
+    <developerConnection>scm:git:https://github.com/metanorma/xmlgraphics-fop.git</developerConnection>
+    <tag>HEAD</tag>
   </scm>
 
   <repositories>
@@ -192,9 +193,15 @@
   </repositories>
 
   <distributionManagement>
+    <repository>
+      <id>github</id>
+      <name>GitHub Metanorma Apache Maven Packages</name>
+      <url>https://maven.pkg.github.com/metanorma/xmlgraphics-fop</url>
+    </repository>
     <snapshotRepository>
-      <id>apache.snapshots.https</id>
-      <url>https://repository.apache.org/content/repositories/snapshots</url>
+      <id>github</id>
+      <name>GitHub Metanorma Apache Maven Packages</name>
+      <url>https://maven.pkg.github.com/metanorma/xmlgraphics-fop</url>
     </snapshotRepository>
   </distributionManagement>
 
