@@ -69,7 +69,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: .fop/target/fop-${{ steps.get_version.outputs.VERSION }}.jar
+          asset_path: ./fop/target/fop-${{ steps.get_version.outputs.VERSION }}.jar
           asset_name: fop-${{ steps.get_version.outputs.VERSION }}.jar
           asset_content_type: application/java-archive
 
