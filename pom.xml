@@ -4,7 +4,7 @@
 
   <groupId>org.metanorma</groupId>
   <artifactId>fop-parent</artifactId>
-  <version>2.11.1</version>
+  <version>2.11.2</version>
   <name>Apache FOP Parent (Metanorma Fork)</name>
   <description>XML Graphics Format Object Processor - Metanorma Fork</description>
   <packaging>pom</packaging>
