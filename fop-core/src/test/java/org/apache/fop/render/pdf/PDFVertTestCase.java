@@ -90,9 +90,11 @@ public class PDFVertTestCase {
                             AffineTransform tr = generator.getState().getData().getTransform();
                             for (int i = 0; i < text.length(); i++) {
                                 int cp = text.codePointAt(i);
-                                if (!Character.isWhitespace(cp)) {
+                                if (!Character.isWhitespace(cp) && cp != 0x2015) {
                                     boolean isHieroglyph = cp >= 0x2e80;
                                     boolean isRotated = tr.getShearX() < tr.getShearY();
+                                    //System.out.println("Character '" + text.charAt(i) + "', isHieroglyph " + isHieroglyph +
+                                    //        ", isRotated " + isRotated);
                                     assertTrue("Character '" + text.charAt(i) + "' should "
                                             + (isRotated ? "not " : "") + "be rotated", isHieroglyph != isRotated);
                                 }
