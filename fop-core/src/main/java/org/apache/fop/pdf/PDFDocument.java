@@ -1212,6 +1212,12 @@ public class PDFDocument {
             if (this.root.getNames() == null) {
                 this.root.setNames(getFactory().makeNames());
             }
+            // https://github.com/metanorma/xmlgraphics-fop/issues/100
+            dests.remove("Limits");
+            // see PDFDictionary comment:
+            //  maintains the order of the entries added to the entry map. Whenever you modify
+            // "entries", always make sure you adjust this list accordingly.
+            dests.order.remove("Limits");
             this.root.getNames().setDests(dests);
         }
     }
