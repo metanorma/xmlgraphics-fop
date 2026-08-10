@@ -400,7 +400,7 @@ class StructureTreeEventTrigger extends FOEventHandler {
 
     @Override
     public void startLink(BasicLink basicLink) {
-        startElementWithIDAndAltText(basicLink, basicLink.getAltText(), null);
+        startElementWithIDAndAltText(basicLink, basicLink.getAltText());
     }
 
     @Override
@@ -410,19 +410,19 @@ class StructureTreeEventTrigger extends FOEventHandler {
 
     @Override
     public void image(ExternalGraphic eg) {
-        startElementWithIDAndAltText(eg, eg.getAltText(), null);
+        startElementWithIDAndAltText(eg, eg.getAltText());
         endElement(eg);
     }
 
     @Override
     public void startExternalDocument(ExternalDocument externalDocument) {
-        startElementWithIDAndAltText(externalDocument, null, null);
+        startElementWithIDAndAltText(externalDocument, null);
         endElement(externalDocument);
     }
 
     @Override
     public void startInstreamForeignObject(InstreamForeignObject ifo) {
-        startElementWithIDAndAltText(ifo, ifo.getAltText(), ifo.getActualText());
+        startElementWithIDAndAltText(ifo, ifo.getAltText());
     }
 
     @Override
@@ -545,15 +545,34 @@ class StructureTreeEventTrigger extends FOEventHandler {
                         node.getParent().getStructureTreeElement()));
     }
 
-    private void startElementWithIDAndAltText(FObj node, String altText, String actualText) {
+    private void startElementWithIDAndAltText(FObj node, String altText) {
         AttributesImpl attributes = new AttributesImpl();
         String localName = node.getLocalName();
         addRole((CommonAccessibilityHolder)node, attributes);
         addAttribute(attributes, ExtensionElementMapping.URI, "alt-text",
                 ExtensionElementMapping.STANDARD_PREFIX, altText);
-        if (actualText != null) {
-            addAttribute(attributes, ExtensionElementMapping.URI, "actual-text",
-                    ExtensionElementMapping.STANDARD_PREFIX, actualText);
+
+        if (node instanceof InstreamForeignObject) {
+            String actualText = ((InstreamForeignObject) node).getActualText();
+            if (actualText != null) {
+                addAttribute(attributes, ExtensionElementMapping.URI, "actual-text",
+                        ExtensionElementMapping.STANDARD_PREFIX, actualText);
+            }
+            // https://github.com/metanorma/xmlgraphics-fop/issues/102
+            String placement = ((InstreamForeignObject) node).getPlacement();
+            if (placement != null && !placement.isEmpty()) {
+                addAttribute(attributes, ExtensionElementMapping.URI, "placement",
+                        ExtensionElementMapping.STANDARD_PREFIX, placement);
+            }
+        }
+
+        if (node instanceof ExternalGraphic) {
+            // https://github.com/metanorma/xmlgraphics-fop/issues/102
+            String placement = ((ExternalGraphic) node).getPlacement();
+            if (placement != null && !placement.isEmpty()) {
+                addAttribute(attributes, ExtensionElementMapping.URI, "placement",
+                        ExtensionElementMapping.STANDARD_PREFIX, placement);
+            }
         }
         node.setStructureTreeElement(
                 structureTreeEventHandler.startImageNode(localName, attributes,

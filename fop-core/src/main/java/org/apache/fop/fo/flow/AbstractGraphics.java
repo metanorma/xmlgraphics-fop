@@ -71,6 +71,7 @@ public abstract class AbstractGraphics extends FObj
     private Length width;
     private String altText;
     private String actualText;
+    private String placement;
     private StructureTreeElement structureTreeElement;
     // Unused but valid items, commented out for performance:
     //     private CommonAccessibility commonAccessibility;
@@ -118,6 +119,8 @@ public abstract class AbstractGraphics extends FObj
             if (altText.equals("")) {
                 getFOValidationEventProducer().altTextMissing(this, getLocalName(), getLocator());
             }
+            // https://github.com/metanorma/xmlgraphics-fop/issues/102
+            placement = pList.get(PR_X_PLACEMENT).getString();
         }
         actualText = pList.get(PR_X_ACTUAL_TEXT).getString();
     }
@@ -241,6 +244,11 @@ public abstract class AbstractGraphics extends FObj
     /** @return  the actual text property. */
     public String getActualText() {
         return actualText;
+    }
+
+    /** @return  the placement property. */
+    public String getPlacement() {
+        return placement;
     }
 
     /** @return the graphic's intrinsic width in millipoints */

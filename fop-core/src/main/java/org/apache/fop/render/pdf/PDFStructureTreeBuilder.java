@@ -300,6 +300,12 @@ public class PDFStructureTreeBuilder implements StructureTreeEventHandler {
             if (actualTextNode != null) {
                 structElem.put("ActualText", actualTextNode);
             }
+
+            // https://github.com/metanorma/xmlgraphics-fop/issues/102
+            String placementNode = attributes.getValue(ExtensionElementMapping.URI, "placement");
+            if (placementNode != null && !placementNode.isEmpty()) {
+                structElem.put("Placement", placementNode);
+            }
         }
 
     }
