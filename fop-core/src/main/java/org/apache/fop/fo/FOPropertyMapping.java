@@ -2685,6 +2685,13 @@ public final class FOPropertyMapping implements Constants {
         m.setDefault("");
         addPropertyMaker("fox:title", m);
 
+        // fox:placement, used for /Figure /Placement
+        // (see https://github.com/metanorma/xmlgraphics-fop/issues/102)
+        m = new StringProperty.Maker(PR_X_PLACEMENT);
+        m.setInherited(false);
+        m.setDefault("");
+        addPropertyMaker("fox:placement", m);
+
         //fox:abbreviation used for accessibility
         m = new StringProperty.Maker(PR_X_ABBREVIATION);
         m.setInherited(false);

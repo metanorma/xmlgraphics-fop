@@ -836,8 +836,11 @@ public interface Constants {
     /**For specifying text for title /T (see https://github.com/metanorma/mn2pdf/issues/348) */
     int PR_X_TITLE = 297;
 
+    /**For specifying placement for /Figure /Placement (see https://github.com/metanorma/xmlgraphics-fop/issues/102) */
+    int PR_X_PLACEMENT = 298;
+
     /** Number of property constants defined */
-    int PROPERTY_COUNT = 297;
+    int PROPERTY_COUNT = 298;
 
     // compound property constants
 
