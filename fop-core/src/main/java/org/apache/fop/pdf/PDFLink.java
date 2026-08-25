@@ -142,11 +142,11 @@ public class PDFLink extends PDFObject {
 
         if (action instanceof PDFFileAttachmentAnnotation) {
             PDFFileAttachmentAnnotation pdfFileAttachmentAnnotation = (PDFFileAttachmentAnnotation) this.action;
-            ulx = brx + 3;
+            /*ulx = brx + 3;
             uly += 5;
             brx += 10;
-            bry += 5;
-            //uly = bry - 10;*/
+            bry += 5;*/
+            //uly = bry - 10;
             dict = "<< /Type /Annot /Subtype " + pdfFileAttachmentAnnotation.getFileAttachmentAnnotation()
                 + "/Rect [ "
                 + (ulx) + " " + (uly) + " "
