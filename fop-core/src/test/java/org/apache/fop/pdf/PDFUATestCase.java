@@ -71,6 +71,8 @@ public class PDFUATestCase {
         Collection<StringBuilder> objs = PDFLinearizationTestCase.readObjs(
                 new ByteArrayInputStream(out.toByteArray())).values();
         Assert.assertTrue(getObj(objs, "/Type /Catalog").contains("/ViewerPreferences << /DisplayDocTitle true >>"));
+        //for https://github.com/metanorma/xmlgraphics-fop/issues/105
+        Assert.assertTrue(getObj(objs, "/Type /Catalog").contains("/RoleMap << /Title /P >>"));
     }
 
     private String getObj(Collection<StringBuilder> objs, String x) {
