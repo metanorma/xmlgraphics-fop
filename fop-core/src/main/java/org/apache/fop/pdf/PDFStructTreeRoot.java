@@ -37,6 +37,14 @@ public class PDFStructTreeRoot extends StructureHierarchyMember implements Seria
         put("Type", new PDFName("StructTreeRoot"));
         put("K", new PDFArray());
         put("ParentTree", parentTree);
+
+        // A dictionary that shall map name objects designating names of structure types used in the document to a
+        // name object designating the name of their approximate equivalents in the set of standard structure types
+        // See 14.7.2 Structure hierarchy ISO 32000-2:2020
+        // https://github.com/metanorma/mn2pdf/issues/425
+        PDFDictionary dictRoleMap = new PDFDictionary();
+        dictRoleMap.put("Title", new PDFName("P"));
+        put("RoleMap", dictRoleMap);
     }
 
     /**
