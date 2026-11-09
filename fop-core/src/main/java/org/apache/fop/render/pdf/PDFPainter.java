@@ -260,7 +260,13 @@ public class PDFPainter extends AbstractIFPainter<PDFDocumentHandler> {
         if (accessEnabled && getDocumentHandler().getPDFDocument().getProfile().getPDFUAMode().isEnabled()) {
             PDFStructElem structElem = (PDFStructElem) getContext().getStructureTreeElement();
             if (structElem != null) { //structElem is null if the image is marked as an artifact
-                PDFDictionary d = new PDFDictionary();
+
+                // PDFDictionary d = new PDFDictionary();
+                PDFDictionary d = (PDFDictionary)structElem.get("A");
+                if (d == null) {
+                    d = new PDFDictionary();
+                }
+
                 double x = rect.x / 1000d;
                 double y = -rect.y / 1000d;
                 double w = rect.width / 1000d;
