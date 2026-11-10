@@ -27,6 +27,7 @@ import java.util.Map;
 
 import javax.xml.XMLConstants;
 
+
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
 
@@ -36,7 +37,9 @@ import org.apache.fop.events.EventBroadcaster;
 import org.apache.fop.fo.extensions.ExtensionElementMapping;
 import org.apache.fop.fo.extensions.InternalElementMapping;
 import org.apache.fop.fo.pagination.Flow;
+import org.apache.fop.pdf.PDFDictionary;
 import org.apache.fop.pdf.PDFFactory;
+import org.apache.fop.pdf.PDFName;
 import org.apache.fop.pdf.PDFParentTree;
 import org.apache.fop.pdf.PDFStructElem;
 import org.apache.fop.pdf.PDFStructTreeRoot;
@@ -304,7 +307,13 @@ public class PDFStructureTreeBuilder implements StructureTreeEventHandler {
             // https://github.com/metanorma/xmlgraphics-fop/issues/102
             String placementNode = attributes.getValue(ExtensionElementMapping.URI, "placement");
             if (placementNode != null && !placementNode.isEmpty()) {
-                structElem.put("Placement", placementNode);
+                //structElem.put("Placement", placementNode);
+                PDFDictionary d = (PDFDictionary)structElem.get("A");
+                if (d == null) {
+                    d = new PDFDictionary();
+                }
+                d.put("Placement", new PDFName(placementNode));
+                structElem.put("A", d);
             }
         }
 
